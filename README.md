@@ -35,21 +35,8 @@ https://www.mongodb.com/nosql-explained/data-modeling
 
 ### Features
 
-- Store buyer authentication
-	- firstname
-	- lastname
-	- email
-	- phone
-
 - Payment
 	- required details asked by payment method
-
-- Store features
-
-<!-- - functionality to stores
-	- store name
-	- first store is only free for a limited time
-	- for each store users have to pay some amount -->
 
 - Creating a store
     - required contact infomation
@@ -58,9 +45,62 @@ https://www.mongodb.com/nosql-explained/data-modeling
 
 - Dashboard Menus
     - home (analytics)
+        - total sales
+        - total revenue
+        - out of stock products
+        - new orders
+    - orders
+        - list of recurrent orders
+        - dispatch button
+        - previous dispatch history (optional)
     - products
+        - upload new products button (Product Entry)
+        - show existing products with CRUD functionality
+        - develop a global modal for all type of errors and warinings
     - customers
-        - just like a contact record
+        - show list of detials of customers (readonly)
+            - full name
+            - last online time (how long a ago)
+            - City & Country
+            - Email
+        - modal to view customer details
+
+
+## Database entries
+
+- Product Entry
+    - ID
+    - Product Name
+    - Price
+    - Images
+    - Description
+    - Stock Availability
+
+- Order Entry
+    - ID
+    - Total Price
+    - Notes
+    - Customer ID
+    - Product IDs (array)
+    - Requested quantity
+
+- Buyer Entry
+    - ID
+    - First name
+    - Last name
+    - City
+    - Country
+    - Address
+    - Email
+    - Phone (Optional)
+    - Online Status / Last Online
+    - Total Spent
+    - Total Complete Orders
+    
+
+## Next release products
+
+- Categories
 
 ### workflow
 
