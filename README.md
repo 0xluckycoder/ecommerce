@@ -68,6 +68,13 @@ https://www.mongodb.com/nosql-explained/data-modeling
 
 ## Database entries
 
+Store Entry
+    - ID
+    - Store name (unique)
+    - Logo
+    - Store status - Boolean
+    - Store Owner - FK
+
 - Product Entry
     - ID
     - Product Name
@@ -96,7 +103,17 @@ https://www.mongodb.com/nosql-explained/data-modeling
     - Online Status / Last Online
     - Total Spent
     - Total Complete Orders
-    
+
+- Vendor Entry
+    - ID
+    - First Name (Optional)
+    - Last Name (Optional)
+    - Phone (Optional)
+    - Country
+    - City
+    - store name subdomain
+    - Email
+    - Password
 
 ## Next release products
 
@@ -116,6 +133,18 @@ https://www.mongodb.com/nosql-explained/data-modeling
     - visit to upload menu
     - click add product and fill the form
     - product will be uploaded to store
+
+- Account Feature
+    - ability to verify and change (email, password, phone)
+    - two factor authentication
+
+Todo
+
+- [x] - Make the design consistant and every page
+- [ ] - Start development with Frontend
+- [ ] - Configure
+- [ ] - Learn how pro developers use reactjs 
+
 
 https://intoli.com/blog/antd-scss-theme-plugin/ - sass for ant design
 https://www.mongodb.com/basics/best-practices - data modeling best practices
