@@ -95,6 +95,7 @@ Store Entry
     - ID
     - First name
     - Last name
+    - Profile picture (optional)
     - City
     - Country
     - Address
@@ -103,6 +104,7 @@ Store Entry
     - Online Status / Last Online
     - Total Spent
     - Total Complete Orders
+    - Save debit card number (next update feature)
 
 - Vendor Entry
     - ID
@@ -141,7 +143,8 @@ Store Entry
 Todo
 
 - [x] - Make the design consistant and every page
-- [ ] - Start development with Frontend
+- [x] - Design Login cards
+- [/] - Start development with Frontend
 - [ ] - Configure
 - [ ] - Learn how pro developers use reactjs 
 
