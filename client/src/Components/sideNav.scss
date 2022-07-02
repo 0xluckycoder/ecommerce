@@ -1,0 +1,33 @@
+.side-nav {
+    position: relative;
+    background: #fff;
+    max-width: 200px;
+    height: 100vh;
+    padding: 40px calc(3rem) 0 2rem;
+    border-right: 1px solid rgba(137, 137, 137, 0.4);;
+
+    .side-nav-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0px 0.5rem 1rem;
+        margin-bottom: 1rem;
+        background: #fff;
+        border-left: 4px solid #fff;
+        cursor: pointer;
+
+        &:hover {
+            border-left: 4px solid #222;
+        }
+
+        svg {
+            display: block;
+        }
+
+        p {
+            margin: 0px;
+            text-transform: capitalize;
+            padding-left: 0.5rem;
+        }
+
+    }
+}
