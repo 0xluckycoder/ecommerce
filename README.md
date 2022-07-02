@@ -33,14 +33,28 @@ this app allows users to create their own store and start selling their products
 - [/] - Make design look better & apply it to all pages
 
 ### Front-End
-- [ ] - Go through react docs and recap everything
-- [ ] - Start development with Frontend
-    - [ ] - Configure with AntDesign / Sass / Use pure css no frameworks
-- [ ] - Learn how pro developers use reactjs
+- [x] - Go through react docs and recap everything
+- [x] - Start development with Frontend
+    - [x] - Configure with AntDesign / Sass
+    - [x] - Learn Antdesign layout & Grid
 - [ ] - Use useReducer as a state manager 
-- [ ] - Dashboard homepage
-- [ ] - Orders page
-- [ ] - Products page
+- [ ] - Learn how pro developers use reactjs
+
+- [ ] - Admin Components
+    - [x] - Admin top navigation
+    - [x] - Side Navbar
+    - [/] - Dashboard homepage
+    - [ ] - Use responsive columns and rows
+    - [ ] - replace existing styles layout styles with columns and rows 
+    - [ ] - Orders page
+    - [ ] - Products page
+        - [ ] - Products Upload Modal
+    - [ ] - Global alert component
+    - [ ] - Customers
+        - [ ] - Customers modal
+    - [ ] - Settings
+    - [ ] - User Profile
+    - [ ] - Authentication modal
 
 
 https://www.mongodb.com/nosql-explained/data-modeling
