@@ -22,14 +22,26 @@ this app allows users to create their own store and start selling their products
 ## TODO
 
 - [x] - list down features
-- [ ] - learn how to properly model nosql databases
-- [ ] - start to model the database example
-
 - [x] - Store UI design
     - [x] - go through the antdesign and be familiar with components
     - [x] - learn how to adujust styles in antdesign
-    - [/] - choose a logo and color theme
-    - [ ] - design dashbaord page
+    - [x] - choose a logo and color theme
+    - [x] - design dashbaord page
+
+- [x] - Make the design consistant and every page
+- [x] - Design Login cards figma UI
+- [/] - Make design look better & apply it to all pages
+
+### Front-End
+- [ ] - Go through react docs and recap everything
+- [ ] - Start development with Frontend
+    - [ ] - Configure with AntDesign / Sass / Use pure css no frameworks
+- [ ] - Learn how pro developers use reactjs
+- [ ] - Use useReducer as a state manager 
+- [ ] - Dashboard homepage
+- [ ] - Orders page
+- [ ] - Products page
+
 
 https://www.mongodb.com/nosql-explained/data-modeling
 
@@ -139,14 +151,6 @@ Store Entry
 - Account Feature
     - ability to verify and change (email, password, phone)
     - two factor authentication
-
-Todo
-
-- [x] - Make the design consistant and every page
-- [x] - Design Login cards
-- [/] - Start development with Frontend
-- [ ] - Configure
-- [ ] - Learn how pro developers use reactjs 
 
 
 https://intoli.com/blog/antd-scss-theme-plugin/ - sass for ant design
