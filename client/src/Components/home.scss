@@ -1,59 +1,76 @@
 .home {
-    .analytics-box-items {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-column-gap: 3rem;
 
-        .analytics-box-item {
+    margin-left: 200px;
+    width: 100%;
 
-            background: #fff;
-            border: 1px solid #EBEBEB;
-            border-radius: 2px;
-            padding: 1rem;
-
-            .flex {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-
-                .icon-wrapper {
-                    background: #222;
-                    border-radius: 8px;
+    .home-inner {
+        h2 {
+            margin-bottom: 1rem;
+        }
+    
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1rem;
+    
+        button span {
+            padding-left: 0.5rem;
+            font-size: 16px;
+        }
+    
+        canvas {
+            width: 100% !important;
+        }
+    
+        .ant-row {
+            margin-bottom: 1rem;
+            .ant-col {
+    
+                .analytics-box-item {
+                    background: #fff;
+                    border: 1px solid #EBEBEB;
+                    border-radius: 2px;
+                    padding: 1rem;
+    
+                    .flex {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+    
+                        .icon-wrapper {
+                            background: #222;
+                            border-radius: 8px;
+                        }
+    
+                        svg {
+                            display: block;
+                            padding: 0.5rem;
+                            height: 20px;
+                            color: #fff;
+                        }
+    
+                        p {
+                            margin: 0px;
+                        }
+                    }
+    
+                    h1 {
+                        font-size: 2.5rem;
+                        text-align: center;
+                    }
                 }
-
-                svg {
-                    display: block;
-                    padding: 0.5rem;
-                    height: 20px;
-                    color: #fff;
+    
+                .box {
+                    background: blue;
+                    // padding: 2rem;
                 }
-            }
-
-            h1 {
-                margin: 0px;
-                font-size: 2.5rem;
-                text-align: center;
-            }
-
-            p {
-                margin: 0px;
             }
         }
     }
 }
 
-.container {
-    // max-width: 1400px;
-    // margin: 0 auto;
-    // overflow: auto;
-    // padding: 0 40px;
-    // background: rgb(182, 182, 182);
-
+@media (max-width: 991px) {
+    .ant-row {
+        row-gap: 2rem;
+    }
 }
-
-/*
-    max-width: 1150px;
-    margin: 0 auto;
-    overflow: auto;
-    padding: 0 40px;
-*/ 

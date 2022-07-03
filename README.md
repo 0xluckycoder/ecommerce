@@ -43,9 +43,18 @@ this app allows users to create their own store and start selling their products
 - [ ] - Admin Components
     - [x] - Admin top navigation
     - [x] - Side Navbar
+    - [x] - Use ant design responsive columns and rows
+    - [x] - replace existing styles layout styles with columns and rows
+    - [x] - make sidenav and topnav sticky (replicate adminpro styles)
+    - [/] - make layout mobile responsive upto iphone 5s
+    - [ ] - use sass modules when styling isolated element
+    - [ ] - configure & customize ant less files with sass
+    - [ ] - create hamburger menu (google it)
+    - [ ] - add routers
+    - [ ] - clean & structure up the components properly
     - [/] - Dashboard homepage
-    - [ ] - Use responsive columns and rows
-    - [ ] - replace existing styles layout styles with columns and rows 
+    (https://demos.wrappixel.com/premium-admin-templates/react/adminpro-react/main/dashboards/analytical)
+
     - [ ] - Orders page
     - [ ] - Products page
         - [ ] - Products Upload Modal
