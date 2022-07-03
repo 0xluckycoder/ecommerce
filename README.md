@@ -46,6 +46,7 @@ this app allows users to create their own store and start selling their products
     - [x] - Use ant design responsive columns and rows
     - [x] - replace existing styles layout styles with columns and rows
     - [x] - make sidenav and topnav sticky (replicate adminpro styles)
+    - [ ] - reverse engineer 229-multi-level-dropdown (https://youtu.be/IF6k0uZuypA)
     - [/] - make layout mobile responsive upto iphone 5s
     - [ ] - use sass modules when styling isolated element
     - [ ] - configure & customize ant less files with sass
