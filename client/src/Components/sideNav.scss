@@ -1,4 +1,5 @@
 .side-nav {
+    transition: 350ms;
     margin-top: 53.71px;
     position: fixed;
     z-index: 2;
@@ -31,5 +32,15 @@
             padding-left: 0.5rem;
         }
 
+    }
+}
+
+@media (max-width: 768px) {
+    .side-nav {
+        transform: translateX(-200px);
+    }
+
+    .side-nav-show {
+        transform: translateX(0px);
     }
 }

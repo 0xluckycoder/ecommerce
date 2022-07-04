@@ -75,3 +75,9 @@
         row-gap: 2rem;
     }
 }
+
+@media (max-width: 768px) {
+    .home {
+        margin-left: 0px;
+    }
+}

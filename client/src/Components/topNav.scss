@@ -7,16 +7,27 @@
     width: 100%;
     background: #222;
     padding: 0.5rem 0 0.5rem 2rem;
+
+    svg {
+        display: none;
+    }
+
+
     
     h1 {
         color: #fff;
         margin: 0px;
         font-size: 1.5rem;
     }
+}
 
-    svg {
-        cursor: pointer;
-        color: #fff;
-        font-size: 1.3rem;
+@media (max-width: 768px) {
+    .topnav {
+        svg {
+            display: block;
+            cursor: pointer;
+            color: #fff;
+            font-size: 1.3rem;
+        }
     }
 }

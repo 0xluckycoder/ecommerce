@@ -2,9 +2,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faTag, faBoxArchive, faUser, faGear } from '@fortawesome/free-solid-svg-icons';
 import './sideNav.scss';
 
-export default function SideNav() {
+export default function SideNav({ sideNavState }) {
+    // <li className={`menu-item ${isActive && 'menu-item-active'}`}>
     return (
-        <div className="side-nav">
+        <div className={`side-nav ${sideNavState && 'side-nav-show'}`}>
             <div className="side-nav-item">
                 <FontAwesomeIcon icon={faHouse} />
                 <p>home</p>
