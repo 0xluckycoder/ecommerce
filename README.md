@@ -30,7 +30,7 @@ this app allows users to create their own store and start selling their products
 
 - [x] - Make the design consistant and every page
 - [x] - Design Login cards figma UI
-- [/] - Make design look better & apply it to all pages
+- [x] - Make design look better & apply it to all pages
 
 ### Front-End
 - [x] - Go through react docs and recap everything
@@ -46,14 +46,20 @@ this app allows users to create their own store and start selling their products
     - [x] - Use ant design responsive columns and rows
     - [x] - replace existing styles layout styles with columns and rows
     - [x] - make sidenav and topnav sticky (replicate adminpro styles)
-    - [ ] - reverse engineer 229-multi-level-dropdown (https://youtu.be/IF6k0uZuypA)
-    - [/] - make layout mobile responsive upto iphone 5s
-    - [ ] - use sass modules when styling isolated element
-    - [ ] - configure & customize ant less files with sass
-    - [ ] - create hamburger menu (google it)
+    - [x] - reverse engineer 229-multi-level-dropdown (https://youtu.be/IF6k0uZuypA)    
+    - [x] - make layout mobile responsive upto iphone SE
+    - [x] - use sass modules when styling isolated element
+    - [x] - create responsive hamburger menu (google it)
+    - [/] - configure & customize ant less files with sass 
+    
+    (https://stackoverflow.com/questions/51761928/ant-design-with-sass-in-react-with-create-react-app)
+    
+    (https://dev.to/christianandrei/5-steps-to-change-antd-theme-on-runtime-using-create-react-app-p2k)
+
     - [ ] - add routers
-    - [ ] - clean & structure up the components properly
-    - [/] - Dashboard homepage
+    - [ ] - add active menu state
+    - [ ] - clean & structure up the components properly before move into other pages
+    - [x] - Dashboard homepage
     (https://demos.wrappixel.com/premium-admin-templates/react/adminpro-react/main/dashboards/analytical)
 
     - [ ] - Orders page
@@ -65,6 +71,9 @@ this app allows users to create their own store and start selling their products
     - [ ] - Settings
     - [ ] - User Profile
     - [ ] - Authentication modal
+
+
+### Backend
 
 
 https://www.mongodb.com/nosql-explained/data-modeling
