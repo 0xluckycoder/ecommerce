@@ -1,14 +1,27 @@
 // import logo from './logo.svg';
+import { useEffect } from 'react';
 import './app.scss';
 import SellerDashboard from './Components/SellerDashboard';
-
-import { DatePicker } from 'antd';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import 'antd/dist/antd.css';
 
+{/* <Route exact path="/">
+  {loggedIn ? <Redirect to="/dashboard" /> : <PublicHomePage />}
+</Route> */}
+
 function App() {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate('/dashboard', { replace: true });
+  }, []);
+
   return (
     <div className="App">
-      <SellerDashboard />
+      <Routes>
+        <Route path="/dashboard" element={<SellerDashboard />} />
+      </Routes>
     </div>
   );
 }

@@ -17,3 +17,17 @@ p {
   // overflow: auto;
   // padding: 0 40px;
 }
+
+// themed button
+.themed-btn {
+  background: #222 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  border: none !important;
+  transition: 0;
+}
+
+// disable button click animation
+[ant-click-animating-without-extra-node='true']::after {
+  display: none !important;
+}

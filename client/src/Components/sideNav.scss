@@ -7,7 +7,15 @@
     max-width: 200px;
     height: calc(100vh - 53.71px); // substracting the navbar height
     padding: 40px calc(3rem) 0 2rem;
-    border-right: 1px solid rgba(137, 137, 137, 0.4);;
+    border-right: 1px solid rgba(137, 137, 137, 0.4);
+
+    .side-nav-active-item {
+        border-left: 4px solid #222 !important; 
+
+        svg {
+            color: #222 !important;
+        }
+    }
 
     .side-nav-item {
         display: flex;
@@ -24,6 +32,7 @@
 
         svg {
             display: block;
+            color: #898989;
         }
 
         p {
@@ -34,6 +43,8 @@
 
     }
 }
+
+
 
 @media (max-width: 768px) {
     .side-nav {
