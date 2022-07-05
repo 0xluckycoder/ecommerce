@@ -40,29 +40,33 @@ this app allows users to create their own store and start selling their products
 - [ ] - Use useReducer as a state manager 
 - [ ] - Learn how pro developers use reactjs
 
-- [ ] - Admin Components
+- [/] - Admin Components
     - [x] - Admin top navigation
     - [x] - Side Navbar
     - [x] - Use ant design responsive columns and rows
     - [x] - replace existing styles layout styles with columns and rows
     - [x] - make sidenav and topnav sticky (replicate adminpro styles)
-    - [x] - reverse engineer 229-multi-level-dropdown (https://youtu.be/IF6k0uZuypA)    
+    - [x] - reverse engineer 229-multi-level-dropdown source code (https://youtu.be/IF6k0uZuypA)    
     - [x] - make layout mobile responsive upto iphone SE
     - [x] - use sass modules when styling isolated element
     - [x] - create responsive hamburger menu (google it)
-    - [/] - configure & customize ant less files with sass 
-    
-    (https://stackoverflow.com/questions/51761928/ant-design-with-sass-in-react-with-create-react-app)
-    
-    (https://dev.to/christianandrei/5-steps-to-change-antd-theme-on-runtime-using-create-react-app-p2k)
-
-    - [ ] - add routers
-    - [ ] - add active menu state
-    - [ ] - clean & structure up the components properly before move into other pages
+    - [x] - overwrite necessary styles
+    - [x] - add routers
+        - [x] - vendor/dashboard
+        - [ ] - vendor/orders
+        - [ ] - vendor/products
+        - [ ] - vendor/product/add
+        - [ ] - vendor/products/edit/:id
+        - [ ] - vendor/customers
+        - [ ] - vendor/customers/view/:id
+        - [ ] - vendor/settings
+    - [x] - clean & structure up the components properly before move into other pages
     - [x] - Dashboard homepage
+    - [x] - add active menu state
+        - [x] - show the active style if current page is match with the path
     (https://demos.wrappixel.com/premium-admin-templates/react/adminpro-react/main/dashboards/analytical)
 
-    - [ ] - Orders page
+    - [/] - Orders page
     - [ ] - Products page
         - [ ] - Products Upload Modal
     - [ ] - Global alert component

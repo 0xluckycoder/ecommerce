@@ -39,67 +39,67 @@ export default function Home() {
 
     return (
         <div className="home">
-        <div className="home-inner">
-            <h2>Dashboard</h2>
+            <div className="home-inner">
+                <h2>Dashboard</h2>
 
-            <Row>
-                <Button className="themed-btn" icon={<FontAwesomeIcon icon={faCalendar} />}>Date</Button>
-            </Row>
+                <Row>
+                    <Button className="themed-btn" icon={<FontAwesomeIcon icon={faCalendar} />}>Date</Button>
+                </Row>
 
-            <Row gutter={32}>
-                <Col lg={6} md={12} sm={24} xs={24}>
-                    <div className="analytics-box-item">
-                        <div className="flex">
-                            <div className="icon-wrapper">
-                                <FontAwesomeIcon icon={faShoppingBag} />
+                <Row gutter={32}>
+                    <Col lg={6} md={12} sm={24} xs={24}>
+                        <div className="analytics-box-item">
+                            <div className="flex">
+                                <div className="icon-wrapper">
+                                    <FontAwesomeIcon icon={faShoppingBag} />
+                                </div>
+                                <p>Sales</p>
                             </div>
-                            <p>Sales</p>
+                            <h1>45</h1>
                         </div>
-                        <h1>45</h1>
-                    </div>
-                </Col>
-                <Col lg={6} md={12} sm={24} xs={24}>
-                    <div className="analytics-box-item">
-                        <div className="flex">
-                            <div className="icon-wrapper">
-                                <FontAwesomeIcon icon={faCoins} />
+                    </Col>
+                    <Col lg={6} md={12} sm={24} xs={24}>
+                        <div className="analytics-box-item">
+                            <div className="flex">
+                                <div className="icon-wrapper">
+                                    <FontAwesomeIcon icon={faCoins} />
+                                </div>
+                                <p>Revenue</p>
                             </div>
-                            <p>Revenue</p>
+                            <h1>1275</h1>
                         </div>
-                        <h1>1275</h1>
-                    </div>
-                </Col>
-                <Col lg={6} md={12} sm={24} xs={24}>
-                    <div className="analytics-box-item">
-                        <div className="flex">
-                            <div className="icon-wrapper">
-                                <FontAwesomeIcon icon={faBoxOpen} />
+                    </Col>
+                    <Col lg={6} md={12} sm={24} xs={24}>
+                        <div className="analytics-box-item">
+                            <div className="flex">
+                                <div className="icon-wrapper">
+                                    <FontAwesomeIcon icon={faBoxOpen} />
+                                </div>
+                                <p>Out of Stock</p>
                             </div>
-                            <p>Out of Stock</p>
+                            <h1>45</h1>
                         </div>
-                        <h1>45</h1>
-                    </div>
-                </Col>
-                <Col lg={6} md={12} sm={24} xs={24}>
-                    <div className="analytics-box-item">
-                        <div className="flex">
-                            <div className="icon-wrapper">
-                                <FontAwesomeIcon icon={faTag} />
+                    </Col>
+                    <Col lg={6} md={12} sm={24} xs={24}>
+                        <div className="analytics-box-item">
+                            <div className="flex">
+                                <div className="icon-wrapper">
+                                    <FontAwesomeIcon icon={faTag} />
+                                </div>
+                                <p>Orders</p>
                             </div>
-                            <p>Orders</p>
+                            <h1>45</h1>
                         </div>
-                        <h1>45</h1>
-                    </div>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
 
-            <Row>
-                <Button className="themed-btn" icon={<FontAwesomeIcon icon={faCalendar} />}>Date</Button>
-            </Row>
+                <Row>
+                    <Button className="themed-btn" icon={<FontAwesomeIcon icon={faCalendar} />}>Date</Button>
+                </Row>
 
-            <Line className="line-chart" {...config} />
-            
-        </div>
+                <Line className="line-chart" {...config} />
+                
+            </div>
         </div>
     );
 }
