@@ -66,8 +66,10 @@ this app allows users to create their own store and start selling their products
         - [x] - show the active style if current page is match with the path
     (https://demos.wrappixel.com/premium-admin-templates/react/adminpro-react/main/dashboards/analytical)
 
-    - [/] - Orders page
-    - [ ] - Products page
+    - [x] - fix scss style conflicts - https://www.freecodecamp.org/news/how-to-style-react-apps-with-css/
+    - [x] - seperate global files from sass modules
+    - [x] - Orders page
+    - [/] - Products page
         - [ ] - Products Upload Modal
     - [ ] - Global alert component
     - [ ] - Customers
