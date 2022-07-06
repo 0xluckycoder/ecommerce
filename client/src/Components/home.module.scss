@@ -1,0 +1,66 @@
+.home {
+
+    // margin-left: 200px;
+    // padding-top: 53.71px; // height of the navbar
+    // width: 100%;
+}
+
+.homeInner {
+    h2 {
+        margin-bottom: 1rem;
+    }
+    
+    button span {
+        padding-left: 0.5rem;
+        font-size: 16px;
+    }
+
+    canvas {
+        width: 100% !important;
+    }
+}
+
+.rowSection {
+    margin-bottom: 1rem;
+}
+
+.analyticsBoxItem {
+    background: #fff;
+    border: 1px solid #EBEBEB;
+    border-radius: 2px;
+    padding: 1rem;
+
+    .flex {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .iconWrapper {
+            background: #222;
+            border-radius: 8px;
+        }
+
+        svg {
+            display: block;
+            padding: 0.5rem;
+            height: 20px;
+            color: #fff;
+        }
+
+        p {
+            margin: 0px;
+        }
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        text-align: center;
+    }
+}
+
+.lineChart {
+    background: #fff;
+    border: 1px solid #EBEBEB;
+    border-radius: 2px;
+    padding: 1.5rem;
+}

@@ -8,10 +8,9 @@ const dataSource = [
       orderId: '11',
       firstName: 'John',
       lastName: 'Doe',
-      totalPrice: 134,
-
-    },
-  ];
+      totalPrice: 134
+    }
+];
   
   const columns = [
     {

@@ -1,4 +1,4 @@
-.side-nav {
+.sideNav {
     transition: 350ms;
     margin-top: 53.71px;
     position: fixed;
@@ -9,7 +9,7 @@
     padding: 40px calc(3rem) 0 2rem;
     border-right: 1px solid rgba(137, 137, 137, 0.4);
 
-    .side-nav-active-item {
+    .sideNavActiveItem {
         border-left: 4px solid #222 !important; 
 
         svg {
@@ -17,7 +17,7 @@
         }
     }
 
-    .side-nav-item {
+    .sideNavItem {
         display: flex;
         align-items: center;
         padding: 0.5rem 0px 0.5rem 1rem;
@@ -28,6 +28,10 @@
 
         &:hover {
             border-left: 4px solid #222;
+
+            svg {
+                color: #222;
+            }
         }
 
         svg {
@@ -47,11 +51,11 @@
 
 
 @media (max-width: 768px) {
-    .side-nav {
+    .sideNav {
         transform: translateX(-200px);
     }
 
-    .side-nav-show {
+    .sideNavShow {
         transform: translateX(0px);
     }
 }

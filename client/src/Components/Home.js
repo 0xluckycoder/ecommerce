@@ -1,4 +1,4 @@
-import './home.scss';
+import styles from './home.module.scss';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingBag, faCoins, faBoxOpen, faTag, faCalendar } from '@fortawesome/free-solid-svg-icons';
@@ -10,16 +10,16 @@ export default function Home() {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-      asyncFetch();
+        asyncFetch();
     }, []);
-  
+
     const asyncFetch = () => {
-      fetch('https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json')
-        .then((response) => response.json())
-        .then((json) => setData(json))
-        .catch((error) => {
-          console.log('fetch data failed', error);
-        });
+        fetch('https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json')
+            .then((response) => response.json())
+            .then((json) => setData(json))
+            .catch((error) => {
+                console.log('fetch data failed', error);
+            });
     };
 
     const config = {
@@ -28,8 +28,8 @@ export default function Home() {
         xField: 'Date',
         yField: 'scales',
         xAxis: {
-          // type: 'timeCat',
-          tickCount: 5,
+            // type: 'timeCat',
+            tickCount: 5,
         },
         smooth: true,
         color: "#222",
@@ -39,18 +39,18 @@ export default function Home() {
 
     return (
         <div className="home">
-            <div className="home-inner">
+            <div className={`${styles.homeInner} home-inner`}>
                 <h2>Dashboard</h2>
 
-                <Row>
+                <Row className={styles.rowSection}>
                     <Button className="themed-btn" icon={<FontAwesomeIcon icon={faCalendar} />}>Date</Button>
                 </Row>
 
-                <Row gutter={32}>
+                <Row className={styles.rowSection} gutter={32}>
                     <Col lg={6} md={12} sm={24} xs={24}>
-                        <div className="analytics-box-item">
-                            <div className="flex">
-                                <div className="icon-wrapper">
+                        <div className={styles.analyticsBoxItem}>
+                            <div className={styles.flex}>
+                                <div className={styles.iconWrapper}>
                                     <FontAwesomeIcon icon={faShoppingBag} />
                                 </div>
                                 <p>Sales</p>
@@ -59,9 +59,9 @@ export default function Home() {
                         </div>
                     </Col>
                     <Col lg={6} md={12} sm={24} xs={24}>
-                        <div className="analytics-box-item">
-                            <div className="flex">
-                                <div className="icon-wrapper">
+                        <div className={styles.analyticsBoxItem}>
+                            <div className={styles.flex}>
+                                <div className={styles.iconWrapper}>
                                     <FontAwesomeIcon icon={faCoins} />
                                 </div>
                                 <p>Revenue</p>
@@ -70,9 +70,9 @@ export default function Home() {
                         </div>
                     </Col>
                     <Col lg={6} md={12} sm={24} xs={24}>
-                        <div className="analytics-box-item">
-                            <div className="flex">
-                                <div className="icon-wrapper">
+                        <div className={styles.analyticsBoxItem}>
+                            <div className={styles.flex}>
+                                <div className={styles.iconWrapper}>
                                     <FontAwesomeIcon icon={faBoxOpen} />
                                 </div>
                                 <p>Out of Stock</p>
@@ -81,9 +81,9 @@ export default function Home() {
                         </div>
                     </Col>
                     <Col lg={6} md={12} sm={24} xs={24}>
-                        <div className="analytics-box-item">
-                            <div className="flex">
-                                <div className="icon-wrapper">
+                        <div className={styles.analyticsBoxItem}>
+                            <div className={styles.flex}>
+                                <div className={styles.iconWrapper}>
                                     <FontAwesomeIcon icon={faTag} />
                                 </div>
                                 <p>Orders</p>
@@ -93,12 +93,11 @@ export default function Home() {
                     </Col>
                 </Row>
 
-                <Row>
+                <Row className={styles.rowSection}>
                     <Button className="themed-btn" icon={<FontAwesomeIcon icon={faCalendar} />}>Date</Button>
                 </Row>
 
-                <Line className="line-chart" {...config} />
-                
+                <Line className={styles.lineChart} {...config} />
             </div>
         </div>
     );

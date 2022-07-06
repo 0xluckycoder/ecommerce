@@ -2,8 +2,10 @@
     // margin-left: 200px;
     // padding-top: 53.71px; // height of the navbar
     // width: 100%;
+    // margin-left: auto !important;
+    // margin-right: auto !important;
 
     .orders-inner {
-        height: calc(100% - 53.71px);
+        // height: calc(100% - 53.71px);
     }
 }

@@ -3,6 +3,7 @@ import SideNav from './SideNav';
 import TopNav from './TopNav';
 import Home from './Home';
 import Orders from './Orders';
+import Products from './Products';
 
 import './sellerDashboard.scss';
 
@@ -29,6 +30,7 @@ export default function SellerDashboard() {
                 <Routes>
                     <Route path="/dashboard" element={<Home />} />
                     <Route path="/orders" element={<Orders />} />
+                    <Route path="/products" element={<Products />} />
                 </Routes>
             </div>
         </div>
