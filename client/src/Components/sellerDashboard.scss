@@ -8,7 +8,8 @@
 // admin common pages
 .home,
 .orders,
-.products {
+.products,
+.customers {
     margin-left: 200px;
     padding-top: 53.71px; // height of the navbar
     width: 100%;
@@ -16,7 +17,8 @@
 
     .home-inner,
     .orders-inner,
-    .products-inner {
+    .products-inner,
+    .customers-inner {
         width: 100%;
         max-width: 1400px;
         margin: 0 auto;
@@ -33,7 +35,8 @@
 @media (max-width: 768px) {
     .home,
     .orders,
-    .products {
+    .products,
+    .customers {
         margin-left: 0px;
     }
 }

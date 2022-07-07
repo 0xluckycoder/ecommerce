@@ -4,6 +4,7 @@ import TopNav from './TopNav';
 import Home from './Home';
 import Orders from './Orders';
 import Products from './Products';
+import Customers from './Customers';
 
 import './sellerDashboard.scss';
 
@@ -31,6 +32,7 @@ export default function SellerDashboard() {
                     <Route path="/dashboard" element={<Home />} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/products" element={<Products />} />
+                    <Route path="/customers" element={<Customers />} />
                 </Routes>
             </div>
         </div>
