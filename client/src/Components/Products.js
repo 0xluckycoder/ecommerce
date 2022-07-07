@@ -15,7 +15,6 @@ export default function Products() {
         <div className="products">
             <div className={`${styles.productsInner} products-inner`}>
                 <h2>Products</h2>
-                {/* modal */}
                 {modal && <Modal setModal={setModal} />}
                 <Row className={styles.rowSection}>
                     <Button className="themed-btn" onClick={() => setModal(true)}>Add New</Button>

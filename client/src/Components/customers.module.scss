@@ -29,3 +29,48 @@
         padding-bottom: 10px;
     }
 }
+
+.modal {
+    position: absolute;
+    background: #fff;
+    z-index: 9;
+    max-width: 500px;
+    padding: 1rem;
+    margin: auto;
+    right: calc(50% - 500px/2);
+
+    .close {
+        display: flex;
+        justify-content: right;
+        font-size: 1.3rem;
+        cursor: pointer;
+    }
+
+    .modalRow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .item {
+        .label {
+            font-weight: bold;
+            color: #8E8E8E;
+        }
+    }
+
+    p {
+        margin: 0px;
+    }
+}
+
+@media(max-width: 600px) {
+    .modal {
+        max-width: 300px;
+        right: calc(50% - 300px/2);
+        .modalRow {
+            grid-template-columns: 1fr;
+        }
+    }
+}
