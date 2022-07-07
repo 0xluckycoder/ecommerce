@@ -30,6 +30,51 @@
     }
 }
 
-.antd-row {
-    gap: 1rem;
+.modal {
+    position: absolute;
+    background: #fff;
+    z-index: 9;
+    max-width: 600px;
+    padding: 1rem;
+    margin: auto;
+    right: calc(50% - 492.73px/2);
+
+    .close {
+        display: flex;
+        justify-content: right;
+        font-size: 1.3rem;
+        cursor: pointer;
+    }
+    
+    h2, .uploadBtn {
+        margin-bottom: 1rem;
+    }
+
+    .formRow {
+        margin-bottom: 1rem;
+    }
+
+    .buttonWrapper {
+        button {
+            &:first-child {
+                margin-right: 1rem;
+            }
+        }
+    }
+
+    .inlineFormRow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 1rem;
+    }
+}
+
+
+@media(max-width: 600px) {
+    .modal {
+        right: calc(50% - 308.89px/2);
+        .inlineFormRow {
+            grid-template-columns: 1fr;
+        }
+    }
 }
