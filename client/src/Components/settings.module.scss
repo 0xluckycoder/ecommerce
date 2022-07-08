@@ -1,0 +1,48 @@
+.cardWrapper {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+
+    .card {
+        background: #fff;
+        border: 1px solid #EBEBEB;
+        padding: 2rem;
+        max-width: 650px;
+
+        .row {
+
+            &:not(:first-child) {
+                padding-top: 1rem;
+            }
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: end;
+
+            button {
+                max-width: 85px;
+            }
+        }
+    }
+}
+
+.verifiedCardWrapper {
+    margin-top: 3rem;
+}
+
+@media (max-width: 768px) {
+    .cardWrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .cardWrapper {
+        .card {            
+            .row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+    }
+}

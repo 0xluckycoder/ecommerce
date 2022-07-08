@@ -9,7 +9,8 @@
 .home,
 .orders,
 .products,
-.customers {
+.customers,
+.settings {
     margin-left: 200px;
     padding-top: 53.71px; // height of the navbar
     width: 100%;
@@ -18,7 +19,8 @@
     .home-inner,
     .orders-inner,
     .products-inner,
-    .customers-inner {
+    .customers-inner,
+    .settings-inner {
         width: 100%;
         max-width: 1400px;
         margin: 0 auto;
@@ -36,7 +38,8 @@
     .home,
     .orders,
     .products,
-    .customers {
+    .customers,
+    .settings {
         margin-left: 0px;
     }
 }
