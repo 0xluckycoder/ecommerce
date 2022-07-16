@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 
 const middlewares = require('./middlewares');
 
+const stores = require('./api/store/stores');
+
 const app = express();
 
 mongoose.connect('mongodb+srv://lakshan:secretpas778@cluster0.gsmu4.mongodb.net/?retryWrites=true&w=majority', {
@@ -12,19 +14,26 @@ mongoose.connect('mongodb+srv://lakshan:secretpas778@cluster0.gsmu4.mongodb.net/
     useUnifiedTopology: true
 });
 
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error ❌: "));
+db.once("open", () => {
+    console.log("connected successfully");
+});
+
 app.use(morgan('common'));
 
-app.use(cors({
-    origin: 3000
-}));
+// config with only allowed origins
+app.use(cors());
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
     res.json({
-        message: 'Hello World',
+        message: 'api root 🦉',
     });
 });
+
+app.use('/api/store', stores)
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
