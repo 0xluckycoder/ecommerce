@@ -38,7 +38,7 @@ this app allows users to create their own store and start selling their products
     - [x] - Configure with AntDesign / Sass
     - [x] - Learn Antdesign layout & Grid
 - [ ] - Use useReducer as a state manager 
-- [ ] - Learn how pro developers use reactjs
+- [ ] - Learn how expert developers use reactjs
 
 - [/] - Admin Components
     - [x] - Admin top navigation
@@ -53,11 +53,11 @@ this app allows users to create their own store and start selling their products
     - [x] - overwrite necessary styles
     - [x] - add routers
         - [x] - vendor/dashboard
-        - [ ] - vendor/orders
-        - [ ] - vendor/products
+        - [x] - vendor/orders
+        - [x] - vendor/products
         - [ ] - vendor/product/add
         - [ ] - vendor/products/edit/:id
-        - [ ] - vendor/customers
+        - [x] - vendor/customers
         - [ ] - vendor/customers/view/:id
         - [ ] - vendor/settings
     - [x] - clean & structure up the components properly before move into other pages
@@ -69,19 +69,32 @@ this app allows users to create their own store and start selling their products
     - [x] - fix scss style conflicts - https://www.freecodecamp.org/news/how-to-style-react-apps-with-css/
     - [x] - seperate global files from sass modules
     - [x] - Orders page
-    - [/] - Products page
-        - [ ] - Products Upload Modal
+    - [x] - Products page
+        - [x] - Products Upload Modal
+        - [ ] - Reactive auto sorting images
     - [ ] - Global alert component
-    - [ ] - Customers
-        - [ ] - Customers modal
+    - [x] - Customers
+        - [x] - Customers modal
     - [ ] - Settings
     - [ ] - User Profile
     - [ ] - Authentication modal
 
+## Fix these
+
+[ ] - fix max font size showing ... in front end
+[ ] - validate max and min user inputs
 
 ### Backend
 
+- [ ] - configure eslint on backend code
+- [ ] - create a simple REST API with mongodb
+- [ ] - Model the data entries
+- [ ] - update errorHandler middleware after configuring dotenv
+ 
+https://joi.dev/ - for schema validation
 
+data model - https://www.mongodb.com/docs/manual/applications/data-models/
+Many to many relationship - http://learnmongodbthehardway.com/schema/schemabasics/
 https://www.mongodb.com/nosql-explained/data-modeling
 
 ### Features
