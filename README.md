@@ -87,7 +87,7 @@ this app allows users to create their own store and start selling their products
 ### Backend
 
 - [ ] - configure eslint on backend code
-- [ ] - create a simple REST API with mongodb
+- [x] - create a simple REST API with mongodb
 - [ ] - Model the data entries
 - [ ] - update errorHandler middleware after configuring dotenv
 
@@ -98,6 +98,8 @@ this app allows users to create their own store and start selling their products
     - [ ] - Order Entry
     - [ ] - Buyer Entry
 
+- [ ] - Enable Vendor to 
+
  
 https://joi.dev/ - for schema validation
 
@@ -105,23 +107,25 @@ data model - https://www.mongodb.com/docs/manual/applications/data-models/
 Many to many relationship - http://learnmongodbthehardway.com/schema/schemabasics/
 https://www.mongodb.com/nosql-explained/data-modeling
 
-### Workflow
+### Development phase with Workflow
 
-- vendor creating a store
-    - singup from the landing page
-        - GET request to /api/vendor/signup
-        - retieve the created object response and save it in frontend state
-        - prompt the user to step form
-            - after signup if user tried to close the browser without completing the step form, it will be prompted again to complete
-                - add { "isCompletedStoreSetup": false }
-            - inlcude store & vendor details in step form fields
-                - 1st step
-                    - store details
-                - 2nd step
-                    - vendor details
-                        - retreive already know data from frontend state
-    - success sign after compeletion
-    - redirect to the dashboard
+[/] - vendor creating a store
+        - singup from the landing page
+            - POST request to /api/vendor/signup
+            - retieve the created object response and save it in frontend state
+            - prompt the user to step form
+                - after signup if user tried to close the browser without completing the step form, it will be prompted again to complete
+                    - add { "isCompletedStoreSetup": false }
+                - inlcude store & vendor details in step form fields
+                    - 1st step
+                        - store details
+                    - 2nd step
+                        - vendor details
+                            - retreive already know data from frontend state
+                    - 3rd step
+                        - payment details - (need to research stripe API for payment field requirements)
+        - success sign after compeletion
+        - redirect to the dashboard
 
 
 - users and admins both cannot have the same email address
@@ -233,6 +237,7 @@ Store Entry
 - Account Feature
     - ability to verify and change (email, password, phone)
     - two factor authentication
+    - add payment details later
 
 
 https://intoli.com/blog/antd-scss-theme-plugin/ - sass for ant design
