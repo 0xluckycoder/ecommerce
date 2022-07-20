@@ -3,9 +3,13 @@ const morgan = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+require('dotenv').config();
+
 const middlewares = require('./middlewares');
 
 const stores = require('./api/store/stores');
+const users = require('./api/user/users');
+
 
 const app = express();
 
@@ -33,7 +37,8 @@ app.get('/', (req, res) => {
     });
 });
 
-app.use('/api/store', stores)
+app.use('/api/store', stores);
+app.use('/api/user', users);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
