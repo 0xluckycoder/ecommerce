@@ -3,6 +3,7 @@
 const { CognitoIdentityProvider, SignUpCommand, CognitoIdentityProviderClient } = require('@aws-sdk/client-cognito-identity-provider')
 
 const { Router } = require('express');
+const nodemailer = require('nodemailer');
 
 const router = Router();
 
@@ -33,6 +34,36 @@ router.get('/', async (req, res, next) => {
 
         console.log(error);
 
+    }
+});
+
+router.get('/email', async () => {
+    console.log('starting');
+    try {
+        const testAccount = await nodemailer.createTestAccount();
+        const transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false,
+            auth : {
+                user: testAccount.user,
+                pass: testAccount.pass
+            }
+        });
+
+        const info = await transporter.sendMail({
+            from: "freebie <freebiesell@gmail.com>",
+            to: "lakshanperera.dev@gmail.com",
+            subject: "Freebie Subject",
+            text: "Hello World",
+            html: "<h1>this is html text </h1>"
+        });
+
+        console.log("Message is sent ", info.messageId);
+
+        console.log("Preveiw URL", nodemailer.getTestMessageUrl(info));
+    } catch (error) {
+        console.log(error);
     }
 });
 
