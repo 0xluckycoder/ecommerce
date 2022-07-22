@@ -98,8 +98,42 @@ this app allows users to create their own store and start selling their products
     - [ ] - Order Entry
     - [ ] - Buyer Entry
 
-- [ ] - Enable Vendor to 
+- [x] - configure IAM
 
+- [/] - configure cognito
+    - [ ] - use custom email sending workflow to verifiy signup users emails
+        - [x] - configure nodemailer for email verification sending
+        - [ ] - validate data properly
+            - try schema validator
+            - try https://openbase.com/js/schema-typed validator 
+            - try obey validator
+        - [ ] - configure custom forgot password account recovery
+        - list down the workflow and follow best practices when confirming emails
+        - use cognito identity prover sdk to confirm users
+        - follow examples
+
+    - [/] - create an sample fully functioning custom auth API with cognito
+    - [ ] - receive accessToken and refreshToken properly
+        - read more about token based authentication
+    - [ ] - learn to secure custom API endpoints with cognito
+    - [ ] - configure federated providers with Google
+    - [ ] - implement it to the project
+
+Cognito App client config
+    - Refresh toekn expiration - 30 days
+    - Access token expiration - 60 mins
+    - ID token expiration - 60 mins
+
+
+- [ ] - update branding information to Oauth 2.0 API in google console
+    - [ ] - add callback redirect after login
+    - app logo
+    - app homelink
+    - app privacy policy link
+    - app terms of service link
+    - authorized domains
+                                                          
+store domain - freebiesell.xyz
  
 https://joi.dev/ - for schema validation
 
