@@ -86,8 +86,10 @@ this app allows users to create their own store and start selling their products
 
 ### Backend
 
-- [ ] - configure eslint on backend code
 - [x] - create a simple REST API with mongodb
+- [/] - Handle Errors properly
+        - example - https://github.com/CodingGarden/inventory-app/blob/master/backend/src/middlewares.js
+- [ ] - configure eslint on backend code
 - [ ] - Model the data entries
 - [ ] - update errorHandler middleware after configuring dotenv
 

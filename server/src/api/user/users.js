@@ -4,7 +4,7 @@ const { CognitoIdentityProvider, SignUpCommand } = require('@aws-sdk/client-cogn
 
 const { Router } = require('express');
 const nodemailer = require('nodemailer');
-const Joi = require('joi');
+const yup = require('yup');
 
 const router = Router();
 
@@ -69,37 +69,55 @@ const router = Router();
 router.post('/signup', async (req, res, next) => {
     console.log('came here')
     try {
-        // validate email and password
-        const data = req.body;
+        const userSchema = yup.object().shape({
+            email: yup.string('email must be a string')
+                    .required('email is required')
+                    .max(127, 'email address is too long')
+                    .email('not a valid email address'),
+            password: yup.string('password must be a string')
+                        .required('password is required')
+                        .max(127, 'password is too long')
+        });
 
-        /* validate with express-validator */ 
+        const validated = await userSchema.validate(req.body);
 
-        // console.log(data);
+        res.json(validated);
+/* 
+        const client = new CognitoIdentityProvider({
+            region: 'us-west-2',
+            credentials : {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
+        });
 
-        // const userSchema = Joi.object({
-        //     email: Joi.string()
-        //             .email()
-        //             .required(),
-        //     password: Joi.string()
-        //             .min(7)
-        //             .max(12)
-        //             .required()
-        //             .error((errors) => {
-        //                 console.log(errors);
-        //             })
-        // });
+        const command = new SignUpCommand({
+            ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID,
+            Username: value.email,
+            Password: value.password,
+        });
 
-        // const { error, value } = userSchema.validate(data, userSchema);
+        const response = await client.send(command);
+*/
 
-        // if (error) {
-        //     console.log('validation error', error);
-        // } else {
-        //     console.log('the value', value);
-        // }
+        /*
+        {
+            "$metadata": {
+                "httpStatusCode": 200,
+                "requestId": "75c810d8-a022-4e23-9bbd-d8e2aeed23e1",
+                "attempts": 1,
+                "totalRetryDelay": 0
+            },
+            "UserConfirmed": false,
+            "UserSub": "c5b426ec-ffcd-445d-a6fc-036a8898ca37"
+        }
+        */ 
 
+        res.json(response);
 
     } catch(error) {
         console.log('errr', error);
+        next(error);
     }
 });
 
