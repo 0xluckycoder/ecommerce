@@ -103,12 +103,10 @@ this app allows users to create their own store and start selling their products
 - [x] - configure IAM
 
 - [/] - configure cognito
-    - [ ] - use custom email sending workflow to verifiy signup users emails
+    - [x] - use custom email sending workflow to verifiy signup users emails
         - [x] - configure nodemailer for email verification sending
-        - [ ] - validate data properly
-            - try schema validator
-            - try https://openbase.com/js/schema-typed validator 
-            - try obey validator
+        - [x] - validate data properly
+        - [/] - use jwt to generate email confirm link
         - [ ] - configure custom forgot password account recovery
         - list down the workflow and follow best practices when confirming emails
         - use cognito identity prover sdk to confirm users

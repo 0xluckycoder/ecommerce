@@ -5,70 +5,17 @@ const { CognitoIdentityProvider, SignUpCommand } = require('@aws-sdk/client-cogn
 const { Router } = require('express');
 const nodemailer = require('nodemailer');
 const yup = require('yup');
+const { validate } = require('../../models/StoreEntry');
 
 const router = Router();
 
 // const StoreEntry = require('../../models/StoreEntry');
 
-// router.get('/', async (req, res, next) => {
-
-//     try {
-//         const client = new CognitoIdentityProvider({
-//             region: 'us-west-2',
-//             credentials : {
-//                 accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-//             },
-//         });
-
-//         const command = new SignUpCommand({
-//             ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID,
-//             Username: "lakshanperera625@gmail.com",
-//             Password: "7BuZ7YkV7JNxpwigiqi",
-//         });
-
-//         const response = await client.send(command);
-
-//         console.log(response);
-        
-//     } catch (error) {
-
-//         console.log(error);
-
-//     }
-// });
-
-// router.get('/email', async () => {
-//     console.log('starting');
-//     try {
-//         const transporter = nodemailer.createTransport({
-//             host: "smtp.zoho.com",
-//             port: 465,
-//             secure: true,
-//             auth : {
-//                 user: process.env.EMAIL_ADDRESS,
-//                 pass: process.env.PASSWORD
-//             }
-//         });
-
-//         const info = await transporter.sendMail({
-//             from: "freebie <freebiesell@zohomail.com>",
-//             to: "lakshanperera.dev@gmail.com",
-//             subject: "Freebie Subject",
-//             html: "<h1>this is html text </h1>"
-//         });
-
-//         console.log("Message is sent ", info);
-
-//         console.log("Preveiw URL", nodemailer.getTestMessageUrl(info));
-//     } catch (error) {
-//         console.log(error);
-//     }
-// });
 
 router.post('/signup', async (req, res, next) => {
     console.log('came here')
     try {
+        // validate user input
         const userSchema = yup.object().shape({
             email: yup.string('email must be a string')
                     .required('email is required')
@@ -81,10 +28,9 @@ router.post('/signup', async (req, res, next) => {
 
         const validated = await userSchema.validate(req.body);
 
-        res.json(validated);
-/* 
+        // save user in cognito
         const client = new CognitoIdentityProvider({
-            region: 'us-west-2',
+            region: process.env.AWS_COGNITO_REGION,
             credentials : {
                 accessKeyId: process.env.AWS_ACCESS_KEY_ID,
                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -93,32 +39,100 @@ router.post('/signup', async (req, res, next) => {
 
         const command = new SignUpCommand({
             ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID,
-            Username: value.email,
-            Password: value.password,
+            Username: validated.email,
+            Password: validated.password,
         });
 
         const response = await client.send(command);
-*/
 
-        /*
-        {
-            "$metadata": {
-                "httpStatusCode": 200,
-                "requestId": "75c810d8-a022-4e23-9bbd-d8e2aeed23e1",
-                "attempts": 1,
-                "totalRetryDelay": 0
-            },
-            "UserConfirmed": false,
-            "UserSub": "c5b426ec-ffcd-445d-a6fc-036a8898ca37"
-        }
-        */ 
+        // success response
+        res.status(200).json({
+            success: true,
+            userInfo: validated,
+            cognitoInfo: response
+        });
 
-        res.json(response);
+/*
+    {
+        "$metadata": {
+            "httpStatusCode": 200,
+            "requestId": "75c810d8-a022-4e23-9bbd-d8e2aeed23e1",
+            "attempts": 1,
+            "totalRetryDelay": 0
+        },
+        "UserConfirmed": false,
+        "UserSub": "c5b426ec-ffcd-445d-a6fc-036a8898ca37"
+    }
+*/ 
 
     } catch(error) {
         console.log('errr', error);
-        next(error);
+
+        // if expected error type is not present in here throw 500 error type
+        const errorTypes = {
+            ValidationError: 400,
+            UsernameExistsException: 400,
+            UserLambdaValidationException: 400,
+            UnexpectedLambdaException: 400,
+            TooManyRequestsException: 400,
+            ResourceNotFoundException: 400,
+            NotAuthorizedException: 400,
+            InvalidSmsRoleTrustRelationshipException: 400,
+            InvalidSmsRoleAccessPolicyException: 400,
+            InvalidPasswordException: 400,
+            InvalidParameterException: 400,
+            InvalidLambdaResponseException: 400,
+            InvalidEmailRoleAccessPolicyException: 400,
+            InternalErrorException: 400,
+            CodeDeliveryFailureException: 400
+        }
+
+        // assign the status code
+        const statusCode = errorTypes[error.name] ? errorTypes[error.name] : 500;
+
+        res.status(statusCode).json({
+            success: false,
+            status: statusCode,
+            message: error.message,
+            stack: process.env.NODE_ENV === 'production' ? 'error stack is hidden in production' : error.stack
+        });
+
+        // next(error);
     }
 });
+
+router.post('/confirmEmail', async (req, res, next) => {
+    /*
+    {
+        "email",
+        "password"
+    }
+    */ 
+    try {
+        // nodemailer config
+        const transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: true,
+            auth : {
+                user: process.env.EMAIL_ADDRESS,
+                pass: process.env.PASSWORD
+            }
+        });
+        
+        const info = await transporter.sendMail({
+            from: "freebie <freebiesell@zohomail.com>",
+            to: "lakshanperera.dev@gmail.com",
+            subject: "Freebie Subject",
+            html: "<h1>this is html text </h1>"
+        });
+
+        console.log("Message is sent ", info);
+
+        console.log("Preveiw URL", nodemailer.getTestMessageUrl(info));
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 module.exports = router;
