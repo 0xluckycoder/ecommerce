@@ -102,16 +102,21 @@ this app allows users to create their own store and start selling their products
 
 - [x] - configure IAM
 
-- [/] - configure cognito
-    - [x] - use custom email sending workflow to verifiy signup users emails
-        - [x] - configure nodemailer for email verification sending
-        - [x] - validate data properly
-        - [/] - use jwt to generate email confirm link
-        - [ ] - configure custom forgot password account recovery
-        - list down the workflow and follow best practices when confirming emails
-        - use cognito identity prover sdk to confirm users
-        - follow examples
+- [x] - configure cognito
 
+- [x] - user signup
+    - [x] - validate user input
+    - [x] - save user in cognito user pool
+
+- [/] - user email confirm
+    - [x] - configure nodemailer SMTP to send emails
+    - [/] - generate confirmation url securly with jwt
+    - [ ] - create a route to verify emails (jwt decode)
+
+- [ ] - Follow the this auth flow and choose a secured secret to generate email confirmation links
+https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-post-confirmation.html
+
+- When using cognito
     - [/] - create an sample fully functioning custom auth API with cognito
     - [ ] - receive accessToken and refreshToken properly
         - read more about token based authentication

@@ -1,11 +1,16 @@
 // const { CognitoIdentityProvider, SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
 
-const { CognitoIdentityProvider, SignUpCommand } = require('@aws-sdk/client-cognito-identity-provider')
+const { 
+    CognitoIdentityProvider, 
+    SignUpCommand, 
+    GetUserCommand 
+} = require('@aws-sdk/client-cognito-identity-provider')
 
 const { Router } = require('express');
 const nodemailer = require('nodemailer');
 const yup = require('yup');
 const { validate } = require('../../models/StoreEntry');
+const { sign } = require('jsonwebtoken');
 
 const router = Router();
 
@@ -13,7 +18,6 @@ const router = Router();
 
 
 router.post('/signup', async (req, res, next) => {
-    console.log('came here')
     try {
         // validate user input
         const userSchema = yup.object().shape({
@@ -45,12 +49,45 @@ router.post('/signup', async (req, res, next) => {
 
         const response = await client.send(command);
 
-        // success response
-        res.status(200).json({
-            success: true,
-            userInfo: validated,
-            cognitoInfo: response
+        // send email verification link
+        const transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: true,
+            auth : {
+                user: process.env.EMAIL_ADDRESS,
+                pass: process.env.PASSWORD
+            }
         });
+
+        // build the jwt link
+
+        const secret = `${validated.}`
+
+        const emailTemplate = {
+            from: "freebie <freebiesell@zohomail.com>",
+            to: "lakshanperera.dev@gmail.com",
+            subject: "Freebie Subject",
+            html: "<h1>this is html text </h1>"
+        };
+
+        const info = await transporter.sendMail(emailTemplate);
+
+        console.log("Message is sent ", info);
+        console.log("Preveiw URL", nodemailer.getTestMessageUrl(info));
+
+        // success response
+        // res.status(200).json({
+        //     success: true,
+        //     userData: validated,
+        //     cognitoData: response
+        // });
+
+        /*
+        [x] - register a user
+        [/] - confirm singup
+        [ ] - sign in and retreive tokens
+        */ 
 
 /*
     {
@@ -103,33 +140,27 @@ router.post('/signup', async (req, res, next) => {
 
 router.post('/confirmEmail', async (req, res, next) => {
     /*
-    {
-        "email",
-        "password"
-    }
+        {
+            "email",
+            "password"
+        }
+
+        retreive user with email from cognito
+        fetch the id and password and sign the user
     */ 
     try {
-        // nodemailer config
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: process.env.SMTP_PORT,
-            secure: true,
-            auth : {
-                user: process.env.EMAIL_ADDRESS,
-                pass: process.env.PASSWORD
-            }
-        });
-        
-        const info = await transporter.sendMail({
-            from: "freebie <freebiesell@zohomail.com>",
-            to: "lakshanperera.dev@gmail.com",
-            subject: "Freebie Subject",
-            html: "<h1>this is html text </h1>"
-        });
 
-        console.log("Message is sent ", info);
+        /*
+        res.status(200).json({
+            success: true,
+            userInfo: validated,
+            cognitoInfo: response
+        });
+        */ 
 
-        console.log("Preveiw URL", nodemailer.getTestMessageUrl(info));
+        // const secret = `${}-${req.body.password}`;
+        // const signedJwt = sign()
+
     } catch (error) {
         console.log(error);
     }
