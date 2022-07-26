@@ -114,6 +114,14 @@ this app allows users to create their own store and start selling their products
     - [x] - create a route to verify emails (jwt decode)
     - [x] - confirm cognito user (adminConfirmSignup)
 
+- [x] - user login with
+    - [x] - choose (adminInitiateAuth) and retreive tokens
+
+- [ ] - authorize backend resources with cognito
+    - [ ] - learn how to protect private endpoints  
+    - [ ] - learn how to manage access token and refresh token
+    - [ ] - create private test endpoint to retreive backend resources
+
 - [ ] - rename auth routes properly
 
 - [ ] - user sign in
@@ -131,7 +139,7 @@ https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-post-
 
 - When using cognito
     - [/] - create an sample fully functioning custom auth API with cognito
-    - [ ] - receive accessToken and refreshToken properly
+    - [x] - receive accessToken and refreshToken properly
         - read more about token based authentication
     - [ ] - learn to secure custom API endpoints with cognito
     - [ ] - configure federated providers with Google
