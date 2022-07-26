@@ -41,7 +41,7 @@ app.use('/api/store', stores);
 app.use('/api/user', users);
 
 // app.use(middlewares.notFound);
-// app.use(middlewares.errorHandler);
+app.use(middlewares.errorHandler);
 
 app.listen(5500, () => {
     console.log('Listening at port 5500');

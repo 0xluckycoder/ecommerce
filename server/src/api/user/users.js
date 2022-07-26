@@ -3,20 +3,23 @@
 const { 
     CognitoIdentityProvider, 
     SignUpCommand, 
-    GetUserCommand 
+    GetUserCommand,
+    AdminConfirmSignUpCommand
 } = require('@aws-sdk/client-cognito-identity-provider')
 
 const { Router } = require('express');
 const nodemailer = require('nodemailer');
 const yup = require('yup');
 const { validate } = require('../../models/StoreEntry');
-const { sign } = require('jsonwebtoken');
+const { sign, verify } = require('jsonwebtoken');
 
 const router = Router();
 
 // const StoreEntry = require('../../models/StoreEntry');
 
-
+// @desc sign up user and send confirm link to email
+// @path POST /api/user/signup
+// @authorization public
 router.post('/signup', async (req, res, next) => {
     try {
         // validate user input
@@ -47,7 +50,7 @@ router.post('/signup', async (req, res, next) => {
             Password: validated.password,
         });
 
-        const response = await client.send(command);
+        const cognitoSavedUser = await client.send(command);
 
         // send email verification link
         const transporter = nodemailer.createTransport({
@@ -60,110 +63,113 @@ router.post('/signup', async (req, res, next) => {
             }
         });
 
-        // build the jwt link
+        const payload = {
+            id: cognitoSavedUser.UserSub,
+            email: validated.email
+        }
 
-        const secret = `${validated.}`
+        const secret = `${process.env.EMAIL_CONFIRM_SECRET}`;
+
+        const token = sign(payload, secret, { expiresIn: 3600*24 });
+
+        const url = `http://localhost:5500/api/user/confirmEmail/${token}`;
 
         const emailTemplate = {
             from: "freebie <freebiesell@zohomail.com>",
-            to: "lakshanperera.dev@gmail.com",
-            subject: "Freebie Subject",
-            html: "<h1>this is html text </h1>"
+            to: validated.email,
+            subject: "Email Confirm",
+            html: `<h1>this is html text</h1><p>click this link to confirm signup - ${url}</p>`
         };
 
         const info = await transporter.sendMail(emailTemplate);
 
-        console.log("Message is sent ", info);
-        console.log("Preveiw URL", nodemailer.getTestMessageUrl(info));
+        console.log(info);
 
         // success response
-        // res.status(200).json({
-        //     success: true,
-        //     userData: validated,
-        //     cognitoData: response
-        // });
-
-        /*
-        [x] - register a user
-        [/] - confirm singup
-        [ ] - sign in and retreive tokens
-        */ 
-
-/*
-    {
-        "$metadata": {
-            "httpStatusCode": 200,
-            "requestId": "75c810d8-a022-4e23-9bbd-d8e2aeed23e1",
-            "attempts": 1,
-            "totalRetryDelay": 0
-        },
-        "UserConfirmed": false,
-        "UserSub": "c5b426ec-ffcd-445d-a6fc-036a8898ca37"
-    }
-*/ 
-
-    } catch(error) {
-        console.log('errr', error);
-
-        // if expected error type is not present in here throw 500 error type
-        const errorTypes = {
-            ValidationError: 400,
-            UsernameExistsException: 400,
-            UserLambdaValidationException: 400,
-            UnexpectedLambdaException: 400,
-            TooManyRequestsException: 400,
-            ResourceNotFoundException: 400,
-            NotAuthorizedException: 400,
-            InvalidSmsRoleTrustRelationshipException: 400,
-            InvalidSmsRoleAccessPolicyException: 400,
-            InvalidPasswordException: 400,
-            InvalidParameterException: 400,
-            InvalidLambdaResponseException: 400,
-            InvalidEmailRoleAccessPolicyException: 400,
-            InternalErrorException: 400,
-            CodeDeliveryFailureException: 400
-        }
-
-        // assign the status code
-        const statusCode = errorTypes[error.name] ? errorTypes[error.name] : 500;
-
-        res.status(statusCode).json({
-            success: false,
-            status: statusCode,
-            message: error.message,
-            stack: process.env.NODE_ENV === 'production' ? 'error stack is hidden in production' : error.stack
+        res.status(200).json({
+            success: true,
+            userData: validated.email,
+            cognitoData: cognitoSavedUser
         });
 
-        // next(error);
+    // {
+    //     "$metadata": {
+    //         "httpStatusCode": 200,
+    //         "requestId": "75c810d8-a022-4e23-9bbd-d8e2aeed23e1",
+    //         "attempts": 1,
+    //         "totalRetryDelay": 0
+    //     },
+    //     "UserConfirmed": false,
+    //     "UserSub": "c5b426ec-ffcd-445d-a6fc-036a8898ca37"
+    // }
+
+    } catch(error) {
+        
+        next(error);
     }
 });
 
-router.post('/confirmEmail', async (req, res, next) => {
-    /*
-        {
-            "email",
-            "password"
-        }
-
-        retreive user with email from cognito
-        fetch the id and password and sign the user
-    */ 
+// @desc confirm email with token
+// @path GET /api/user/confirmEmail/:token
+// @authorization public
+router.get('/confirmEmail/:token', async (req, res, next) => {
     try {
 
-        /*
-        res.status(200).json({
-            success: true,
-            userInfo: validated,
-            cognitoInfo: response
+        const { token } = req.params;
+
+        const secret = `${process.env.EMAIL_CONFIRM_SECRET}`;
+
+        const decoded = verify(token, secret);
+
+        // console.log(decoded);
+
+        const client = new CognitoIdentityProvider({
+            region: process.env.AWS_COGNITO_REGION,
+            credentials : {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
         });
+
+        const command = new AdminConfirmSignUpCommand({
+            UserPoolId: process.env.USER_POOL_ID,
+            Username: decoded.id
+        });
+
+        const response = await client.send(command);
+
+        res.status(200).json(response);
+
+        /*
+        {
+            "$metadata": {
+                "httpStatusCode": 200,
+                "requestId": "bfad74bc-8228-4bff-b18c-3520582c8a13",
+                "attempts": 1,
+                "totalRetryDelay": 0
+            }
+        }
+        */ 
+
+        /*
+        - two options
+            - redirect user to login page
+            - redirect user to dashboard page without login (token will fetched by admin api operations)
+
+        {
+            id: '932ae7ba-594c-4208-a9be-bd717d1587e7',
+            email: 'lakshanperera.dev@gmail.com',
+            iat: 1658855828,
+            exp: 1658942228
+        }
         */ 
 
         // const secret = `${}-${req.body.password}`;
         // const signedJwt = sign()
 
     } catch (error) {
-        console.log(error);
+        next(error);
     }
-})
+});
 
 module.exports = router;

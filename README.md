@@ -108,10 +108,23 @@ this app allows users to create their own store and start selling their products
     - [x] - validate user input
     - [x] - save user in cognito user pool
 
-- [/] - user email confirm
+- [x] - user email confirm
     - [x] - configure nodemailer SMTP to send emails
-    - [/] - generate confirmation url securly with jwt
-    - [ ] - create a route to verify emails (jwt decode)
+    - [x] - generate confirmation url securly with jwt
+    - [x] - create a route to verify emails (jwt decode)
+    - [x] - confirm cognito user (adminConfirmSignup)
+
+- [ ] - rename auth routes properly
+
+- [ ] - user sign in
+    - [ ] - 
+
+- [ ] - resend verification link feature
+    - [ ] - create seperate endpoint
+    - [ ] - add custom rate limits for resending
+
+- [ ] - modulerize and cleanup the backend code
+    - https://github.dev/async-labs/builderbook/tree/master/builderbook/server
 
 - [ ] - Follow the this auth flow and choose a secured secret to generate email confirmation links
 https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-post-confirmation.html
@@ -128,7 +141,6 @@ Cognito App client config
     - Refresh toekn expiration - 30 days
     - Access token expiration - 60 mins
     - ID token expiration - 60 mins
-
 
 - [ ] - update branding information to Oauth 2.0 API in google console
     - [ ] - add callback redirect after login
@@ -277,10 +289,6 @@ Store Entry
     - ability to verify and change (email, password, phone)
     - two factor authentication
     - add payment details later
-
-
-https://intoli.com/blog/antd-scss-theme-plugin/ - sass for ant design
-https://www.mongodb.com/basics/best-practices - data modeling best practices
 
 
 
