@@ -113,14 +113,30 @@ this app allows users to create their own store and start selling their products
     - [x] - generate confirmation url securly with jwt
     - [x] - create a route to verify emails (jwt decode)
     - [x] - confirm cognito user (adminConfirmSignup)
+    - [ ] - update email_verify in confirm process
 
 - [x] - user login with
     - [x] - choose (adminInitiateAuth) and retreive tokens
 
 - [ ] - authorize backend resources with cognito
-    - [ ] - learn how to protect private endpoints  
-    - [ ] - learn how to manage access token and refresh token
-    - [ ] - create private test endpoint to retreive backend resources
+    - [x] - learn how to protect private endpoints  
+    - [x] - learn how to manage access token
+    - [x] - create private test endpoint to retreive backend resources
+    - [x] - authorize with private endpoints using only access token for now, later implement refresh tokens
+    - [ ] - manage expired access token errors
+    - [ ] - learn to generate refresh tokens and create valid access tokens with it  
+        - since we receive the refresh token when signing in check to see if there is a common algorithm process to generate access token
+        - see how custom access tokens are generate from refresh tokens
+        - test it with endpoints
+        - research about refresh token managing
+
+    - getuser function can be used to retreive the user info (only accesskey is required)
+    - private key is used to sign the token / public key is used to verify the token
+    - verify the access ID token / access token signature before accepting it
+    - call GlobalSignOut when singing out to disable active tokens
+    - https://youtu.be/QDR-pX7Ho8k - cognito token verify guide
+
+- [ ] - implement auth functionalitites to 
 
 - [ ] - rename auth routes properly
 

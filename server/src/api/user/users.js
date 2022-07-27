@@ -245,5 +245,40 @@ router.post('/signin', async (req, res, next) => {
     }
 });
 
+// @desc private test endpoint that only accessed by logged in users
+// @path POST /api/user/private/test
+// @authorization private
+router.post('/private/test', async (req, res, next) => {
+
+    /*
+        Secure authorization endpoints from CSRF vulnerbility
+    */ 
+
+    try {
+        // extract the access token from request header
+        const accessToken = req.header('Authorization').split(' ')[1];
+
+        // get user from cognito
+        const client = new CognitoIdentityProvider({
+            region: process.env.AWS_COGNITO_REGION,
+            credentials : {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
+        });
+
+        const command = new GetUserCommand({
+            AccessToken: accessToken 
+        });
+
+        const user = await client.send(command);
+
+        res.status(200).json(user);
+        
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 module.exports = router;
