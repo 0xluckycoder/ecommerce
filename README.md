@@ -18,6 +18,42 @@ this app allows users to create their own store and start selling their products
 - MongoDB
 - AWS tools
 
+### Business Logic / Features  
+- Managed ecommerce platform that allows anyone to create their own stores and start selling products online ( like shopify )
+- This app contains two user levels which are customer and vendor, since we have two customer levels when authenticating visitor will be asked to whether they need to signup as a customer or signup as a vendor.
+
+####  Vendor Level Features
+- Vendor Account
+	- Ability to change user verified attributes
+		- require to verify sensitive information like phone & email
+
+- Store 
+	- Ability to create stores
+	- Edit store details
+	- Deactivate or activate the store
+	
+- Products
+	- Ability to upload/edit/delete products
+	- Ability to see their previous customers
+
+- Orders
+	-	Ability to see orders
+	-	change order statuses
+
+- Analytics
+	- sales / revenue (with custom date range)
+	- current out of stock products
+	- current orders
+	- sales line chart with date sorting
+
+#### Customer Level Features
+- Customer Account
+	- Ability to change user verified attributes
+		- require to verify sensitive information like phone & email
+
+- Orders
+	- ability to view previous made orders
+
 
 ## TODO
 
@@ -27,6 +63,7 @@ this app allows users to create their own store and start selling their products
     - [x] - learn how to adujust styles in antdesign
     - [x] - choose a logo and color theme
     - [x] - design dashbaord page
+    - [ ] - create UI views for user level selection page
 
 - [x] - Make the design consistant and every page
 - [x] - Design Login cards figma UI
@@ -100,6 +137,18 @@ this app allows users to create their own store and start selling their products
     - [ ] - Order Entry
     - [ ] - Buyer Entry
 
+- When using cognito
+    - [x] - create an sample fully functioning custom auth API with cognito
+    - [x] - receive accessToken and refreshToken properly
+    - [x] - learn to secure custom API endpoints with cognito
+    - [ ] - configure federated providers with Google
+    - [ ] - implement it to the project
+
+Cognito App client config
+    - Refresh toekn expiration - 30 days
+    - Access token expiration - 60 mins
+    - ID token expiration - 60 mins
+
 - [x] - configure IAM
 
 - [x] - configure cognito
@@ -124,47 +173,43 @@ this app allows users to create their own store and start selling their products
     - [x] - create private test endpoint to retreive backend resources
     - [x] - authorize with private endpoints using only access token for now, later implement refresh tokens
     - [ ] - manage expired access token errors
-    - [ ] - learn to generate refresh tokens and create valid access tokens with it  
+    - [x] - learn to generate refresh tokens and create valid access tokens with it
+    - [ ] - make sure to revoke active token calling singout endpoint when using logging out from the app  
+        - [ ] - invalidate and blacklist refreshtokens in serverside
+    - [ ] - provide greater security to refreshtokens in frontend
         - since we receive the refresh token when signing in check to see if there is a common algorithm process to generate access token
         - see how custom access tokens are generate from refresh tokens
         - test it with endpoints
         - research about refresh token managing
+    - [ ] - encrypt refreshtokens (not required) 
+        -  research about how to do it
+    - [ ] - handle errors and responses properly
 
-    - getuser function can be used to retreive the user info (only accesskey is required)
-    - private key is used to sign the token / public key is used to verify the token
-    - verify the access ID token / access token signature before accepting it
-    - call GlobalSignOut when singing out to disable active tokens
-    - https://youtu.be/QDR-pX7Ho8k - cognito token verify guide
+- [ ] - refresh the accesstoken with refreshtoken
+    - [ ] - save the refreshToken and user attribute in memory
+    - [ ] - use aws jwk to verify accessTokens
+    - [x] - refresh the new accessToken and send it to user
+    - [ ] - logout the user if token is expired (revoke refreshToken)
+        - [x] - validate the refreshToken
+        - [x] - aws refresh the accessToken and idToken api call (no need to use jwt to generate new tokens)
+        - [ ] - veirfy the user with jwk or with sdk getUser method if necessary
+        - https://youtu.be/QDR-pX7Ho8k - cognito token verify guide
+        - callGlobalSignOut when revoking tokens
 
-- [ ] - implement auth functionalitites to 
+    - [x] - follow the refresh token guides and make sure process in not vulnerble or missing any important things
+        - [x] - https://youtu.be/QDR-pX7Ho8k
+        - [x] - https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
 
-- [ ] - rename auth routes properly
-
-- [ ] - user sign in
-    - [ ] - 
-
+    - [ ] - Organize the backend
+        - [ ] - follow the this guide and re-write the routes - https://www.freecodecamp.org/news/rest-api-design-best-practices-build-a-rest-api/
+        - [ ] - follow this guide to modulerize the code after most of the backend api work has been completed https://github.dev/async-labs/builderbook/tree/master/builderbook/server
+    
 - [ ] - resend verification link feature
     - [ ] - create seperate endpoint
     - [ ] - add custom rate limits for resending
 
-- [ ] - modulerize and cleanup the backend code
-    - https://github.dev/async-labs/builderbook/tree/master/builderbook/server
-
 - [ ] - Follow the this auth flow and choose a secured secret to generate email confirmation links
 https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-post-confirmation.html
-
-- When using cognito
-    - [/] - create an sample fully functioning custom auth API with cognito
-    - [x] - receive accessToken and refreshToken properly
-        - read more about token based authentication
-    - [ ] - learn to secure custom API endpoints with cognito
-    - [ ] - configure federated providers with Google
-    - [ ] - implement it to the project
-
-Cognito App client config
-    - Refresh toekn expiration - 30 days
-    - Access token expiration - 60 mins
-    - ID token expiration - 60 mins
 
 - [ ] - update branding information to Oauth 2.0 API in google console
     - [ ] - add callback redirect after login
@@ -182,28 +227,6 @@ data model - https://www.mongodb.com/docs/manual/applications/data-models/
 Many to many relationship - http://learnmongodbthehardway.com/schema/schemabasics/
 https://www.mongodb.com/nosql-explained/data-modeling
 
-### Development phase with Workflow
-
-[/] - vendor creating a store
-        - singup from the landing page
-            - POST request to /api/vendor/signup
-            - retieve the created object response and save it in frontend state
-            - prompt the user to step form
-                - after signup if user tried to close the browser without completing the step form, it will be prompted again to complete
-                    - add { "isCompletedStoreSetup": false }
-                - inlcude store & vendor details in step form fields
-                    - 1st step
-                        - store details
-                    - 2nd step
-                        - vendor details
-                            - retreive already know data from frontend state
-                    - 3rd step
-                        - payment details - (need to research stripe API for payment field requirements)
-        - success sign after compeletion
-        - redirect to the dashboard
-
-
-- users and admins both cannot have the same email address
 
 ### Features
 
@@ -289,30 +312,6 @@ Store Entry
     - store name subdomain
     - Email
     - Password
-
-## Next release products
-
-- Categories
-
-### workflow
-
-- Creating a store
-    - store buyer authenticate to the website
-    - confirm authentication
-    - creating a new store in dashboard (only one store for one user)
-        - choose a name for store
-        - upload logo to store
-        - store will be created
-
-- Uploading products
-    - visit to upload menu
-    - click add product and fill the form
-    - product will be uploaded to store
-
-- Account Feature
-    - ability to verify and change (email, password, phone)
-    - two factor authentication
-    - add payment details later
 
 
 

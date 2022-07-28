@@ -12,12 +12,9 @@ const {
 const { Router } = require('express');
 const nodemailer = require('nodemailer');
 const yup = require('yup');
-const { validate } = require('../../models/StoreEntry');
 const { sign, verify } = require('jsonwebtoken');
 
 const router = Router();
-
-const tokenList = {};
 
 // const StoreEntry = require('../../models/StoreEntry');
 
@@ -288,7 +285,7 @@ router.post('/private/test', async (req, res, next) => {
 // @authorization private
 router.post('/private/token', async (req, res, next) => {
     /*
-     Authorization: Bearer accesstoken
+     no access token is required since this endpoint since this endpoint uses to create new tokens
 
      {
         "refreshToken": refreshToken

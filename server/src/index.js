@@ -13,7 +13,7 @@ const users = require('./api/user/users');
 
 const app = express();
 
-mongoose.connect('mongodb+srv://lakshan:secretpas778@cluster0.gsmu4.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect(`mongodb+srv://lakshan:${process.env.DB_PASS}@cluster0.gsmu4.mongodb.net/?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -37,8 +37,8 @@ app.get('/', (req, res) => {
     });
 });
 
-app.use('/api/store', stores);
 app.use('/api/user', users);
+app.use('/api/store', stores);
 
 // app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
