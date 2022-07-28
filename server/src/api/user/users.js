@@ -5,7 +5,8 @@ const {
     SignUpCommand, 
     GetUserCommand,
     AdminConfirmSignUpCommand,
-    AdminInitiateAuthCommand
+    AdminInitiateAuthCommand,
+    InitiateAuthCommand
 } = require('@aws-sdk/client-cognito-identity-provider')
 
 const { Router } = require('express');
@@ -15,6 +16,8 @@ const { validate } = require('../../models/StoreEntry');
 const { sign, verify } = require('jsonwebtoken');
 
 const router = Router();
+
+const tokenList = {};
 
 // const StoreEntry = require('../../models/StoreEntry');
 
@@ -280,5 +283,100 @@ router.post('/private/test', async (req, res, next) => {
     }
 });
 
+// @desc refresh the access tokens
+// @path /api/user/private/token
+// @authorization private
+router.post('/private/token', async (req, res, next) => {
+    /*
+     Authorization: Bearer accesstoken
+
+     {
+        "refreshToken": refreshToken
+     }
+
+
+    */ 
+    try {
+        const { refreshToken } = req.body;
+
+        // save user in cognito
+        const client = new CognitoIdentityProvider({
+            region: process.env.AWS_COGNITO_REGION,
+            credentials : {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
+        });
+
+        const command = new InitiateAuthCommand({
+            AuthFlow: "REFRESH_TOKEN_AUTH",
+            AuthParameters: {
+                REFRESH_TOKEN: refreshToken,
+            },
+            ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID
+        });
+
+        const newTokens = await client.send(command);
+
+        /*
+            {
+                "$metadata": {
+                    "httpStatusCode": 200,
+                    "requestId": "a67eea8c-7d1e-44af-acb1-e040f5499237",
+                    "attempts": 1,
+                    "totalRetryDelay": 0
+                },
+                "AuthenticationResult": {
+                    "AccessToken": "eyJraWQiOiJCNnBoUmkyRFwvK2ExckRsV21MXC92UmdBRjJNSVl2MnF0R3Q3VEFGVUVqcjg9IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiIwNzdhMWM2Zi0zMTNmLTQyOGYtODI4My0xNDJhZGJhMThiN2UiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtd2VzdC0yLmFtYXpvbmF3cy5jb21cL3VzLXdlc3QtMl80THpBNER5dEwiLCJjbGllbnRfaWQiOiI2dWR0YjBodnY4b2EycjZiMGxrY2htMmhucSIsIm9yaWdpbl9qdGkiOiJkZDIzZDYyMy1jYzdiLTQ1NjItOTQxZi03ZmE4ODcyMGQ2MWQiLCJldmVudF9pZCI6Ijc5ZjI3ODYxLWVlNGItNGQxNi1iNmE3LTlkMjQwNTVhYzA3OCIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE2NTkwMjY2OTMsImV4cCI6MTY1OTAzMTA3NiwiaWF0IjoxNjU5MDI3NDc2LCJqdGkiOiJjNTEzOTFmNi03NmVhLTQ5ZjctOTBhZS04OWUzZTg0ZTZjZjgiLCJ1c2VybmFtZSI6IjA3N2ExYzZmLTMxM2YtNDI4Zi04MjgzLTE0MmFkYmExOGI3ZSJ9.Zb6WtDyLRCsteYdciwH9y81tFxveJfBwbmrNUA5Zt1BFJAVjm3GEODucIsjbP59BqgzezjhLlB7Qb8yv13SaCb7O3ptqoY7dHX7-Kh-Bs7DUC7u__jMYf2a6Ky8Y6C6Hk7sU3kgkXnbrb4U56Iu09OaRBQUMRtq_mr1TV1oo-EOvDSnzX9PDikIvKL37mO1EJNZswGxE04BdyMyPMlEt-b1q2P8_NLT3X2G9PObxfmekjZxvtvhxX3tPGZ8ygkcAnKhGMJ1HRD795fFSDYRK705zss3mW0wpABsNz8e7jyMxEidsxKeRW74_-7RW87NzbDKHXpFTjwOVOv8rZc5lRQ",
+                    "ExpiresIn": 3600,
+                    "IdToken": "eyJraWQiOiI1VktYcGlId2FsSTZiMHhaMEFWcmhLd25HVG5KTHkzeFNhODJpbmVEVDZ3PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIwNzdhMWM2Zi0zMTNmLTQyOGYtODI4My0xNDJhZGJhMThiN2UiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy13ZXN0LTIuYW1hem9uYXdzLmNvbVwvdXMtd2VzdC0yXzRMekE0RHl0TCIsImNvZ25pdG86dXNlcm5hbWUiOiIwNzdhMWM2Zi0zMTNmLTQyOGYtODI4My0xNDJhZGJhMThiN2UiLCJvcmlnaW5fanRpIjoiZGQyM2Q2MjMtY2M3Yi00NTYyLTk0MWYtN2ZhODg3MjBkNjFkIiwiYXVkIjoiNnVkdGIwaHZ2OG9hMnI2YjBsa2NobTJobnEiLCJldmVudF9pZCI6Ijc5ZjI3ODYxLWVlNGItNGQxNi1iNmE3LTlkMjQwNTVhYzA3OCIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjU5MDI2NjkzLCJleHAiOjE2NTkwMzEwNzYsImlhdCI6MTY1OTAyNzQ3NiwianRpIjoiOTYwOTZiODctMGI2OS00MGEwLWFkOGUtODVmYjNjYjdiMWQ5IiwiZW1haWwiOiJsYWtzaGFucGVyZXJhLmRldkBnbWFpbC5jb20ifQ.Fr9a2vCdCtF8Vu7suTDHVi8vUbI9Ntf8Ak01MEjBoz4CARK0XCzQ_M0pOoNhr4ho8ClRZj4XatHPSnB5DqxJdxz7Td9Kmhr2wv_bnkvCm8FlqHMBzqmhjwIcZP9p56nuN-Z2RIszKa-ozR3639hll6x6C7aCClbPg3OmhCkO95oMB_ztAI4tsUkTKV54rrgi8zCh67vq_sZ4Cx_b85A4aqtVZxRgNprC9vD7wjp1PQNSyr2ujotTJWvC1u3ooiUAOoInD9j37mQ-N6u6JVvFXBTH3ej99QoWxAWbDIe6xDpkTdAL4jx5ClmVSKXRCxNrC69yEZDyI0_gaJEEbwkcBg",
+                    "TokenType": "Bearer"
+                },
+                "ChallengeParameters": {}
+            }
+        */ 
+
+        res.status(200).json(newTokens);
+
+        // if (refreshToken &&)
+    } catch (error) {
+        next(error);
+    }
+});
+
+/*
+app.post('/token', (req, res) => {
+  const refreshToken = req.body.token
+  if (refreshToken == null) return res.sendStatus(401)
+  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403)
+    const accessToken = generateAccessToken({ name: user.name })
+    res.json({ accessToken: accessToken })
+  })
+})
+
+
+router.post('/token', (req,res) => {
+    // refresh the damn token
+    const postData = req.body
+    // if refresh token exists
+    if((postData.refreshToken) && (postData.refreshToken in tokenList)) {
+        const user = {
+            "email": postData.email,
+            "name": postData.name
+        }
+        const token = jwt.sign(user, config.secret, { expiresIn: config.tokenLife})
+        const response = {
+            "token": token,
+        }
+        // update the token in the list
+        tokenList[postData.refreshToken].token = token
+        res.status(200).json(response);        
+    } else {
+        res.status(404).send('Invalid request')
+    }
+})
+*/ 
 
 module.exports = router;
