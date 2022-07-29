@@ -12,12 +12,12 @@ const {
 const { Router } = require('express');
 const nodemailer = require('nodemailer');
 const yup = require('yup');
-const { sign, verify } = require('jsonwebtoken');
+const { verify } = require('jsonwebtoken');
 const router = Router();
 
-const generateEmailConfirmTemplate = require('../../lib/generateEmailConfirmTemplate');
+const StoreEntry = require('../../models/StoreEntry');
 
-// const StoreEntry = require('../../models/StoreEntry');
+const generateEmailConfirmTemplate = require('../../lib/generateEmailConfirmTemplate');
 
 // @desc sign up user and send confirm link to email
 // @path POST /api/user/signup
@@ -281,7 +281,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // @desc refresh the access tokens
-// @path /api/user/private/token
+// @path POST /api/user/private/token
 // @authorization private
 router.post('/private/token', async (req, res, next) => {
     /*

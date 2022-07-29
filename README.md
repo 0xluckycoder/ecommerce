@@ -136,7 +136,9 @@ this app allows users to create their own store and start selling their products
 - [x] - POST - /api/user/signin - user singin
 - [x] - GET  - /api/user/confirmEmail/:token - verify email address confirmation
 - [x] - GET  - /api/user - get user
-- [/] - POST - /api/user/token - get new access/id tokens using refresh token
+- [x] - POST - /api/user/token - get new access/id tokens using refresh token
+- [ ] - logout route
+- [ ] - resend email verification link
 
 - [ ] - create mongoose schema for all entries
     - [x] - Store Entry
@@ -158,7 +160,6 @@ Cognito App client config
     - ID token expiration - 60 mins
 
 - [x] - configure IAM
-
 - [x] - configure cognito
 
 - [x] - user signup
@@ -207,6 +208,11 @@ Cognito App client config
     - [x] - follow the refresh token guides and make sure process in not vulnerble or missing any important things
         - [x] - https://youtu.be/QDR-pX7Ho8k
         - [x] - https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
+
+    - [/] - complete the authentication workflow with frontend
+        - [ ] - securely store tokens in frontend
+        - [ ] - follow best practices guides
+        - [ ] - handle errors & redirects properly
 
     - [ ] - Organize the backend
         - [ ] - follow the this guide and re-write the routes - https://www.freecodecamp.org/news/rest-api-design-best-practices-build-a-rest-api/
