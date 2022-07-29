@@ -130,6 +130,14 @@ this app allows users to create their own store and start selling their products
 - [ ] - Model the data entries
 - [ ] - update errorHandler middleware after configuring dotenv
 
+- API endpoints
+
+- [x] - POST - /api/user/signup - user singup
+- [x] - POST - /api/user/signin - user singin
+- [x] - GET  - /api/user/confirmEmail/:token - verify email address confirmation
+- [x] - GET  - /api/user - get user
+- [/] - POST - /api/user/token - get new access/id tokens using refresh token
+
 - [ ] - create mongoose schema for all entries
     - [x] - Store Entry
     - [ ] - Vendor Entry
@@ -205,7 +213,6 @@ Cognito App client config
         - [ ] - follow this guide to modulerize the code after most of the backend api work has been completed https://github.dev/async-labs/builderbook/tree/master/builderbook/server
     
 - [ ] - resend verification link feature
-    - [ ] - create seperate endpoint
     - [ ] - add custom rate limits for resending
 
 - [ ] - Follow the this auth flow and choose a secured secret to generate email confirmation links

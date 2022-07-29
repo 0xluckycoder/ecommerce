@@ -16,7 +16,8 @@ const errorTypes = {
     CodeDeliveryFailureException: 400,
     JsonWebTokenError: 400,
     TokenExpiredError: 400,
-    NotBeforeError: 400
+    NotBeforeError: 400,
+    InvalidAuthorization: 401 // custom error name
 }
 
 // const notFound = (req, res, next) => {
@@ -37,8 +38,6 @@ guide - https://reflectoring.io/express-error-handling/
 */
 
 const errorHandler = (error, req, res, next) => {
-
-    console.log('error', error);
 
     // assign the status code
     const statusCode = errorTypes[error.name] ? errorTypes[error.name] : 500;

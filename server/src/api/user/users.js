@@ -13,8 +13,9 @@ const { Router } = require('express');
 const nodemailer = require('nodemailer');
 const yup = require('yup');
 const { sign, verify } = require('jsonwebtoken');
-
 const router = Router();
+
+const generateEmailConfirmTemplate = require('../../lib/generateEmailConfirmTemplate');
 
 // const StoreEntry = require('../../models/StoreEntry');
 
@@ -53,7 +54,6 @@ router.post('/signup', async (req, res, next) => {
 
         const cognitoSavedUser = await client.send(command);
 
-        // send email verification link
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
@@ -64,24 +64,9 @@ router.post('/signup', async (req, res, next) => {
             }
         });
 
-        const payload = {
-            id: cognitoSavedUser.UserSub,
-            email: validated.email
-        }
-
-        const secret = `${process.env.EMAIL_CONFIRM_SECRET}`;
-
-        const token = sign(payload, secret, { expiresIn: 3600*24 });
-
-        const url = `http://localhost:5500/api/user/confirmEmail/${token}`;
-
-        const emailTemplate = {
-            from: "freebie <freebiesell@zohomail.com>",
-            to: validated.email,
-            subject: "Email Confirm",
-            html: `<h1>this is html text</h1><p>click this link to confirm signup - ${url}</p>`
-        };
-
+        const emailTemplate = generateEmailConfirmTemplate(cognitoSavedUser.UserSub, validated.email);
+        
+        // send email confirm link
         const info = await transporter.sendMail(emailTemplate);
 
         console.log(info);
@@ -93,83 +78,22 @@ router.post('/signup', async (req, res, next) => {
             cognitoData: cognitoSavedUser
         });
         /*
-        {
-            "$metadata": {
-                "httpStatusCode": 200,
-                "requestId": "75c810d8-a022-4e23-9bbd-d8e2aeed23e1",
-                "attempts": 1,
-                "totalRetryDelay": 0
-            },
-            "UserConfirmed": false,
-            "UserSub": "c5b426ec-ffcd-445d-a6fc-036a8898ca37"
-        }
+        response format - 
+            {
+                "$metadata": {
+                    "httpStatusCode": 200,
+                    "requestId": "75c810d8-a022-4e23-9bbd-d8e2aeed23e1",
+                    "attempts": 1,
+                    "totalRetryDelay": 0
+                },
+                "UserConfirmed": false,
+                "UserSub": "c5b426ec-ffcd-445d-a6fc-036a8898ca37"
+            }
         */
-
     } catch(error) {
         
-        next(error);
-    }
-});
+        console.log('original error ❌❌', error);
 
-// @desc confirm email with token
-// @path GET /api/user/confirmEmail/:token
-// @authorization public
-router.get('/confirmEmail/:token', async (req, res, next) => {
-    try {
-
-        const { token } = req.params;
-
-        const secret = `${process.env.EMAIL_CONFIRM_SECRET}`;
-
-        const decoded = verify(token, secret);
-
-        // console.log(decoded);
-
-        const client = new CognitoIdentityProvider({
-            region: process.env.AWS_COGNITO_REGION,
-            credentials : {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-            },
-        });
-
-        const command = new AdminConfirmSignUpCommand({
-            UserPoolId: process.env.AWS_USER_POOL_ID,
-            Username: decoded.id
-        });
-
-        const response = await client.send(command);
-
-        res.status(200).json(response);
-
-        /*
-        {
-            "$metadata": {
-                "httpStatusCode": 200,
-                "requestId": "bfad74bc-8228-4bff-b18c-3520582c8a13",
-                "attempts": 1,
-                "totalRetryDelay": 0
-            }
-        }
-        */ 
-
-        /*
-        - two options
-            - redirect user to login page
-            - redirect user to dashboard page without login (token will fetched by admin api operations)
-
-        {
-            id: '932ae7ba-594c-4208-a9be-bd717d1587e7',
-            email: 'lakshanperera.dev@gmail.com',
-            iat: 1658855828,
-            exp: 1658942228
-        }
-        */ 
-
-        // const secret = `${}-${req.body.password}`;
-        // const signedJwt = sign()
-
-    } catch (error) {
         next(error);
     }
 });
@@ -216,6 +140,7 @@ router.post('/signin', async (req, res, next) => {
         res.status(200).json(signInResponse);
 
         /*
+        response format -
         {
             "$metadata": {
                 "httpStatusCode": 200,
@@ -237,26 +162,90 @@ router.post('/signin', async (req, res, next) => {
             "ChallengeParameters": {}
         }
         */ 
-
-
     } catch(error) {
         
+        console.log('original error ❌❌', error);
+
         next(error);
     }
 });
 
-// @desc private test endpoint that only accessed by logged in users
-// @path POST /api/user/private/test
+// @desc confirm email with token
+// @path GET /api/user/confirmEmail/:token
+// @authorization public
+router.get('/confirmEmail/:token', async (req, res, next) => {
+    try {
+
+        const { token } = req.params;
+
+        const secret = `${process.env.EMAIL_CONFIRM_SECRET}`;
+        const decoded = verify(token, secret);
+
+        const client = new CognitoIdentityProvider({
+            region: process.env.AWS_COGNITO_REGION,
+            credentials : {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
+        });
+
+        const command = new AdminConfirmSignUpCommand({
+            UserPoolId: process.env.AWS_USER_POOL_ID,
+            Username: decoded.id
+        });
+
+        const response = await client.send(command);
+
+        res.status(200).json(response);
+
+        /*
+        response format - 
+        {
+            "$metadata": {
+                "httpStatusCode": 200,
+                "requestId": "bfad74bc-8228-4bff-b18c-3520582c8a13",
+                "attempts": 1,
+                "totalRetryDelay": 0
+            }
+        }
+    
+        decoded jwt format -
+        {
+            id: '932ae7ba-594c-4208-a9be-bd717d1587e7',
+            email: 'lakshanperera.dev@gmail.com',
+            iat: 1658855828,
+            exp: 1658942228
+        }
+        */ 
+        /*
+        note:
+        redirect to login page
+        */
+
+    } catch (error) {
+
+        console.log('original error ❌❌', error);
+        
+        if (error.name === 'TokenExpiredError') error.message = 'this url is only valid for 24hrs. visit freebie.xyz and try again';
+        if (error.name === 'JsonWebTokenError') error.message = 'invalid url';
+
+        next(error);
+    }
+});
+
+// @desc get active user using access token
+// @path GET /api/user
 // @authorization private
-router.post('/private/test', async (req, res, next) => {
-
-    /*
-        Secure authorization endpoints from CSRF vulnerbility
-    */ 
-
+router.get('/', async (req, res, next) => {
     try {
         // extract the access token from request header
         const accessToken = req.header('Authorization').split(' ')[1];
+
+        const invalidAuthorizationError = new Error('authorization error');
+        invalidAuthorizationError.name = 'InvalidAuthorization';
+
+        // throw authorization error if token is not present
+        if (!accessToken) throw invalidAuthorizationError;
 
         // get user from cognito
         const client = new CognitoIdentityProvider({
@@ -274,8 +263,19 @@ router.post('/private/test', async (req, res, next) => {
         const user = await client.send(command);
 
         res.status(200).json(user);
+
+        /*
+            response format -
+            https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-cognito-identity-provider/interfaces/getusercommandoutput.html
+        */ 
+        /*
+        note: Secure authorization endpoints from CSRF vulnerbility
+        */ 
         
     } catch (error) {
+
+        console.log('original error ❌❌', error);
+
         next(error);
     }
 });
@@ -285,13 +285,7 @@ router.post('/private/test', async (req, res, next) => {
 // @authorization private
 router.post('/private/token', async (req, res, next) => {
     /*
-     no access token is required since this endpoint since this endpoint uses to create new tokens
-
-     {
-        "refreshToken": refreshToken
-     }
-
-
+    no access token is required since this endpoint since this endpoint uses to create new tokens
     */ 
     try {
         const { refreshToken } = req.body;
@@ -342,6 +336,7 @@ router.post('/private/token', async (req, res, next) => {
 });
 
 /*
+refresh token snippet
 app.post('/token', (req, res) => {
   const refreshToken = req.body.token
   if (refreshToken == null) return res.sendStatus(401)
