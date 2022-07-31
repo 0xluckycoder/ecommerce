@@ -55,27 +55,21 @@ this app allows users to create their own store and start selling their products
 	- ability to view previous made orders
 
 
-## TODO
-
-- [x] - list down features
-- [x] - Store UI design
-    - [x] - go through the antdesign and be familiar with components
-    - [x] - learn how to adujust styles in antdesign
-    - [x] - choose a logo and color theme
-    - [x] - design dashbaord page
-    - [ ] - create UI views for user level selection page
-
-- [x] - Make the design consistant and every page
-- [x] - Design Login cards figma UI
-- [x] - Make design look better & apply it to all pages
-
 ### Front-End
+
 - [x] - Go through react docs and recap everything
 - [x] - Start development with Frontend
     - [x] - Configure with AntDesign / Sass
     - [x] - Learn Antdesign layout & Grid
 - [ ] - Use useReducer as a state manager 
 - [ ] - Learn how expert developers use reactjs
+
+- [ ] - develop choose between pages
+
+- [ ] - Authenticate page components
+    - [/] - choose between vendor & seller page
+    - [ ] - login component
+    - [ ] - signup component
 
 - [/] - Admin Components
     - [x] - Admin top navigation
@@ -109,9 +103,12 @@ this app allows users to create their own store and start selling their products
     - [x] - Products page
         - [x] - Products Upload Modal
         - [ ] - Reactive auto sorting images
+
     - [ ] - Global alert component
+    
     - [x] - Customers
         - [x] - Customers modal
+    
     - [ ] - Settings
     - [ ] - User Profile
     - [ ] - Authentication modal

@@ -1,12 +1,14 @@
 import './app.scss';
-import SellerDashboard from './Components/SellerDashboard';
 import 'antd/dist/antd.css';
+import SellerDashboard from './Components/SellerDashboard';
+import ChooseRole from './Components/Auth/ChooseRole';
 
 function App() {
 
   return (
     <div className="App">
-      <SellerDashboard />
+      {/* <SellerDashboard /> */}
+      <ChooseRole />
     </div>
   );
 }

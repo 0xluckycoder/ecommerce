@@ -8,7 +8,7 @@ export default function TopNav({ setSideNavState, sideNavState }) {
     return (
         <div className={styles.topnav}>
             <FontAwesomeIcon onClick={() => setSideNavState(!sideNavState)} icon={faBars} />
-            <h1>Ecommerce</h1>
+            <h1>freebiesell</h1>
         </div>
     );
 }

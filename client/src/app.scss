@@ -31,3 +31,20 @@ p {
 [ant-click-animating-without-extra-node='true']::after {
   display: none !important;
 }
+
+.grey-background {
+  background-color: #F6F6F7;
+  height: 100vh;
+}
+
+.brand-top-nav {
+  background-color: #222;
+  color: #fff;
+  padding: 0.5rem 0 0.5rem 2rem;
+
+  h1 {
+    margin: 0px;
+    color: #fff;
+    font-size: 1.5rem;
+  }
+}
