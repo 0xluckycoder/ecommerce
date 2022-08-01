@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './AuthPage.module.scss';
 import trolley from '../../assets/trolley.svg';
 import store from '../../assets/store.svg';
@@ -15,6 +15,8 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 - [x] - try to include both signin and signup pages in this component
 - [x] - make the page mobile firendly
 - [x] - create a flow and link all components accordingly
+- [x] - make select item works even when user clicks on the image
+- [ ] - add active class and highlight the active selected item
 - [ ] - add validation to form fields
 - [ ] - make the component heights dynamic when showing errors
 */
@@ -31,6 +33,7 @@ export default function AuthPage() {
             <Routes>
                 <Route path="/auth/login" element={<SignIn navigate={navigate} />} />
                 <Route path="/auth/signup" element={<SignUp navigate={navigate} />} />
+                <Route path="/auth/chooseRole" element={<ChooseRole navigate={navigate} />} />
                 <Route path="/auth/forgotPassword" element={<ForgotPassword navigate={navigate} />} />
             </Routes>
 
@@ -39,6 +42,13 @@ export default function AuthPage() {
 }
 
 function ForgotPassword({ navigate }) {
+
+    const [forgotPasswordState, setForgotPasswordState] = useState({});
+
+    const handleInputChange = (e) => {
+        setForgotPasswordState({[e.target.name]: e.target.value});
+    }
+
     return (
         <div className={styles.authBox}>
             <p className={styles.heading}>Forgot Password</p>
@@ -47,8 +57,8 @@ function ForgotPassword({ navigate }) {
             </div>
             <div className={styles.row}>
                 <div className={styles.formItem}>
-                    <label>Email</label>
-                    <Input />
+                    <label name="email">Email</label>
+                    <Input onClick={handleInputChange} />
                 </div>
             </div>
             <div className={styles.row}>
@@ -62,19 +72,35 @@ function ForgotPassword({ navigate }) {
 }
 
 function SignUp({ navigate }) {
+
+    const [signUpState, setSignUpState] = useState({
+        role: "",
+        confirmed: false
+    });
+
+    const handleInputChange = (e) => {
+        setSignUpState({[e.target.name]: e.target.value});
+    }
+
     return (
+        <>
+
+        {signUpState.role && signUpState.confirmed 
+        
+        ?
+
         <div className={styles.authBox}>
             <p className={styles.heading}>Create your account</p>
             <div className={styles.row}>
                 <div className={styles.formItem}>
                     <label>Email</label>
-                    <Input />
+                    <Input name="email" onChange={handleInputChange} />
                 </div>
             </div>
             <div className={styles.row}>
                 <div className={styles.formItem}>
                     <label>Password</label>
-                    <Input />
+                    <Input name="password" onChange={handleInputChange} />
                 </div>
             </div>
             <div className={styles.row}>
@@ -90,22 +116,82 @@ function SignUp({ navigate }) {
                 </div>
             </div>
         </div>
+        :
+        <ChooseRole signUpState={signUpState} setSignUpState={setSignUpState} />
+        }
+
+        </>
     )
 }
 
+function ChooseRole({ navigate, signUpState, setSignUpState }) {
+    
+    
+    return (
+        <div className={styles.centerBox}>
+        
+            <h2>Join as a vendor or buyer</h2>
+
+            <div className={styles.selectItems}>
+                <SelectItem
+                    id="vendor"
+                    text="Join as a vendor" 
+                    icon={store}
+                    signUpState={signUpState}
+                    setSignUpState={setSignUpState}
+                />
+                <SelectItem 
+                    id="buyer"
+                    text="Join as a buyer" 
+                    icon={trolley}
+                    signUpState={signUpState}
+                    setSignUpState={setSignUpState}
+                />
+            </div>
+
+            <div className={styles.inlineButtons}>
+                <Button className="themed-btn">Next</Button>
+                <Button onClick={() => navigate('/auth/signup')} className="themed-btn">Cancel</Button>
+            </div>
+
+        </div>
+    );
+}
+
+function SelectItem({ text, icon, id, signUpState, setSignUpState }) {
+
+    const handleSelecItemClick = (e) => {
+        setSignUpState({...signUpState, role: e.target.id})
+    }
+
+    return (
+        <div onClick={e => handleSelecItemClick(e)} className={styles.selectItem} id={id}>
+            <img src={icon} id={id} />
+            <p id={id}>{text}</p>
+        </div>
+    );
+}
+
 function SignIn({ navigate }) {
+
+    const [signInState, setSignInState] = useState({});
+
+    const handleInputChange = (e) => {
+        setSignInState({[e.target.name]: e.target.value});
+    }
+
     return (
         <div className={styles.authBox}>
             <p className={styles.heading}>Login to your account</p>
             <div className={styles.row}>
                 <div className={styles.formItem}>
-                    <label>Email</label>
+                    <label onClick={handleInputChange}>Email</label>
                     <Input />
                 </div>
             </div>
             <div className={styles.row}>
                 <div className={styles.formItem}>
-                    <label>Password</label>
+                    <label onClick={handleInputChange}>Password</label>
                     <Input />
                 </div>
             </div>
@@ -132,13 +218,4 @@ function GreyBackground(props) {
     return (
         <div className='grey-background'>{props.children}</div>
     )
-}
-
-function SelectItem({ text, icon }) {
-    return (
-        <div className={styles.selectItem}>
-            <img src={icon} />
-            <p>{text}</p>
-        </div>
-    );
 }

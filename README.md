@@ -70,8 +70,9 @@ this app allows users to create their own store and start selling their products
     - [x] - choose between vendor & seller page
     - [x] - login component
     - [x] - signup component
-    - [/] - forgot password component
-    - [ ] - link components together
+    - [x] - forgot password component
+    - [x] - link components together
+    - [ ] - add form validation for all fields
 
 - [/] - Admin Components
     - [x] - Admin top navigation
