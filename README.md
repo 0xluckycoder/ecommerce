@@ -66,10 +66,11 @@ this app allows users to create their own store and start selling their products
 
 - [ ] - develop choose between pages
 
-- [ ] - Authenticate page components
-    - [/] - choose between vendor & seller page
-    - [ ] - login component
-    - [ ] - signup component
+- [/] - Authenticate page components
+    - [x] - choose between vendor & seller page
+    - [x] - login component
+    - [x] - signup component
+    - [ ] - link components together
 
 - [/] - Admin Components
     - [x] - Admin top navigation

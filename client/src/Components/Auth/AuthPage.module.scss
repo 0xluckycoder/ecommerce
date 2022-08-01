@@ -1,0 +1,99 @@
+.centerBox {
+    position: relative;
+    top: calc(50% - 545.28px/2 + 53px/2);
+    padding: 2rem 0px;
+    border: 1px solid #D9D9D9;
+    background-color: #fff;
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+
+    h2 {
+        margin: 0px;
+    }
+
+    .selectItems {
+        padding: 4rem 0px;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        .selectItem {
+            cursor: pointer;
+            padding: 1rem 0;
+            border: 2px solid #D9D9D9;
+            border-radius: 2px;
+            min-width: 236px;
+
+            &:hover {
+                border: 2px solid #000;
+            }
+
+            img {
+                padding-bottom: 1rem;
+            }
+    
+            p {
+                margin: 0;
+            }
+        }
+    }
+}
+
+// sign in
+.authBox {
+    position: relative;
+    top: calc(50% - 393px/2 + 53px/2);
+    background: #fff;
+    padding: 1rem;
+    max-width: 350px;
+    margin: auto;
+    border: 2px solid #ECEAEA;
+
+    .heading {
+        font-weight: 500;
+        padding-bottom: 30px;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .inline {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+    }
+
+    .row {
+        &:not(:last-child) {
+            margin-bottom: 1rem;
+        }
+
+        a.forgotPassword {
+            color: #A9A9A9;
+        }
+
+        button {
+            width: 100%;
+        }
+    }
+
+    .withGoogle {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        border: 1px solid #C6C6C6;
+        padding: 4px 0px;
+    }
+
+    p {
+        margin: 0px;
+    }
+}
+
+@media(max-width: 632px) {
+    .centerBox {
+        margin: 0 1rem;
+    }
+}
