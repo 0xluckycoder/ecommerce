@@ -18,11 +18,11 @@ export default function SellerDashboard() {
     const navigate = useNavigate();
     const { pathname } = useLocation();
 
-    useEffect(() => {
-        if (pathname === '/') {
-            navigate('/dashboard', {replace: true});
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (pathname === '/') {
+    //         navigate('/dashboard', {replace: true});
+    //     }
+    // }, []);
 
     return (
         <div className="dashboard">
