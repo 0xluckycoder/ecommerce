@@ -16,9 +16,11 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 - [x] - make the page mobile firendly
 - [x] - create a flow and link all components accordingly
 - [x] - make select item works even when user clicks on the image
-- [ ] - add active class and highlight the active selected item
+- [x] - add active class and highlight the active selected item
+- [ ] - organize auth routes
 - [ ] - add validation to form fields
 - [ ] - make the component heights dynamic when showing errors
+
 */
 
 export default function AuthPage() {
@@ -31,10 +33,10 @@ export default function AuthPage() {
             <TopNav hideHamburger={true} />
 
             <Routes>
-                <Route path="/auth/login" element={<SignIn navigate={navigate} />} />
-                <Route path="/auth/signup" element={<SignUp navigate={navigate} />} />
-                <Route path="/auth/chooseRole" element={<ChooseRole navigate={navigate} />} />
-                <Route path="/auth/forgotPassword" element={<ForgotPassword navigate={navigate} />} />
+                <Route path="public/auth/login" element={<SignIn navigate={navigate} />} />
+                <Route path="public/auth/signup" element={<SignUp navigate={navigate} />} />
+                <Route path="public/auth/chooseRole" element={<ChooseRole navigate={navigate} />} />
+                <Route path="public/auth/forgotPassword" element={<ForgotPassword navigate={navigate} />} />
             </Routes>
 
         </GreyBackground>
@@ -65,7 +67,7 @@ function ForgotPassword({ navigate }) {
                 <Button className='themed-btn'>Submit</Button>
             </div>
             <div className={styles.row}>
-                <Button onClick={() => navigate('/auth/login')} className='themed-btn'>Cancel</Button>
+                <Button onClick={() => navigate('/public/auth/login')} className='themed-btn'>Cancel</Button>
             </div>
         </div>
     );
@@ -75,7 +77,7 @@ function SignUp({ navigate }) {
 
     const [signUpState, setSignUpState] = useState({
         role: "",
-        confirmed: false
+        roleSelectedByUser: false
     });
 
     const handleInputChange = (e) => {
@@ -85,7 +87,7 @@ function SignUp({ navigate }) {
     return (
         <>
 
-        {signUpState.role && signUpState.confirmed 
+        {signUpState.role && signUpState.roleSelectedByUser 
         
         ?
 
@@ -112,12 +114,15 @@ function SignUp({ navigate }) {
             </div>
             <div className={styles.row}>
                 <div className={`${styles.inline} ${styles.center}`}>
-                    <p>Already have an account</p><a onClick={() => navigate('/auth/login')}>Sign in</a>
+                    <p>Already have an account</p><a onClick={() => navigate('/public/auth/login')}>Sign in</a>
                 </div>
             </div>
         </div>
+        
         :
-        <ChooseRole signUpState={signUpState} setSignUpState={setSignUpState} />
+        
+        <ChooseRole navigate={navigate} signUpState={signUpState} setSignUpState={setSignUpState} />
+        
         }
 
         </>
@@ -126,7 +131,10 @@ function SignUp({ navigate }) {
 
 function ChooseRole({ navigate, signUpState, setSignUpState }) {
     
-    
+    const handleNextPageClick = () => {
+        setSignUpState({ ...signUpState, roleSelectedByUser: true });
+    }
+
     return (
         <div className={styles.centerBox}>
         
@@ -150,8 +158,8 @@ function ChooseRole({ navigate, signUpState, setSignUpState }) {
             </div>
 
             <div className={styles.inlineButtons}>
-                <Button className="themed-btn">Next</Button>
-                <Button onClick={() => navigate('/auth/signup')} className="themed-btn">Cancel</Button>
+                <Button onClick={() => navigate('/public/auth/login')} className="themed-btn">Cancel</Button>
+                <Button onClick={() => handleNextPageClick()} className="themed-btn">Next</Button>
             </div>
 
         </div>
@@ -165,7 +173,11 @@ function SelectItem({ text, icon, id, signUpState, setSignUpState }) {
     }
 
     return (
-        <div onClick={e => handleSelecItemClick(e)} className={styles.selectItem} id={id}>
+        <div 
+            onClick={e => handleSelecItemClick(e)} 
+            className={`${styles.selectItem} ${signUpState.role === id ? styles.active : null}`} 
+            id={id}
+        >
             <img src={icon} id={id} />
             <p id={id}>{text}</p>
         </div>
@@ -207,7 +219,7 @@ function SignIn({ navigate }) {
             </div>
             <div className={styles.row}>
                 <div className={`${styles.inline} ${styles.center}`}>
-                    <p>Didn't have an account ?</p><a onClick={() => navigate('/auth/signup')}>Sign up</a>
+                    <p>Didn't have an account ?</p><a onClick={() => navigate('/public/auth/signup')}>Sign up</a>
                 </div>
             </div>
         </div>
