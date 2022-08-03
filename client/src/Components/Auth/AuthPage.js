@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './AuthPage.module.scss';
 import trolley from '../../assets/trolley.svg';
 import store from '../../assets/store.svg';
@@ -17,8 +17,8 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 - [x] - create a flow and link all components accordingly
 - [x] - make select item works even when user clicks on the image
 - [x] - add active class and highlight the active selected item
-- [ ] - add validation to form fields
-- [ ] - make the component heights dynamic when showing errors
+- [x] - add validation to form fields
+- [x] - make the component heights dynamic when showing errors
 - [ ] - organize auth routes
 
 later restructure validation code to just a one fuction that takes validation rules object as an argument and validate field according to those ruelus
@@ -257,67 +257,92 @@ function SignIn({ navigate }) {
         passwordError: null
     });
 
+    const emailElement = useRef(null);
+    const passwordElement = useRef(null);
+
+
+
     const handleInputChange = (e) => {
         setSignInState({...signInState, [e.target.name]: e.target.value});
     }
 
-    const validateEmail = (e) => {
+    const validateEmail = (value) => {
 
         // validate empty fields
-        if (e.target.value === "") {
-            setError({
-                ...error,
-                emailError: {
-                    validateStatus: "error",
-                    help: "This field is required"
-                }
-            });
-
+        if (value === "") {
+            setError(error => ({...error, emailError: {
+                validateStatus: "error",
+                help: "This field is required",
+            }}));
         } else {
-            setError({ ...error, emailError: null });
+            // setError({ ...error, emailError: null });
 
             // validate email address format
-            if (! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value)) {
-                setError({
-                    ...error,
-                    emailError: {
+            if (! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+                setError(error => ({...error, emailError: {
                         validateStatus: "error",
                         help: "Not a valid email"
-                    }
-                });
+                    }}));
 
             } else {
-                setError({ ...error, emailError: null });
+                // setError({ ...error, emailError: null });
+                setError(error => ({ ...error, emailError: null }));
             }
         }
     }
 
-    const validatePassword = (e) => {
-        if (e.target.value === "") {
+    const validatePassword = (value) => {
+
+        if (value === "") {
             // validate empty fields
-            setError({
-                ...error,
-                passwordError: {
+            setError(error => ({ ...error, passwordError: {
                     validateStatus: "error",
                     help: "This field is required",
-                }
-            })
+            }}));
         } else {
-            setError({ ...error, passwordError: null });
+            // setError({ ...error, passwordError: null });
+            setError(error => ({ ...error, passwordError: null }));
 
             // length must be more than 7 characters
-            if (e.target.value.length < 7) {
-                setError({
-                    ...error,
-                    passwordError: {
+            if (value.length < 7) {
+                setError(error => ({...error, passwordError: {
                         validateStatus: "error",
                         help: "must be more than 7 characters"
-                    }
-                });
+                }}));
             } else {
-                setError({ ...error, passwordError: null });
+                setError(error => ({ ...error, passwordError: null }));
             }
         }
+    }
+
+    const handleSignIn = async () => {
+
+        const emailInputValue = emailElement.current.input.defaultValue;
+        const passwordInputValue = passwordElement.current.input.defaultValue;
+        
+        validateEmail(emailInputValue);
+        validatePassword(passwordInputValue);
+
+        if (error.emailError === null && error.passwordError === null) {
+
+            console.log('calling api');
+            // call the api here
+            const response = await fetch('http://localhost:5000/api/user/signin', {
+                method: 'POST',
+                body: {
+                    email: 'lakshan@email.com',
+                    password: 'helloworlditsme'
+                }
+            });
+
+            const data = await response.json();
+            console.log(data);
+        }
+
+        // const response = await fetch('http://localhost:5000/api/user/signup', {
+
+        // });
+        // const data = await response
     }
 
     return (
@@ -326,20 +351,20 @@ function SignIn({ navigate }) {
             <div className={styles.row}>
                 <Form.Item {...(error.emailError ? error.emailError : {})}>                    
                     <label>Email</label>
-                    <Input name="email" onBlur={(e) => validateEmail(e)} onChange={handleInputChange} />
+                    <Input ref={emailElement} name="email" onBlur={(e) => validateEmail(e.target.value)} onChange={handleInputChange} />
                 </Form.Item>
             </div>
             <div className={styles.row}>
                 <Form.Item {...(error.passwordError ? error.passwordError : {})}>
                     <label>Password</label>
-                    <Input name="password" onBlur={(e) => validatePassword(e)} onChange={handleInputChange} />
+                    <Input ref={passwordElement} name="password" onBlur={(e) => validatePassword(e.target.value)} onChange={handleInputChange} />
                 </Form.Item>
             </div>
             <div className={`${styles.row} ${styles.center}`}>
                 <a onClick={() => navigate('/public/auth/forgotPassword')} className={styles.forgotPassword}>Forgot Password</a>
             </div>
             <div className={styles.row}>
-                <Button className='themed-btn'>Log In</Button>
+                <Button onClick={() => handleSignIn()} className='themed-btn'>Log In</Button>
             </div>
             <div className={`${styles.row} ${styles.withGoogle}`}>
                 <img src={googleIcon} />
