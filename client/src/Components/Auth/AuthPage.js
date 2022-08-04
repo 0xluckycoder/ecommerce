@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './AuthPage.module.scss';
 import trolley from '../../assets/trolley.svg';
 import store from '../../assets/store.svg';
 import googleIcon from '../../assets/google-icon.svg';
 import TopNav from '../TopNav';
-import { Input, Button, Form } from 'antd';
+import { Input, Button, Form, Alert } from 'antd';
 
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
@@ -78,7 +78,9 @@ function SignUp({ navigate }) {
 
     const [signUpState, setSignUpState] = useState({
         role: "",
-        roleSelectedByUser: false
+        roleSelectedByUser: false,
+        email: '',
+        password: ''
     });
 
     const [error, setError] = useState({
@@ -86,67 +88,113 @@ function SignUp({ navigate }) {
         passwordError: null
     });
 
+    const [allowedToCallApiState, setAllowedToCallApiState] = useState(false);
+
+    const [apiError, setApiError] = useState({
+        errorMessage: null
+    });
+
+    const validateEmail = (value) => {
+
+        // validate empty fields
+        if (value === "") {
+            setError(error => ({...error, emailError: {
+                validateStatus: "error",
+                help: "This field is required",
+            }}));
+        } else {
+            // validate email address format
+            if (! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+                setError(error => ({...error, emailError: {
+                        validateStatus: "error",
+                        help: "Not a valid email"
+                    }}));
+
+            } else {
+                setError(error => ({ ...error, emailError: null }));
+            }
+        }
+    }
+
+    const validatePassword = (value) => {
+
+        if (value === "") {
+            // validate empty fields
+            setError(error => ({ ...error, passwordError: {
+                    validateStatus: "error",
+                    help: "This field is required",
+            }}));
+        } else {
+            setError(error => ({ ...error, passwordError: null }));
+
+            // length must be more than 7 characters
+            if (value.length < 7) {
+                setError(error => ({...error, passwordError: {
+                        validateStatus: "error",
+                        help: "must be more than 7 characters"
+                }}));
+            } else {
+                setError(error => ({ ...error, passwordError: null }));
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (allowedToCallApiState) {
+
+            const signUpRequest = async () => {
+                const bodyData = {
+                    email: signUpState.email,
+                    password: signUpState.password
+                }
+
+                try {
+                    const response = await fetch('http://localhost:5500/api/user/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(bodyData)
+                    });
+                    const data = await response.json();
+
+                    if (data.status === 200) {
+                        console.log('success login');
+                    } else {
+                        setApiError({
+                            errorMessage: data.message
+                        });
+                    }
+
+                } catch(error) {
+                    console.log('api error', error);
+                }
+            }
+
+            if (error.emailError === null && error.passwordError === null) {
+                signUpRequest();
+                // alert('called the api');
+
+                // reset the apiError to default
+            } else {
+                // disable api access when errors are present
+                setAllowedToCallApiState(false);
+            }
+
+        }
+    }, [error]);
+
     const handleInputChange = (e) => {
         setSignUpState({...signUpState, [e.target.name]: e.target.value});
     }
 
-    const validateEmail = (e) => {
+    const handleSignUp = () => {
 
-        // validate empty fields
-        if (e.target.value === "") {
-            setError({
-                ...error,
-                emailError: {
-                    validateStatus: "error",
-                    help: "This field is required"
-                }
-            });
-
-        } else {
-            setError({ ...error, emailError: null });
-
-            // validate email address format
-            if (! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value)) {
-                setError({
-                    ...error,
-                    emailError: {
-                        validateStatus: "error",
-                        help: "Not a valid email"
-                    }
-                });
-
-            } else {
-                setError({ ...error, emailError: null });
-            }
-        }
-    }
-
-    const validatePassword = (e) => {
-        if (e.target.value === "") {
-            // validate empty fields
-            setError({
-                ...error,
-                passwordError: {
-                    validateStatus: "error",
-                    help: "This field is required",
-                }
-            })
-        } else {
-            setError({ ...error, passwordError: null });
-
-            // length must be more than 7 characters
-            if (e.target.value.length < 7) {
-                setError({
-                    ...error,
-                    passwordError: {
-                        validateStatus: "error",
-                        help: "must be more than 7 characters"
-                    }
-                });
-            } else {
-                setError({ ...error, passwordError: null });
-            }
-        }
+        validateEmail(signUpState.email);
+        validatePassword(signUpState.password);
+        
+        // alllow api to make requests
+        setAllowedToCallApiState(true);
     }
 
     return (
@@ -158,20 +206,31 @@ function SignUp({ navigate }) {
 
         <div className={styles.authBox}>
             <p className={styles.heading}>Create your account</p>
+            {apiError.errorMessage ? <Alert message={apiError.errorMessage} type="error" style={{ marginBottom: "24px" }} /> : null}
             <div className={styles.row}>
                 <Form.Item {...(error.emailError ? error.emailError : {})}>                    
                     <label>Email</label>
-                    <Input name="email" onBlur={(e) => validateEmail(e)} onChange={handleInputChange} />
+                    <Input 
+                        name="email" 
+                        onBlur={(e) => validateEmail(e.target.value)} 
+                        onChange={handleInputChange}
+                        value={signUpState.email}
+                    />
                 </Form.Item>
             </div>
             <div className={styles.row}>
                 <Form.Item {...(error.passwordError ? error.passwordError : {})}>
                     <label>Password</label>
-                    <Input name="password" onBlur={(e) => validatePassword(e)} onChange={handleInputChange} />
+                    <Input 
+                        name="password"
+                        onBlur={(e) => validatePassword(e.target.value)}
+                        onChange={handleInputChange}
+                        value={signUpState.password}
+                    />
                 </Form.Item>
             </div>
             <div className={styles.row}>
-                <Button className='themed-btn'>Sign up</Button>
+                <Button onClick={() => handleSignUp()} className='themed-btn'>Sign up</Button>
             </div>
             <div className={`${styles.row} ${styles.withGoogle}`}>
                 <img src={googleIcon} />
@@ -202,9 +261,7 @@ function ChooseRole({ navigate, signUpState, setSignUpState }) {
 
     return (
         <div className={styles.centerBox}>
-        
             <h2>Join as a vendor or buyer</h2>
-
             <div className={styles.selectItems}>
                 <SelectItem
                     id="vendor"
@@ -251,16 +308,69 @@ function SelectItem({ text, icon, id, signUpState, setSignUpState }) {
 
 function SignIn({ navigate }) {
 
-    const [signInState, setSignInState] = useState({});
+    const [signInState, setSignInState] = useState({
+        email: '',
+        password: ''
+    });
+
     const [error, setError] = useState({
         emailError: null,
-        passwordError: null
+        passwordError: null,
+    });
+
+    const [allowedToCallApiState, setAllowedToCallApiState] = useState(false);
+
+    const [apiError, setApiError] = useState({
+        errorMessage: null
     });
 
     const emailElement = useRef(null);
     const passwordElement = useRef(null);
+    
+    useEffect(() => {
+        if (allowedToCallApiState) {
 
+            const signInRequest = async () => {
+                const bodyData = {
+                    email: signInState.email,
+                    password: signInState.password
+                }
 
+                try {
+                    const response = await fetch('http://localhost:5500/api/user/signin', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(bodyData)
+                    });
+                    const data = await response.json();
+
+                    if (data.status === 200) {
+                        console.log('success login');
+                    } else {
+                        setApiError({
+                            errorMessage: data.message
+                        });
+                    }
+
+                } catch(error) {
+                    console.log('api error', error);
+                }
+            }
+
+            if (error.emailError === null && error.passwordError === null) {
+                signInRequest();
+                // alert('called the api');
+
+                // reset the apiError to default
+            } else {
+                // disable api access when errors are present
+                setAllowedToCallApiState(false);
+            }
+
+        }
+    }, [error]);
 
     const handleInputChange = (e) => {
         setSignInState({...signInState, [e.target.name]: e.target.value});
@@ -275,8 +385,6 @@ function SignIn({ navigate }) {
                 help: "This field is required",
             }}));
         } else {
-            // setError({ ...error, emailError: null });
-
             // validate email address format
             if (! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
                 setError(error => ({...error, emailError: {
@@ -285,7 +393,6 @@ function SignIn({ navigate }) {
                     }}));
 
             } else {
-                // setError({ ...error, emailError: null });
                 setError(error => ({ ...error, emailError: null }));
             }
         }
@@ -300,7 +407,6 @@ function SignIn({ navigate }) {
                     help: "This field is required",
             }}));
         } else {
-            // setError({ ...error, passwordError: null });
             setError(error => ({ ...error, passwordError: null }));
 
             // length must be more than 7 characters
@@ -315,49 +421,49 @@ function SignIn({ navigate }) {
         }
     }
 
-    const handleSignIn = async () => {
+    // const resetInputFields = () => {    
+    //     // reset input fields
+    //     setSignInState({
+    //         email: "",
+    //         password: ""
+    //     });
+    // }
 
-        const emailInputValue = emailElement.current.input.defaultValue;
-        const passwordInputValue = passwordElement.current.input.defaultValue;
+    const handleSignIn = () => {
+
+        validateEmail(signInState.email);
+        validatePassword(signInState.password);
         
-        validateEmail(emailInputValue);
-        validatePassword(passwordInputValue);
-
-        if (error.emailError === null && error.passwordError === null) {
-
-            console.log('calling api');
-            // call the api here
-            const response = await fetch('http://localhost:5000/api/user/signin', {
-                method: 'POST',
-                body: {
-                    email: 'lakshan@email.com',
-                    password: 'helloworlditsme'
-                }
-            });
-
-            const data = await response.json();
-            console.log(data);
-        }
-
-        // const response = await fetch('http://localhost:5000/api/user/signup', {
-
-        // });
-        // const data = await response
+        // alllow api to make requests
+        setAllowedToCallApiState(true);
     }
 
     return (
         <div className={styles.authBox}>
             <p className={styles.heading}>Login to your account</p>
+            {apiError.errorMessage ? <Alert message={apiError.errorMessage} type="error" style={{ marginBottom: "24px" }} /> : null}
             <div className={styles.row}>
                 <Form.Item {...(error.emailError ? error.emailError : {})}>                    
                     <label>Email</label>
-                    <Input ref={emailElement} name="email" onBlur={(e) => validateEmail(e.target.value)} onChange={handleInputChange} />
+                    <Input 
+                        ref={emailElement} 
+                        name="email" 
+                        onBlur={(e) => validateEmail(e.target.value)} 
+                        onChange={handleInputChange} 
+                        value={signInState.email}
+                    />
                 </Form.Item>
             </div>
             <div className={styles.row}>
                 <Form.Item {...(error.passwordError ? error.passwordError : {})}>
                     <label>Password</label>
-                    <Input ref={passwordElement} name="password" onBlur={(e) => validatePassword(e.target.value)} onChange={handleInputChange} />
+                    <Input
+                        ref={passwordElement}
+                        name="password"
+                        onBlur={(e) => validatePassword(e.target.value)} 
+                        onChange={handleInputChange} 
+                        value={signInState.password} 
+                    />
                 </Form.Item>
             </div>
             <div className={`${styles.row} ${styles.center}`}>

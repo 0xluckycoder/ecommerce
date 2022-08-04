@@ -103,41 +103,46 @@ router.post('/signup', async (req, res, next) => {
 // @authorization public
 router.post('/signin', async (req, res, next) => {
     try {
-        // validate user input
-        const userSchema = yup.object().shape({
-            email: yup.string('email must be a string')
-                    .required('email is required')
-                    .max(127, 'email address is too long')
-                    .email('not a valid email address'),
-            password: yup.string('password must be a string')
-                        .required('password is required')
-                        .max(127, 'password is too long')
-        });
 
-        const validated = await userSchema.validate(req.body);
+        console.log(req.body);
 
-        // save user in cognito
-        const client = new CognitoIdentityProvider({
-            region: process.env.AWS_COGNITO_REGION,
-            credentials : {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-            },
-        });
+        throw new Error('hi from server');
 
-        const command = new AdminInitiateAuthCommand({
-            AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
-            AuthParameters: {
-                USERNAME: validated.email,
-                PASSWORD: validated.password
-            },
-            ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID,
-            UserPoolId: process.env.AWS_USER_POOL_ID
-        });
+        // // validate user input
+        // const userSchema = yup.object().shape({
+        //     email: yup.string('email must be a string')
+        //             .required('email is required')
+        //             .max(127, 'email address is too long')
+        //             .email('not a valid email address'),
+        //     password: yup.string('password must be a string')
+        //                 .required('password is required')
+        //                 .max(127, 'password is too long')
+        // });
 
-        const signInResponse = await client.send(command);
+        // const validated = await userSchema.validate(req.body);
 
-        res.status(200).json(signInResponse);
+        // // save user in cognito
+        // const client = new CognitoIdentityProvider({
+        //     region: process.env.AWS_COGNITO_REGION,
+        //     credentials : {
+        //         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        //         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+        //     },
+        // });
+
+        // const command = new AdminInitiateAuthCommand({
+        //     AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
+        //     AuthParameters: {
+        //         USERNAME: validated.email,
+        //         PASSWORD: validated.password
+        //     },
+        //     ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID,
+        //     UserPoolId: process.env.AWS_USER_POOL_ID
+        // });
+
+        // const signInResponse = await client.send(command);
+
+        // res.status(200).json(signInResponse);
 
         /*
         response format -
