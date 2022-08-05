@@ -19,7 +19,9 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 - [x] - add active class and highlight the active selected item
 - [x] - add validation to form fields
 - [x] - make the component heights dynamic when showing errors
+- [x] - add role attribute
 - [ ] - organize auth routes
+- [ ] - test red card error messages
 
 later restructure validation code to just a one fuction that takes validation rules object as an argument and validate field according to those ruelus
 */
@@ -145,7 +147,8 @@ function SignUp({ navigate }) {
             const signUpRequest = async () => {
                 const bodyData = {
                     email: signUpState.email,
-                    password: signUpState.password
+                    password: signUpState.password,
+                    role: signUpState.role
                 }
 
                 try {
@@ -172,6 +175,9 @@ function SignUp({ navigate }) {
             }
 
             if (error.emailError === null && error.passwordError === null) {
+
+                // alert(signUpState);
+
                 signUpRequest();
                 // alert('called the api');
 

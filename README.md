@@ -21,6 +21,7 @@ this app allows users to create their own store and start selling their products
 ### Business Logic / Features  
 - Managed ecommerce platform that allows anyone to create their own stores and start selling products online ( like shopify )
 - This app contains two user levels which are customer and vendor, since we have two customer levels when authenticating visitor will be asked to whether they need to signup as a customer or signup as a vendor.
+- once user selected a role his account only can be used for that selected role
 
 ####  Vendor Level Features
 - Vendor Account
@@ -162,7 +163,10 @@ Cognito App client config
 - [x] - configure IAM
 - [x] - configure cognito
 
+- [ ] - handle customer and 
+
 - [x] - user signup
+    - [ ] - include the user role in attributes
     - [x] - validate user input
     - [x] - save user in cognito user pool
 
