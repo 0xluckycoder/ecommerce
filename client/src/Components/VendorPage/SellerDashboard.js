@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SideNav from './SideNav';
 import TopNav from './TopNav';
 import Home from './Home';
@@ -10,7 +10,6 @@ import Settings from './Settings';
 import './sellerDashboard.scss';
 
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
 
 export default function SellerDashboard() {
     const [sideNavState , setSideNavState] = useState(false);

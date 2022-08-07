@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import productDemo from '../assets/product-demo.png';
+import productDemo from '../../assets/product-demo.png';
 import styles from './products.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';

@@ -15,27 +15,27 @@ export default function SideNav({ sideNavState }) {
 
     return (
         <div className={`${styles.sideNav} ${sideNavState && styles.sideNavShow}`}>
-            <div onClick={() => handleNavClick('/dashboard')} className={`${styles.sideNavItem} ${pathname === '/dashboard' && styles.sideNavActiveItem}`}>
+            <div onClick={() => handleNavClick('/vendor/dashboard')} className={`${styles.sideNavItem} ${pathname === '/dashboard' && styles.sideNavActiveItem}`}>
                 <FontAwesomeIcon icon={faHouse} />
                 <p>Home</p>
             </div>
 
-            <div onClick={() => handleNavClick('/orders')} className={`${styles.sideNavItem} ${pathname === '/orders' && styles.sideNavActiveItem}`}>
+            <div onClick={() => handleNavClick('/vendor/orders')} className={`${styles.sideNavItem} ${pathname === '/orders' && styles.sideNavActiveItem}`}>
                 <FontAwesomeIcon icon={faTag} />
                 <p>Orders</p>
             </div>
 
-            <div onClick={() => handleNavClick('/products')} className={`${styles.sideNavItem} ${pathname === '/products' && styles.sideNavActiveItem}`}>
+            <div onClick={() => handleNavClick('/vendor/products')} className={`${styles.sideNavItem} ${pathname === '/products' && styles.sideNavActiveItem}`}>
                 <FontAwesomeIcon icon={faBoxArchive} />
                 <p>Products</p>
             </div>
 
-            <div onClick={() => handleNavClick('/customers')} className={`${styles.sideNavItem} ${pathname === '/customers' && styles.sideNavActiveItem}`}>
+            <div onClick={() => handleNavClick('/vendor/customers')} className={`${styles.sideNavItem} ${pathname === '/customers' && styles.sideNavActiveItem}`}>
                 <FontAwesomeIcon icon={faUser} />
                 <p>Customers</p>
             </div>
 
-            <div onClick={() => handleNavClick('/settings')} className={`${styles.sideNavItem} ${pathname === '/settings' && styles.sideNavActiveItem}`}>
+            <div onClick={() => handleNavClick('/vendor/settings')} className={`${styles.sideNavItem} ${pathname === '/settings' && styles.sideNavActiveItem}`}>
                 <FontAwesomeIcon icon={faGear} />
                 <p>Settings</p>
             </div>

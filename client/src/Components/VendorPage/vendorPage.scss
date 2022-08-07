@@ -1,0 +1,45 @@
+.content-wrapper {
+    display: flex;
+    background: #F6F6F7;
+}
+
+// conditionally activate the background color if user is in admins
+
+// admin common pages
+.home,
+.orders,
+.products,
+.customers,
+.settings {
+    margin-left: 200px;
+    padding-top: 53.71px; // height of the navbar
+    width: 100%;
+    min-height: 100vh; // this style can cause style bugs
+
+    .home-inner,
+    .orders-inner,
+    .products-inner,
+    .customers-inner,
+    .settings-inner {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 991px) {
+    .ant-row {
+        row-gap: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .home,
+    .orders,
+    .products,
+    .customers,
+    .settings {
+        margin-left: 0px;
+    }
+}

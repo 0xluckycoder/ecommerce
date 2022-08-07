@@ -4,6 +4,7 @@ const {
     CognitoIdentityProvider, 
     SignUpCommand, 
     GetUserCommand,
+    AdminGetUserCommand,
     AdminConfirmSignUpCommand,
     AdminInitiateAuthCommand,
     InitiateAuthCommand
@@ -33,7 +34,7 @@ router.post('/signup', async (req, res, next) => {
             password: yup.string('password must be a string')
                         .required('password is required')
                         .max(127, 'password is too long'),
-            role: yup.string('role is required')
+            role: yup.string('role must be a string')
                     .required('role is required')
         });
 
@@ -41,7 +42,6 @@ router.post('/signup', async (req, res, next) => {
 
         console.log(validated);
 
-        // save user in cognito
         const client = new CognitoIdentityProvider({
             region: process.env.AWS_COGNITO_REGION,
             credentials : {
@@ -50,7 +50,8 @@ router.post('/signup', async (req, res, next) => {
             },
         });
 
-        const command = new SignUpCommand({
+        // register new user
+        const signUpCommand = new SignUpCommand({
             ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID,
             Username: validated.email,
             Password: validated.password,
@@ -61,8 +62,26 @@ router.post('/signup', async (req, res, next) => {
                 }
             ]
         });
+        const signUpResponse = await client.send(signUpCommand);
 
-        const cognitoSavedUser = await client.send(command);
+        // authenticate the registered user and retreive account details and tokens
+        // const adminInitiateAuthcommand = new AdminInitiateAuthCommand({
+        //     AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
+        //     AuthParameters: {
+        //         USERNAME: validated.email,
+        //         PASSWORD: validated.password
+        //     },
+        //     ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID,
+        //     UserPoolId: process.env.AWS_USER_POOL_ID
+        // });
+        // const adminInitiateAuthResponse = await client.send(adminInitiateAuthcommand);
+
+        // retreive user details
+        // const getUserCommand = new GetUserCommand({
+        //     AccessToken: adminInitiateAuthResponse.AuthenticationResult.AccessToken
+        // });
+        // const getUserResponse = await client.send(getUserCommand);
+
 
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
@@ -73,22 +92,22 @@ router.post('/signup', async (req, res, next) => {
                 pass: process.env.PASSWORD
             }
         });
-
-        const emailTemplate = generateEmailConfirmTemplate(cognitoSavedUser.UserSub, validated.email);
-        
+        const emailTemplate = generateEmailConfirmTemplate(signUpResponse.UserSub, validated.email);
         // send email confirm link
         const info = await transporter.sendMail(emailTemplate);
 
         console.log(info);
 
+        // set token cookies
+        // construct a format for response
+
         // success response
         res.status(200).json({
             success: true,
-            userData: validated.email,
-            cognitoData: cognitoSavedUser
+            data: signUpResponse
         });
         /*
-        response format - 
+        signup response format - 
             {
                 "$metadata": {
                     "httpStatusCode": 200,
@@ -116,8 +135,6 @@ router.post('/signin', async (req, res, next) => {
 
         console.log(req.body);
 
-        // throw new Error('hi from server');
-
         // validate user input
         const userSchema = yup.object().shape({
             email: yup.string('email must be a string')
@@ -140,7 +157,8 @@ router.post('/signin', async (req, res, next) => {
             },
         });
 
-        const adminInitiateAuthcommand = new AdminInitiateAuthCommand({
+        // retreive user tokens
+        const adminInitiateAuthCommand = new AdminInitiateAuthCommand({
             AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
             AuthParameters: {
                 USERNAME: validated.email,
@@ -149,21 +167,20 @@ router.post('/signin', async (req, res, next) => {
             ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID,
             UserPoolId: process.env.AWS_USER_POOL_ID
         });
+        const adminInitiateAuthResponse = await client.send(adminInitiateAuthCommand);
 
-        const adminInitiateAuthResponse = await client.send(adminInitiateAuthcommand);
-
+        // get user details
         const getUserCommand = new GetUserCommand({
             AccessToken: adminInitiateAuthResponse.AuthenticationResult.AccessToken
         });
+        const getUserResponse = await client.send(getUserCommand);
 
-        const getUserCommandResponse = await client.send(getUserCommand);
+        console.log(getUserResponse);
 
-        console.log(getUserCommandResponse);
-
-        // res.status(200).json(adminInitiateAuthResponse);
-
-        // console.log(signInResponse);
-
+        res.status(200).json({
+            success: true,
+            data: getUserResponse
+        });
 
         /*
         response format -
@@ -191,7 +208,6 @@ router.post('/signin', async (req, res, next) => {
     } catch(error) {
         
         console.log('original error ❌❌', error);
-
         next(error);
     }
 });

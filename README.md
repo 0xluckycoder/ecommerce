@@ -58,35 +58,33 @@ this app allows users to create their own store and start selling their products
 
 ### Front-End
 
-- [x] - Go through react docs and recap everything
-- [x] - Start development with Frontend
-    - [x] - Configure with AntDesign / Sass
-    - [x] - Learn Antdesign layout & Grid
-- [ ] - Use useReducer as a state manager 
-- [ ] - Learn how expert developers use reactjs
+- [x] - sidebar component with navigation
+- [x] - Top Navbar
 
-- [ ] - develop choose between pages
+Vendor Routes
 
-- [/] - Authenticate page components
-    - [x] - choose between vendor & seller page
-    - [x] - login component
-    - [x] - signup component
-    - [x] - forgot password component
-    - [x] - link components together
-    - [ ] - add form validation for all fields
+- [x] - Dashboard
+    - /vendor/dashboard
 
-- [/] - Admin Components
-    - [x] - Admin top navigation
-    - [x] - Side Navbar
-    - [x] - Use ant design responsive columns and rows
-    - [x] - replace existing styles layout styles with columns and rows
-    - [x] - make sidenav and topnav sticky (replicate adminpro styles)
-    - [x] - reverse engineer 229-multi-level-dropdown source code (https://youtu.be/IF6k0uZuypA)    
-    - [x] - make layout mobile responsive upto iphone SE
-    - [x] - use sass modules when styling isolated element
-    - [x] - create responsive hamburger menu (google it)
-    - [x] - overwrite necessary styles
-    - [x] - add routers
+- [x] - Orders
+    - /vendor/orders
+
+- [x] - Products
+    - /vendor/products
+
+- [x] - Customers
+    - /vendor/customers
+
+- [x] - Settings
+    - /vendor/settings
+
+- [ ] - hamburger mobile menu for mobiles
+
+
+
+
+- make sure every page can be viewed properly by iphoneSE
+
         - [x] - vendor/dashboard
         - [x] - vendor/orders
         - [x] - vendor/products
@@ -116,6 +114,28 @@ this app allows users to create their own store and start selling their products
     - [ ] - Settings
     - [ ] - User Profile
     - [ ] - Authentication modal
+
+
+
+- [x] - Go through react docs and recap everything
+- [x] - Start development with Frontend
+    - [x] - Configure with AntDesign / Sass
+    - [x] - Learn Antdesign layout & Grid
+- [ ] - Use useReducer as a state manager 
+- [ ] - Learn how expert developers use reactjs
+
+- [ ] - develop choose between pages
+
+- [/] - Authenticate page components
+    - [x] - choose between vendor & seller page
+    - [x] - login component
+    - [x] - signup component
+    - [x] - forgot password component
+    - [x] - link components together
+    - [ ] - add form validation for all fields
+
+- [ ] - create top level authentication handling with a state
+
 
 ## Fix these
 
@@ -213,12 +233,10 @@ Cognito App client config
         - [x] - https://youtu.be/QDR-pX7Ho8k
         - [x] - https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
 
-    - [/] - complete the authentication workflow with frontend
-        - [ ] - securely store tokens in frontend
-        - [ ] - follow best practices guides
-        - [ ] - handle errors & redirects properly
+    - [ ] - store tokens in cookies
+        - [ ] - validate tokens in subsequent requests
 
-    - [ ] - Organize the backend
+    - [ ] - Organize the backend architecture
         - [ ] - follow the this guide and re-write the routes - https://www.freecodecamp.org/news/rest-api-design-best-practices-build-a-rest-api/
         - [ ] - follow this guide to modulerize the code after most of the backend api work has been completed https://github.dev/async-labs/builderbook/tree/master/builderbook/server
     
