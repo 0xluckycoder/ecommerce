@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 
@@ -27,9 +28,15 @@ db.once("open", () => {
 app.use(morgan('common'));
 
 // config with only allowed origins
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true
+}));
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
     res.json({

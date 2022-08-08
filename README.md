@@ -60,8 +60,11 @@ this app allows users to create their own store and start selling their products
 
 - [x] - sidebar component with navigation
 - [x] - Top Navbar
+- [x] - Side Navbar
 
-Vendor Routes
+Vendor Components
+
+- [x] - VendorPage
 
 - [x] - Dashboard
     - /vendor/dashboard
@@ -78,8 +81,24 @@ Vendor Routes
 - [x] - Settings
     - /vendor/settings
 
-- [ ] - hamburger mobile menu for mobiles
+Auth Components
 
+- [x] - AuthPage
+    - /auth
+
+- [x] - Signin
+    - /auth/signin
+
+- [x] - SignUp
+    - /auth/signup
+
+- [x] - ForgotPassword
+    - /auth/forgot-password
+
+- [x] - confirm email address
+    -/auth/confirm-email
+
+- [x] - hamburger mobile menu for mobiles
 
 
 
@@ -137,10 +156,11 @@ Vendor Routes
 - [ ] - create top level authentication handling with a state
 
 
-## Fix these
+## Todo
 
-[ ] - fix max font size showing ... in front end
-[ ] - validate max and min user inputs
+ - [ ] - fix max font size showing ... in front end
+ - [ ] - add resend link feature to confirm email
+
 
 ### Backend
 

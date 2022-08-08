@@ -86,9 +86,12 @@ export default function SignUp() {
                     role: signUpState.role
                 }
 
+                console.log('request sent', bodyData);
+
                 try {
                     const response = await fetch('http://localhost:5500/api/user/signup', {
                         method: 'POST',
+                        credentials: "include",
                         headers: {
                             'Content-Type': 'application/json'
                         },
@@ -96,8 +99,13 @@ export default function SignUp() {
                     });
                     const data = await response.json();
 
-                    if (data.status === 200) {
-                        console.log('success login');
+                    console.log(data);
+
+                    console.log(data.status);
+
+                    if (data.success === true) {
+                        console.log('success');
+                        navigate('/auth/confirm-email');
                     } else {
                         setApiError({
                             errorMessage: data.message

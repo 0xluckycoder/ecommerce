@@ -64,25 +64,6 @@ router.post('/signup', async (req, res, next) => {
         });
         const signUpResponse = await client.send(signUpCommand);
 
-        // authenticate the registered user and retreive account details and tokens
-        // const adminInitiateAuthcommand = new AdminInitiateAuthCommand({
-        //     AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
-        //     AuthParameters: {
-        //         USERNAME: validated.email,
-        //         PASSWORD: validated.password
-        //     },
-        //     ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID,
-        //     UserPoolId: process.env.AWS_USER_POOL_ID
-        // });
-        // const adminInitiateAuthResponse = await client.send(adminInitiateAuthcommand);
-
-        // retreive user details
-        // const getUserCommand = new GetUserCommand({
-        //     AccessToken: adminInitiateAuthResponse.AuthenticationResult.AccessToken
-        // });
-        // const getUserResponse = await client.send(getUserCommand);
-
-
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
@@ -95,7 +76,6 @@ router.post('/signup', async (req, res, next) => {
         const emailTemplate = generateEmailConfirmTemplate(signUpResponse.UserSub, validated.email);
         // send email confirm link
         const info = await transporter.sendMail(emailTemplate);
-
         console.log(info);
 
         // set token cookies
@@ -175,7 +155,16 @@ router.post('/signin', async (req, res, next) => {
         });
         const getUserResponse = await client.send(getUserCommand);
 
-        console.log(getUserResponse);
+        // set tokens
+        res.cookie('accessToken', adminInitiateAuthResponse.AuthenticationResult.AccessToken, {
+            maxAge: 60000 * 2,
+            // httpOnly: true
+        });
+
+        res.cookie('refreshToken', adminInitiateAuthResponse.AuthenticationResult.RefreshToken, {
+            maxAge: 60000 * 2,
+            // httpOnly: true
+        });
 
         res.status(200).json({
             success: true,

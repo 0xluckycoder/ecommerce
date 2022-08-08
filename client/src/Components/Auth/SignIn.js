@@ -39,6 +39,7 @@ export default function SignIn() {
                 try {
                     const response = await fetch('http://localhost:5500/api/user/signin', {
                         method: 'POST',
+                        credentials: "include",
                         headers: {
                             'Content-Type': 'application/json'
                         },
@@ -46,9 +47,19 @@ export default function SignIn() {
                     });
                     const data = await response.json();
 
+                    console.log(data);
+
                     if (data.status === 200) {
                         console.log('success login');
+                        navigate('/vendor/dashboard');
                     } else {
+
+                        // if user is not confirmed redirect to email confirm page
+                        if (data.message === "User is not confirmed.") {
+                            navigate('/auth/confirm-email');
+                            return;
+                        }
+
                         setApiError({
                             errorMessage: data.message
                         });
@@ -167,7 +178,7 @@ export default function SignIn() {
                 </Form.Item>
             </div>
             <div className={`${styles.row} ${styles.center}`}>
-                <a onClick={() => navigate('/auth/forgotPassword')} className={styles.forgotPassword}>Forgot Password</a>
+                <a onClick={() => navigate('/auth/forgot-password')} className={styles.forgotPassword}>Forgot Password</a>
             </div>
             <div className={styles.row}>
                 <Button onClick={() => handleSignIn()} className='themed-btn'>Log In</Button>

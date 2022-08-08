@@ -15,6 +15,8 @@ import Settings from './Components/VendorPage/Settings';
 import AuthPage from './Components/Auth/AuthPage';
 import SignIn from './Components/Auth/SignIn';
 import SignUp from './Components/Auth/SignUp';
+import ForgotPassword from './Components/Auth/ForgotPassword';
+import ConfirmEmail from './Components/Auth/ConfirmEmail';
 
 function App() {
 
@@ -31,6 +33,9 @@ function App() {
         <Route path="auth" element={<AuthPage />}>
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
+          <Route path="signup" element={<SignUp />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="confirm-email" element={<ConfirmEmail />} />
         </Route>
       </Routes>
     </div>
