@@ -155,16 +155,21 @@ router.post('/signin', async (req, res, next) => {
         });
         const getUserResponse = await client.send(getUserCommand);
 
-        // set tokens
-        res.cookie('accessToken', adminInitiateAuthResponse.AuthenticationResult.AccessToken, {
-            maxAge: 60000 * 2,
-            // httpOnly: true
-        });
+        // // set tokens
+        // res.cookie('AccessToken', adminInitiateAuthResponse.AuthenticationResult.AccessToken, {
+        //     maxAge: 60000 * 2,
+        //     // httpOnly: true
+        // });
 
-        res.cookie('refreshToken', adminInitiateAuthResponse.AuthenticationResult.RefreshToken, {
-            maxAge: 60000 * 2,
-            // httpOnly: true
-        });
+        // res.cookie('RefreshToken', adminInitiateAuthResponse.AuthenticationResult.RefreshToken, {
+        //     maxAge: 60000 * 2,
+        //     // httpOnly: true
+        // });
+        
+        // res.cookie('IdToken', adminInitiateAuthResponse.AuthenticationResult.IdToken, {
+        //     maxAge: 60000 * 2,
+        //     // httpOnly: true
+        // });
 
         res.status(200).json({
             success: true,

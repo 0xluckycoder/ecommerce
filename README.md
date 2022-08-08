@@ -59,8 +59,13 @@ this app allows users to create their own store and start selling their products
 ### Front-End
 
 - [x] - sidebar component with navigation
+
 - [x] - Top Navbar
+
 - [x] - Side Navbar
+
+- [x] - hamburger mobile menu for mobiles
+
 
 Vendor Components
 
@@ -98,7 +103,8 @@ Auth Components
 - [x] - confirm email address
     -/auth/confirm-email
 
-- [x] - hamburger mobile menu for mobiles
+- [/] - handle auth state and presist login users until logout
+
 
 
 

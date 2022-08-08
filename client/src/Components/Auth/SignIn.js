@@ -1,10 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import styles from './AuthGlobalStyles.module.scss';
 import googleIcon from '../../assets/google-icon.svg';
 import { Input, Button, Form, Alert } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
+import { DispatchContext, StateContext, ACTIONS } from '../../App';
+
 export default function SignIn() {
+
+    // consume auth contexts
+    const { dispatch } = useContext(DispatchContext);
+    const { state } = useContext(StateContext);
 
     const navigate = useNavigate();
 
@@ -150,49 +156,55 @@ export default function SignIn() {
     }
 
     return (
-        <div className={styles.authBox}>
-            <p className={styles.heading}>Login to your account</p>
-            {apiError.errorMessage ? <Alert message={apiError.errorMessage} type="error" style={{ marginBottom: "24px" }} /> : null}
-            <div className={styles.row}>
-                <Form.Item {...(error.emailError ? error.emailError : {})}>                    
-                    <label>Email</label>
-                    <Input 
-                        ref={emailElement} 
-                        name="email" 
-                        onBlur={(e) => validateEmail(e.target.value)} 
-                        onChange={handleInputChange} 
-                        value={signInState.email}
-                    />
-                </Form.Item>
-            </div>
-            <div className={styles.row}>
-                <Form.Item {...(error.passwordError ? error.passwordError : {})}>
-                    <label>Password</label>
-                    <Input
-                        ref={passwordElement}
-                        name="password"
-                        onBlur={(e) => validatePassword(e.target.value)} 
-                        onChange={handleInputChange} 
-                        value={signInState.password} 
-                    />
-                </Form.Item>
-            </div>
-            <div className={`${styles.row} ${styles.center}`}>
-                <a onClick={() => navigate('/auth/forgot-password')} className={styles.forgotPassword}>Forgot Password</a>
-            </div>
-            <div className={styles.row}>
-                <Button onClick={() => handleSignIn()} className='themed-btn'>Log In</Button>
-            </div>
-            <div className={`${styles.row} ${styles.withGoogle}`}>
-                <img src={googleIcon} />
-                <p>Sign in with google</p>
-            </div>
-            <div className={styles.row}>
-                <div className={`${styles.inline} ${styles.center}`}>
-                    <p>Didn't have an account ?</p>
-                    <a onClick={() => navigate('/auth/signup')}>Sign up</a>
-                </div>
-            </div>
-        </div>
+        // <div className={styles.authBox}>
+        //     <p className={styles.heading}>Login to your account</p>
+        //     {apiError.errorMessage ? <Alert message={apiError.errorMessage} type="error" style={{ marginBottom: "24px" }} /> : null}
+        //     <div className={styles.row}>
+        //         <Form.Item {...(error.emailError ? error.emailError : {})}>                    
+        //             <label>Email</label>
+        //             <Input 
+        //                 ref={emailElement} 
+        //                 name="email" 
+        //                 onBlur={(e) => validateEmail(e.target.value)} 
+        //                 onChange={handleInputChange} 
+        //                 value={signInState.email}
+        //             />
+        //         </Form.Item>
+        //     </div>
+        //     <div className={styles.row}>
+        //         <Form.Item {...(error.passwordError ? error.passwordError : {})}>
+        //             <label>Password</label>
+        //             <Input
+        //                 ref={passwordElement}
+        //                 name="password"
+        //                 onBlur={(e) => validatePassword(e.target.value)} 
+        //                 onChange={handleInputChange} 
+        //                 value={signInState.password} 
+        //             />
+        //         </Form.Item>
+        //     </div>
+        //     <div className={`${styles.row} ${styles.center}`}>
+        //         <a onClick={() => navigate('/auth/forgot-password')} className={styles.forgotPassword}>Forgot Password</a>
+        //     </div>
+        //     <div className={styles.row}>
+        //         <Button onClick={() => handleSignIn()} className='themed-btn'>Log In</Button>
+        //     </div>
+        //     <div className={`${styles.row} ${styles.withGoogle}`}>
+        //         <img src={googleIcon} />
+        //         <p>Sign in with google</p>
+        //     </div>
+        //     <div className={styles.row}>
+        //         <div className={`${styles.inline} ${styles.center}`}>
+        //             <p>Didn't have an account ?</p>
+        //             <a onClick={() => navigate('/auth/signup')}>Sign up</a>
+        //         </div>
+        //     </div>
+        // </div>
+        <>
+            <button style={{ marginTop: "200px"}} onClick={() => dispatch({ type: ACTIONS.INCREASE })}>increase</button>
+            <hr/>
+            <p>hello :{state.value}</p>
+            <button onClick={() => dispatch({ type: ACTIONS.DECREASE })}>decrease</button>
+        </>
     )
 }
