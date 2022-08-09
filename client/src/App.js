@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useMemo } from 'react';
+import React, { createContext, useReducer, useMemo, useEffect } from 'react';
 
 import './app.scss';
 import 'antd/dist/antd.css';
@@ -20,13 +20,6 @@ import SignUp from './Components/Auth/SignUp';
 import ForgotPassword from './Components/Auth/ForgotPassword';
 import ConfirmEmail from './Components/Auth/ConfirmEmail';
 
-/* 
-- [ ] - verify the email address when user is clicking the link by admin operation
-- [ ] - add name and other attributes
-- [ ] - save additional attributes like name, city in mongoDB
-  - seperate collections database for vendor & user
-- user attr
-*/
 const initialState = {
   email: "",
   role: ""
@@ -37,26 +30,25 @@ export const ACTIONS = {
   LOGIN_ERROR: 'login_error',
   LOGOUT: 'logout',
   LOADING: 'loading'
-  // INCREASE: 'increase',
-  // DECREASE: 'decrease'
 }
 
+// accept the payload
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.LOGIN_SUCCESS:
       return {
-        value: state.value + 1
+        email: action.payload.email,
+        role: action.payload.role
       };
-    case ACTIONS.DECREASE:
+    case ACTIONS.LOGIN_ERROR:
       return {
-        value: state.value - 1
+        email: "",
+        role: ""
       };
     default:
       return state;
   }
 }
-
-// export const AuthContext = createContext();
 
 export const DispatchContext = createContext();
 export const StateContext = createContext();
@@ -65,11 +57,55 @@ function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  /*
+  - [ ] - add the loading while authenticating
+  */
+
+  useEffect(() => {
+   (async () => {
+      try {
+        const response = await fetch('http://localhost:5500/api/user/verifyAuth', {
+          method: 'GET',
+          credentials: "include",
+        });
+        const data = await response.json();
+        console.log(data);
+
+        dispatch({ 
+          type: ACTIONS.LOGIN_SUCCESS, 
+          payload: {
+              email: data.userData.email,
+              role: data.userData.role
+        }});
+
+      } catch(error) {
+        console.log('error', error);
+        dispatch({ type: ACTIONS.LOGIN_ERROR });
+      }
+   })()
+
+  }, []);
+
+  try {
+
+      
+
+    // const response = await fetch('http://localhost:5500/api/user/verifyAuth', {
+    //   method: 'GET',
+    //   credentials: "include",
+    // });
+
+    // const data = await response.json();
+
+    // console.log(data);
+
+  } catch(error) {
+    console.log(error);
+  }
+
   // const contextValue = useMemo(() => {
   //   return { state, dispatch };
   // }, [state, dispatch]);
-
-  // const myNumber = 10;
 
   return (
       <div className="App">
@@ -96,56 +132,5 @@ function App() {
     </div>
   );
 }
-
-/*
-import React, { useReducer } from "react";
- 
-let user = localStorage.getItem("currentUser")
-  ? JSON.parse(localStorage.getItem("currentUser")).user
-  : "";
-let token = localStorage.getItem("currentUser")
-  ? JSON.parse(localStorage.getItem("currentUser")).auth_token
-  : "";
- 
-export const initialState = {
-  userDetails: "" || user,
-  token: "" || token,
-  loading: false,
-  errorMessage: null
-};
- 
-export const AuthReducer = (initialState, action) => {
-  switch (action.type) {
-    case "REQUEST_LOGIN":
-      return {
-        ...initialState,
-        loading: true
-      };
-    case "LOGIN_SUCCESS":
-      return {
-        ...initialState,
-        user: action.payload.user,
-        token: action.payload.auth_token,
-        loading: false
-      };
-    case "LOGOUT":
-      return {
-        ...initialState,
-        user: "",
-        token: ""
-      };
- 
-    case "LOGIN_ERROR":
-      return {
-        ...initialState,
-        loading: false,
-        errorMessage: action.error
-      };
- 
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
-  }
-};
-*/ 
 
 export default App;

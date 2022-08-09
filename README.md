@@ -164,8 +164,21 @@ Auth Components
 
 ## Todo
 
- - [ ] - fix max font size showing ... in front end
- - [ ] - add resend link feature to confirm email
+- [ ] - fix max font size showing ... in front end
+- [ ] - add resend link feature to confirm email
+
+- [x] - persist the user after signin
+    - [x] - keep a top level auth state in fronten
+    - [x] - store both accessToken and refreshToken in httpOnly cookies
+    - [/] - presist user in page reloads or tab moves 
+    - [ ] - validate tokens from bakend in private requests
+    - [ ] - when user is logged in redirect user to private page if logged in if not redirect to login 
+
+- [ ] - verify the user's email when user is confirming their account by cliking the link that sent to them
+
+- [ ] - store user role specific additional attributes in DB 
+
+
 
 
 ### Backend

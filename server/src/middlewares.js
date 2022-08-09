@@ -17,7 +17,8 @@ const errorTypes = {
     JsonWebTokenError: 400,
     TokenExpiredError: 400,
     NotBeforeError: 400,
-    InvalidAuthorization: 401 // custom error name
+    InvalidAuthorization: 401, // custom error name,
+    CookiesUnavailable: 400 // custom error name
 }
 
 // const notFound = (req, res, next) => {
