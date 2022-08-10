@@ -170,9 +170,12 @@ Auth Components
 - [x] - persist the user after signin
     - [x] - keep a top level auth state in fronten
     - [x] - store both accessToken and refreshToken in httpOnly cookies
-    - [/] - presist user in page reloads or tab moves 
-    - [ ] - validate tokens from bakend in private requests
-    - [ ] - when user is logged in redirect user to private page if logged in if not redirect to login 
+    - [x] - presist user in page reloads or tab moves 
+    - [x] - validate tokens from bakend in private requests
+
+- [ ] - make frontend vendor routes private
+    - [ ] - redirect auth and unauth users accordingly
+    - [ ] - logout user when accessToken, refreshToken is expired 
 
 - [ ] - verify the user's email when user is confirming their account by cliking the link that sent to them
 
