@@ -20,90 +20,16 @@ const StoreEntry = require('../../models/StoreEntry');
 
 const generateEmailConfirmTemplate = require('../../lib/generateEmailConfirmTemplate');
 
-const refreshAccessToken = async (refreshToken, res) => {
-    console.log(refreshToken);
-    try {
-
-        const client = new CognitoIdentityProvider({
-            region: process.env.AWS_COGNITO_REGION,
-            credentials : {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-            },
-        });
-
-        const command = new InitiateAuthCommand({
-            AuthFlow: "REFRESH_TOKEN_AUTH",
-            AuthParameters: {
-                REFRESH_TOKEN: refreshToken,
-            },
-            ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID
-        });
-
-        const InitiateAuthCommandResponse = await client.send(command);
-
-        res.cookie('AccessToken', InitiateAuthCommandResponse.AuthenticationResult.AccessToken, {
-            maxAge: 60000 * 5,
-            httpOnly: true
-        });
-
-        res.cookie('IdToken', InitiateAuthCommandResponse.AuthenticationResult.IdToken, {
-            maxAge: 60000 * 5,
-            httpOnly: true
-        });
-
-        /*
-        {
-            '$metadata': {
-                httpStatusCode: 200,
-                requestId: 'eab1f0d9-3051-4404-85f1-fa5e8a8b2dd1',
-                extendedRequestId: undefined,
-                cfId: undefined,
-                attempts: 1,
-                totalRetryDelay: 0
-            },
-            AuthenticationResult: {
-                AccessToken: 'eyJraWQiOiJCNnBoUmkyRFwvK2ExckRsV21MXC92UmdBRjJNSVl2MnF0R3Q3VEFGVUVqcjg9IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiIwYjljMGI1OC1kNjhmLTQ2ZmQtODU5NS02MTJhYzgwYWYyZWYiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtd2VzdC0yLmFtYXpvbmF3cy5jb21cL3VzLXdlc3QtMl80THpBNER5dEwiLCJjbGllbnRfaWQiOiI2dWR0YjBodnY4b2EycjZiMGxrY2htMmhucSIsIm9yaWdpbl9qdGkiOiI4YTcxN2IxYy03YmY2LTQ1YWItOWMyYS01YmMxMTdkMjAyZGMiLCJldmVudF9pZCI6IjdiMjczODM5LTgwYmQtNDU4OS1iYmE3LWFmNjQ1YmI2MWM4OSIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE2NjAwNzUwMjksImV4cCI6MTY2MDA3ODYzNywiaWF0IjoxNjYwMDc1MDM3LCJqdGkiOiI1YzE0MjAyYy00MjUxLTRkODUtYTUzMC1iNzA1OGEzOTg4YmUiLCJ1c2VybmFtZSI6IjBiOWMwYjU4LWQ2OGYtNDZmZC04NTk1LTYxMmFjODBhZjJlZiJ9.TW8Hj86jzjeXEB4SpBZGzvjrHek3xqohTidWIi5baLkTNeBhSpFETL8YpN7DslK-0JsovFs3-Gm-zkzMbMrmhO1_ElOiXtsrcvqjcbya9nia7cIhbionbYhv3Tnq-9_r4ZWD-0qPNF5skiYii579sDIfR6QoTk2GgqZOSW4YCFQ9RmIrmXGLglRF88V-eJUDVUYCOPfQa8RcaMk1MfqWoN4eOP_NPZPd1TEMs3oobP06aXQ7H7n7rH9mTZ9htxwDvtcwCMvq-PxTTO8QdpcYb9DiJY2WWLiHE7vQXJsvNDcvkxxbQ87gJiq7DTBdiR9C4sFyAGuOF4VUJWe2AUDOfA',
-                ExpiresIn: 3600,
-                IdToken: 'eyJraWQiOiI1VktYcGlId2FsSTZiMHhaMEFWcmhLd25HVG5KTHkzeFNhODJpbmVEVDZ3PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIwYjljMGI1OC1kNjhmLTQ2ZmQtODU5NS02MTJhYzgwYWYyZWYiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy13ZXN0LTIuYW1hem9uYXdzLmNvbVwvdXMtd2VzdC0yXzRMekE0RHl0TCIsImNvZ25pdG86dXNlcm5hbWUiOiIwYjljMGI1OC1kNjhmLTQ2ZmQtODU5NS02MTJhYzgwYWYyZWYiLCJvcmlnaW5fanRpIjoiOGE3MTdiMWMtN2JmNi00NWFiLTljMmEtNWJjMTE3ZDIwMmRjIiwiYXVkIjoiNnVkdGIwaHZ2OG9hMnI2YjBsa2NobTJobnEiLCJldmVudF9pZCI6IjdiMjczODM5LTgwYmQtNDU4OS1iYmE3LWFmNjQ1YmI2MWM4OSIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjYwMDc1MDI5LCJleHAiOjE2NjAwNzg2MzcsImN1c3RvbTpyb2xlIjoidmVuZG9yIiwiaWF0IjoxNjYwMDc1MDM3LCJqdGkiOiJlMTU2NmU0Ny05M2ZlLTRkOWYtYTQwMi05ZGU1ODNmZjljZTQiLCJlbWFpbCI6Imxha3NoYW5wZXJlcmEuZGV2QGdtYWlsLmNvbSJ9.RAtmkZq3Qnd2GMt7o9aDJrjIxRtUvsf9ZRQ_lwwxPoCKgbQ-TrM83D1Vs-e8dKQTPA0q-A4O4S9XdMndTUFFqtCsvPXznPSTkhofA9JNpHqFFVzbxy9FnepMh8dgD2D8aN9JALq4sFnuw0eOwxLqwqjgEMT3e5ED-TYM0x1h5TqCBBnCo-EgbfBByP3Y35zjMjn6q3E4voQbXKcDQ3dGy3jVDNvwD82lfeDFV7DsUfEKKKzai9MAvkqfnAKHHreiqxbLcyKWMpt7hbJJq1GKUfE4-nOqHruUziH9lAjmR0T3EtG18AE3ck1t-UaFFnyfsFPX_MCIi7Zt7WpPgJin7A',
-                NewDeviceMetadata: undefined,
-                RefreshToken: undefined,
-                TokenType: 'Bearer'
-            },
-            ChallengeName: undefined,
-            ChallengeParameters: {},
-            Session: undefined
-        }
-        */ 
-
-    } catch(error) {
-        console.log('refreshAccessTokenError', error);
-    }
-}
-
 router.get('/verifyAuth', async(req, res, next) => {
     try {
-        // console.log('Cookies', req.cookies.AccessToken);
-        // console.log('Cookies', req.cookies.RefreshToken);
-        // console.log('Cookies', req.cookies.IdToken);
 
-        /*
-        - if accesstoken is expired
-            - refresh with refreshtoken and set the new accesstoken
-            - if refreshtoken invalid or expired redirect user to login
-
-        - handle errors properly
-        ❌❌ refreshToken function cannot access the res.cookie since is an isolated function
-        (Fix it)
-        - [x] - unavailable token error
-        - [x] - test retreive user with cognito getUser function
-        - [ ] - test generate accesstoken if current accesstoken is invalid
-            - [ ] - throw error if refreshtoken is invalid
-            - [ ] - send the getUser data to client along with tokens when refreshing tokens 
-        */
+        /**
+         *  - [ ] - logout the user if refreshtoken is expired
+         * */ 
 
         const { AccessToken, RefreshToken, IdToken } = req.cookies;
-
+        
+        // validate cookies
         if (!AccessToken || !RefreshToken || !IdToken) {
             const tokenUnavailableError = new Error('no cookies available');
             tokenUnavailableError.name = 'CookiesUnavailable';            
@@ -118,38 +44,98 @@ router.get('/verifyAuth', async(req, res, next) => {
             },
         });
 
-        // get user details
         const getUserCommand = new GetUserCommand({
             AccessToken: 'sdfsdf'
         });
 
-        const getUserResponse = await client.send(getUserCommand);
+        // nested try catch
+        try {
+            // get user details
+            const getUserResponse = await client.send(getUserCommand);
+           
+            // construct the response
+            const email = getUserResponse.UserAttributes.find(element => element.Name === "email");
+            const role = getUserResponse.UserAttributes.find(element => element.Name === "custom:role");
+            const data = {
+                email: email.Value,
+                role: role.Value
+            }
+           
+            // singin response
+            res.status(200).json({
+                success: true,
+                userData: data
+            });
 
-        // construct the response
-        const email = getUserResponse.UserAttributes.find(element => element.Name === "email");
-        const role = getUserResponse.UserAttributes.find(element => element.Name === "custom:role");
+        } catch(error) {
+            console.log('nested try catch error', error);
 
-        const data = {
-            email: email.Value,
-            role: role.Value
+            /**
+             * if access token is expired reassign new access & id tokens to client
+             * if access token is invalid throw error
+             * */ 
+            if (error.name === 'NotAuthorizedException') {
+                const command = new InitiateAuthCommand({
+                    AuthFlow: "REFRESH_TOKEN_AUTH",
+                    AuthParameters: {
+                        REFRESH_TOKEN: RefreshToken,
+                    },
+                    ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID
+                });
+
+                // retreive access & id tokens
+                const InitiateAuthCommandResponse = await client.send(command);
+                console.log('new tokens assigned', InitiateAuthCommandResponse);
+
+                // clear token cookies
+                res.clearCookie('AccessToken');
+                res.clearCookie('IdToken');
+
+                // reassign access & id tokens as cookies
+                res.cookie('AccessToken', InitiateAuthCommandResponse.AuthenticationResult.AccessToken, {
+                    maxAge: 60000 * 5,
+                    httpOnly: true
+                });
+                res.cookie('IdToken', InitiateAuthCommandResponse.AuthenticationResult.IdToken, {
+                    maxAge: 60000 * 5,
+                    httpOnly: true
+                });
+
+                res.json({
+                    success: true
+                })
+                /*
+                {
+                    '$metadata': {
+                        httpStatusCode: 200,
+                        requestId: 'eab1f0d9-3051-4404-85f1-fa5e8a8b2dd1',
+                        extendedRequestId: undefined,
+                        cfId: undefined,
+                        attempts: 1,
+                        totalRetryDelay: 0
+                    },
+                    AuthenticationResult: {
+                        AccessToken: 'eyJraWQiOiJCNnBoUmkyRFwvK2ExckRsV21MXC92UmdBRjJNSVl2MnF0R3Q3VEFGVUVqcjg9IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiIwYjljMGI1OC1kNjhmLTQ2ZmQtODU5NS02MTJhYzgwYWYyZWYiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtd2VzdC0yLmFtYXpvbmF3cy5jb21cL3VzLXdlc3QtMl80THpBNER5dEwiLCJjbGllbnRfaWQiOiI2dWR0YjBodnY4b2EycjZiMGxrY2htMmhucSIsIm9yaWdpbl9qdGkiOiI4YTcxN2IxYy03YmY2LTQ1YWItOWMyYS01YmMxMTdkMjAyZGMiLCJldmVudF9pZCI6IjdiMjczODM5LTgwYmQtNDU4OS1iYmE3LWFmNjQ1YmI2MWM4OSIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE2NjAwNzUwMjksImV4cCI6MTY2MDA3ODYzNywiaWF0IjoxNjYwMDc1MDM3LCJqdGkiOiI1YzE0MjAyYy00MjUxLTRkODUtYTUzMC1iNzA1OGEzOTg4YmUiLCJ1c2VybmFtZSI6IjBiOWMwYjU4LWQ2OGYtNDZmZC04NTk1LTYxMmFjODBhZjJlZiJ9.TW8Hj86jzjeXEB4SpBZGzvjrHek3xqohTidWIi5baLkTNeBhSpFETL8YpN7DslK-0JsovFs3-Gm-zkzMbMrmhO1_ElOiXtsrcvqjcbya9nia7cIhbionbYhv3Tnq-9_r4ZWD-0qPNF5skiYii579sDIfR6QoTk2GgqZOSW4YCFQ9RmIrmXGLglRF88V-eJUDVUYCOPfQa8RcaMk1MfqWoN4eOP_NPZPd1TEMs3oobP06aXQ7H7n7rH9mTZ9htxwDvtcwCMvq-PxTTO8QdpcYb9DiJY2WWLiHE7vQXJsvNDcvkxxbQ87gJiq7DTBdiR9C4sFyAGuOF4VUJWe2AUDOfA',
+                        ExpiresIn: 3600,
+                        IdToken: 'eyJraWQiOiI1VktYcGlId2FsSTZiMHhaMEFWcmhLd25HVG5KTHkzeFNhODJpbmVEVDZ3PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIwYjljMGI1OC1kNjhmLTQ2ZmQtODU5NS02MTJhYzgwYWYyZWYiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy13ZXN0LTIuYW1hem9uYXdzLmNvbVwvdXMtd2VzdC0yXzRMekE0RHl0TCIsImNvZ25pdG86dXNlcm5hbWUiOiIwYjljMGI1OC1kNjhmLTQ2ZmQtODU5NS02MTJhYzgwYWYyZWYiLCJvcmlnaW5fanRpIjoiOGE3MTdiMWMtN2JmNi00NWFiLTljMmEtNWJjMTE3ZDIwMmRjIiwiYXVkIjoiNnVkdGIwaHZ2OG9hMnI2YjBsa2NobTJobnEiLCJldmVudF9pZCI6IjdiMjczODM5LTgwYmQtNDU4OS1iYmE3LWFmNjQ1YmI2MWM4OSIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjYwMDc1MDI5LCJleHAiOjE2NjAwNzg2MzcsImN1c3RvbTpyb2xlIjoidmVuZG9yIiwiaWF0IjoxNjYwMDc1MDM3LCJqdGkiOiJlMTU2NmU0Ny05M2ZlLTRkOWYtYTQwMi05ZGU1ODNmZjljZTQiLCJlbWFpbCI6Imxha3NoYW5wZXJlcmEuZGV2QGdtYWlsLmNvbSJ9.RAtmkZq3Qnd2GMt7o9aDJrjIxRtUvsf9ZRQ_lwwxPoCKgbQ-TrM83D1Vs-e8dKQTPA0q-A4O4S9XdMndTUFFqtCsvPXznPSTkhofA9JNpHqFFVzbxy9FnepMh8dgD2D8aN9JALq4sFnuw0eOwxLqwqjgEMT3e5ED-TYM0x1h5TqCBBnCo-EgbfBByP3Y35zjMjn6q3E4voQbXKcDQ3dGy3jVDNvwD82lfeDFV7DsUfEKKKzai9MAvkqfnAKHHreiqxbLcyKWMpt7hbJJq1GKUfE4-nOqHruUziH9lAjmR0T3EtG18AE3ck1t-UaFFnyfsFPX_MCIi7Zt7WpPgJin7A',
+                        NewDeviceMetadata: undefined,
+                        RefreshToken: undefined,
+                        TokenType: 'Bearer'
+                    },
+                    ChallengeName: undefined,
+                    ChallengeParameters: {},
+                    Session: undefined
+                }
+                */ 
+            }
         }
-
-        // singin response
-        res.status(200).json({
-            success: true,
-            userData: data
+        res.json({
+            success: true
         });
-        
+
     } catch(error) {
         // if accesstoken is invalid refresh it
-        console.log('original error ❌❌', error.name);
-
-        if(error.name == 'NotAuthorizedException') {
-            console.log('refresinggg');
-            refreshAccessToken(req.cookies.RefreshToken, res);
-        } else {
-            next(error);
-        }
+        console.log('original error ❌❌', error);
     }
 });
 
@@ -291,19 +277,24 @@ router.post('/signin', async (req, res, next) => {
 
         const getUserResponse = await client.send(getUserCommand);
 
+        // clear existing token cookies
+        res.clearCookie('AccessToken');
+        res.clearCookie('IdToken');
+        res.clearCookie('RefreshToken');
+
         // set access token, refresh token, id token on client accordingly
         res.cookie('AccessToken', adminInitiateAuthResponse.AuthenticationResult.AccessToken, {
-            maxAge: 60000 * 5,
+            maxAge: 60000 * 50,
             httpOnly: true
         });
 
         res.cookie('RefreshToken', adminInitiateAuthResponse.AuthenticationResult.RefreshToken, {
-            maxAge: 60000 * 5,
+            maxAge: 60000 * 50,
             httpOnly: true
         });
         
         res.cookie('IdToken', adminInitiateAuthResponse.AuthenticationResult.IdToken, {
-            maxAge: 60000 * 5,
+            maxAge: 60000 * 50,
             httpOnly: true
         });
 
