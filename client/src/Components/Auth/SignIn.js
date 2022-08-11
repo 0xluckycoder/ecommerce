@@ -4,7 +4,7 @@ import googleIcon from '../../assets/google-icon.svg';
 import { Input, Button, Form, Alert } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
-import { DispatchContext, StateContext, ACTIONS } from '../../App';
+import { DispatchContext, StateContext, ACTIONS, ROUTES } from '../../App';
 
 export default function SignIn() {
 
@@ -26,9 +26,9 @@ export default function SignIn() {
 
     const [allowedToCallApiState, setAllowedToCallApiState] = useState(false);
 
-    const [apiError, setApiError] = useState({
-        errorMessage: null
-    });
+    // const [apiError, setApiError] = useState({
+    //     errorMessage: null
+    // });
 
     const emailElement = useRef(null);
     const passwordElement = useRef(null);
@@ -37,12 +37,15 @@ export default function SignIn() {
         if (allowedToCallApiState) {
 
             const signInRequest = async () => {
+                // format the data to sent
                 const bodyData = {
                     email: signInState.email,
                     password: signInState.password
                 }
 
                 try {
+                    dispatch({ type: ACTIONS.LOADING });
+
                     const response = await fetch('http://localhost:5500/api/user/signin', {
                         method: 'POST',
                         credentials: "include",
@@ -51,43 +54,47 @@ export default function SignIn() {
                         },
                         body: JSON.stringify(bodyData)
                     });
+                
+                    
                     const data = await response.json();
-
                     console.log(data);
 
                     if (data.success) {
                         console.log('success login');
-                        
-                    dispatch({ 
-                        type: ACTIONS.LOGIN_SUCCESS, 
-                        payload: {
-                            email: data.userData.email,
-                            role: data.userData.role
-                    }});
+                        dispatch({ 
+                            type: ACTIONS.SIGNIN_SUCCESS,
+                            payload: {
+                                email: data.userData.email,
+                                role: data.userData.role
+                        }});
+                        data.userData.role === 'vendor' && navigate('/vendor/dashboard');
+                        // add customers redirect route here
 
-                        // navigate('/vendor/dashboard');
                     } else {
                         // if user is not confirmed redirect to email confirm page
                         if (data.message === "User is not confirmed.") {
-                            navigate('/auth/confirm-email');
+                            dispatch({ error: ACTIONS.CLEAR_ERROR });
+                            navigate(ROUTES.CONFIRM_EMAIL);
                             return;
                         }
 
-                        dispatch({ type: ACTIONS.LOGIN_ERROR });
-
-                        setApiError({
-                            errorMessage: data.message
-                        });
+                        dispatch({ type: ACTIONS.SIGNIN_ERROR,
+                            payload: {
+                                errorMessage: data.message
+                        }});
                     }
 
                 } catch(error) {
-                    console.log('api error', error);
+                    console.log('unexpected', error);
+                    dispatch({ type: ACTIONS.SIGNIN_ERROR,
+                        payload: {
+                            errorMessage: "Unknown error occurred"
+                    }});
                 }
             }
 
             if (error.emailError === null && error.passwordError === null) {
                 signInRequest();
-                // alert('called the api');
 
                 // reset the apiError to default
             } else {
@@ -167,7 +174,7 @@ export default function SignIn() {
     return (
         <div className={styles.authBox}>
             <p className={styles.heading}>Login to your account</p>
-            {apiError.errorMessage ? <Alert message={apiError.errorMessage} type="error" style={{ marginBottom: "24px" }} /> : null}
+            {state.errorMessage ? <Alert message={state.errorMessage} type="error" style={{ marginBottom: "24px" }} /> : null}
             <div className={styles.row}>
                 <Form.Item {...(error.emailError ? error.emailError : {})}>                    
                     <label>Email</label>
@@ -205,7 +212,10 @@ export default function SignIn() {
             <div className={styles.row}>
                 <div className={`${styles.inline} ${styles.center}`}>
                     <p>Didn't have an account ?</p>
-                    <a onClick={() => navigate('/auth/signup')}>Sign up</a>
+                    <a onClick={() => {
+                        dispatch({ type: ACTIONS.CLEAR_ERROR });
+                        navigate(ROUTES.SIGNUP);
+                    }}>Sign up</a>
                 </div>
             </div>
         </div>

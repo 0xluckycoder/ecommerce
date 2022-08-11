@@ -27,6 +27,18 @@ p {
   transition: 0;
 }
 
+// loader
+.loading-wrapper {
+  width: 50px;
+  position: absolute;
+  top: calc(50% - 50px/2);
+  left: calc(50% - 50px/2);
+
+  svg {
+    fill: #000;
+  }
+}
+
 // disable button click animation
 [ant-click-animating-without-extra-node='true']::after {
   display: none !important;

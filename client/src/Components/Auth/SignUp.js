@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 
 import styles from './AuthGlobalStyles.module.scss';
 import trolley from '../../assets/trolley.svg';
@@ -8,8 +8,13 @@ import googleIcon from '../../assets/google-icon.svg';
 import { useNavigate } from 'react-router-dom';
 
 import { Input, Button, Form, Alert } from 'antd';
+import { ACTIONS, DispatchContext, ROUTES, StateContext } from '../../App';
 
 export default function SignUp() {
+
+    // consume auth context
+    const { dispatch } = useContext(DispatchContext);
+    const { state } = useContext(StateContext);
 
     const navigate = useNavigate();
 
@@ -27,9 +32,9 @@ export default function SignUp() {
 
     const [allowedToCallApiState, setAllowedToCallApiState] = useState(false);
 
-    const [apiError, setApiError] = useState({
-        errorMessage: null
-    });
+    // const [apiError, setApiError] = useState({
+    //     errorMessage: null
+    // });
 
     const validateEmail = (value) => {
 
@@ -89,6 +94,8 @@ export default function SignUp() {
                 console.log('request sent', bodyData);
 
                 try {
+                    dispatch({ type: ACTIONS.LOADING });
+
                     const response = await fetch('http://localhost:5500/api/user/signup', {
                         method: 'POST',
                         credentials: "include",
@@ -97,33 +104,31 @@ export default function SignUp() {
                         },
                         body: JSON.stringify(bodyData)
                     });
+                    
                     const data = await response.json();
-
                     console.log(data);
-
-                    console.log(data.status);
 
                     if (data.success === true) {
                         console.log('success');
-                        navigate('/auth/confirm-email');
+                        dispatch({ type: ACTIONS.SIGNUP_SUCCESS });
+                        navigate(ROUTES.CONFIRM_EMAIL);
                     } else {
-                        setApiError({
+                        dispatch({ type: ACTIONS.SIGNUP_ERROR, payload: {
                             errorMessage: data.message
-                        });
+                        }});
                     }
 
                 } catch(error) {
-                    console.log('api error', error);
+                    console.log('unexpected', error);
+                    dispatch({ type: ACTIONS.SIGNIN_ERROR,
+                        payload: {
+                            errorMessage: "Unknown error occurred"
+                    }});
                 }
             }
 
             if (error.emailError === null && error.passwordError === null) {
-
-                // alert(signUpState);
-
                 signUpRequest();
-                // alert('called the api');
-
                 // reset the apiError to default
             } else {
                 // disable api access when errors are present
@@ -149,13 +154,13 @@ export default function SignUp() {
     return (
         <>
 
-        {signUpState.role && signUpState.roleSelectedByUser 
+        {signUpState.role && signUpState.roleSelectedByUser || state.errorMessage 
         
         ?
 
         <div className={styles.authBox}>
             <p className={styles.heading}>Create your account</p>
-            {apiError.errorMessage ? <Alert message={apiError.errorMessage} type="error" style={{ marginBottom: "24px" }} /> : null}
+            {state.errorMessage ? <Alert message={state.errorMessage} type="error" style={{ marginBottom: "24px" }} /> : null}
             <div className={styles.row}>
                 <Form.Item {...(error.emailError ? error.emailError : {})}>                    
                     <label>Email</label>
@@ -187,7 +192,13 @@ export default function SignUp() {
             </div>
             <div className={styles.row}>
                 <div className={`${styles.inline} ${styles.center}`}>
-                    <p>Already have an account</p><a onClick={() => navigate('/auth/signin')}>Sign in</a>
+                    <p>
+                        Already have an account
+                    </p>
+                    <a onClick={() => {
+                        dispatch({type: ACTIONS.CLEAR_ERROR});
+                        navigate(ROUTES.SIGNIN);
+                    }}>Sign in</a>
                 </div>
             </div>
         </div>

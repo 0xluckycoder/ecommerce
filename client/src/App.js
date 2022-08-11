@@ -18,35 +18,82 @@ import SignUp from './Components/Auth/SignUp';
 import ForgotPassword from './Components/Auth/ForgotPassword';
 import ConfirmEmail from './Components/Auth/ConfirmEmail';
 
+import Loading from './Components/Loading';
+
 const authState = {
+  isLoading: false,
   isAuthenticated: false,
   email: "",
-  role: ""
+  role: "",
+  errorMessage: ""
 }
 
 export const ACTIONS = {
-  LOGIN_SUCCESS: 'login_success',
-  LOGIN_ERROR: 'login_error',
+  AUTH_SUCCESS: 'auth_success',
+  SIGNIN_SUCCESS: 'signin_success',
+  SIGNUP_SUCCESS: 'signup_success',
+  AUTH_ERROR: 'auth_error',
   LOGOUT: 'logout',
-  LOADING: 'loading'
+  LOADING: 'loading',
+  SIGNIN_ERROR: 'signin_error',
+  SIGNUP_ERROR: 'signup_error',
+  CLEAR_ERROR: 'clear_error'
 }
 
 // accept the payload
 const reducer = (state, action) => {
   switch (action.type) {
-    case ACTIONS.LOGIN_SUCCESS:
+    case ACTIONS.AUTH_SUCCESS:
+    case ACTIONS.SIGNIN_SUCCESS:
+      // console.log('loading success');
       return {
+        isLoading: false,
         isAuthenticated: true,
         email: action.payload.email,
-        role: action.payload.role
+        role: action.payload.role,
+        errorMessage: "",
       };
-    case ACTIONS.LOGIN_ERROR:
+    case ACTIONS.SIGNUP_SUCCESS:
       return {
+        isLoading: false,
         isAuthenticated: false,
         email: "",
-        role: ""
+        role: "",
+        errorMessage: "",
+      }
+    case ACTIONS.SIGNIN_ERROR:
+    case ACTIONS.SIGNUP_ERROR:
+      // console.log('loading error')
+      return {
+        isLoading: false,
+        isAuthenticated: false,
+        email: "",
+        role: "",
+        errorMessage: action.payload.errorMessage
       };
+
+    case ACTIONS.AUTH_ERROR:
+      return {
+        isLoading: false,
+        isAuthenticated: false,
+        email: "",
+        role: "",
+        errorMessage: ""
+      }
+    case ACTIONS.LOADING:
+      // console.log('loading')
+      return {
+        ...authState,
+        isLoading: true
+      }
+
+    case ACTIONS.CLEAR_ERROR:
+      return {
+        ...authState,
+        errorMessage: "",
+      }
     default:
+      // console.log('default')
       return state;
   }
 }
@@ -60,7 +107,9 @@ export const ROUTES = {
   VENDOR_ORDERS: '/vendor/orders',
   VENDOR_PRODUCTS: '/vendor/products',
   VENDOR_SETTINGS: '/vendor/settings',
-  SIGNIN: '/auth/signin'
+  SIGNIN: '/auth/signin',
+  SIGNUP: '/auth/signup',
+  CONFIRM_EMAIL: '/auth/confirm-email'
 }
 
 function App() {
@@ -90,6 +139,13 @@ function App() {
   useEffect(() => {
    (async () => {
       try {
+        dispatch({ type: ACTIONS.LOADING });
+
+        // setTimeout(() => {
+        //   console.log('timer done')
+        //   dispatch({ type: ACTIONS.LOGIN_ERROR });
+        // }, 5000);
+
         const response = await fetch('http://localhost:5500/api/user/verifyAuth', {
           method: 'GET',
           credentials: "include",
@@ -98,23 +154,17 @@ function App() {
         console.log(data);
 
         dispatch({ 
-          type: ACTIONS.LOGIN_SUCCESS, 
+          type: ACTIONS.AUTH_SUCCESS, 
           payload: {
               email: data.userData.email,
               role: data.userData.role
         }});
-
-        console.log(location.pathname);
-
-        // if (location.pathname === '/vendor/dashboard' && data.userData.role === 'vendor') {
-        //   navigate('/vendor/dashboard');
-        // }
-
+        
         authorizeDirectLinks(location.pathname, data.userData.role);
 
       } catch(error) {
         console.log('error', error);
-        dispatch({ type: ACTIONS.LOGIN_ERROR });
+        dispatch({ type: ACTIONS.AUTH_ERROR });
       }
    })()
 
@@ -125,32 +175,37 @@ function App() {
   // }, [state, dispatch]);
 
   return (
+
       <div className="App">
-        {/* <Link to="/vendor">vendor</Link> */}
         <StateContext.Provider value={{state}}>
-          <DispatchContext.Provider value={{dispatch}}>
-          <Routes>
-            <Route path="vendor" element={
-                    <Protected authState={state} permissionRole={"vendor"}>
-                      <VendorPage />
-                    </Protected>
-            }>
-              <Route path="dashboard" element={<Home />} />
-              <Route path="customers" element={<Customers />} />
-              <Route path="orders" element={<Orders />} />
-              <Route path="products" element={<Products />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
-            <Route path="auth" element={<AuthPage />}>
-              <Route path="signin" element={<SignIn />} />
-              <Route path="signup" element={<SignUp />} />
-              <Route path="signup" element={<SignUp />} />
-              <Route path="forgot-password" element={<ForgotPassword />} />
-              <Route path="confirm-email" element={<ConfirmEmail />} />
-            </Route>
-          </Routes>
-          </DispatchContext.Provider>
-        </StateContext.Provider>
+        <DispatchContext.Provider value={{dispatch}}>
+        {state.isLoading ? 
+          <Loading />
+        :
+            <Routes>
+              <Route path="vendor" element={
+                      <Protected authState={state} permissionRole={"vendor"}>
+                        <VendorPage />
+                      </Protected>
+              }>
+                <Route path="dashboard" element={<Home />} />
+                <Route path="customers" element={<Customers />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="products" element={<Products />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
+              <Route path="auth" element={<AuthPage />}>
+                <Route path="signin" element={<SignIn />} />
+                <Route path="signup" element={<SignUp />} />
+                <Route path="signup" element={<SignUp />} />
+                <Route path="forgot-password" element={<ForgotPassword />} />
+                <Route path="confirm-email" element={<ConfirmEmail />} />
+              </Route>
+            </Routes>
+        }
+        {/* <Loading /> */}
+    </DispatchContext.Provider>
+    </StateContext.Provider>
     </div>
   );
 }
@@ -164,5 +219,7 @@ function Protected({ children, authState, permissionRole }) {
   console.log('falsy');
   return <Navigate to="/auth/signin" replace />
 }
+
+
 
 export default App;

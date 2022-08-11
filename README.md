@@ -173,15 +173,22 @@ Auth Components
     - [x] - presist user in page reloads or tab moves 
     - [x] - validate tokens from bakend in private requests
 
-- [ ] - make frontend vendor routes private
-    - [ ] - redirect auth and unauth users accordingly
+- [x] - make frontend vendor routes private
+    - [x] - redirect auth and unauth users accordingly
     - [ ] - logout user when accessToken, refreshToken is expired
+
+- [x] - add full screen loading
+
+- [/] - move error state to authState
+
+- [ ] - logout
+    - [ ] - add logout button in navbar
+    - [ ] - backend route to logout
+    - [ ] - make sure to revoke old tokens 
 
 - [ ] - verify the user's email when user is confirming their account by cliking the link that sent to them
 
 - [ ] - store user role specific additional attributes in DB 
-
-
 
 
 ### Backend
