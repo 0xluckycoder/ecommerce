@@ -209,12 +209,5 @@ export default function SignIn() {
                 </div>
             </div>
         </div>
-
-        // <>
-        //     <button style={{ marginTop: "200px"}} onClick={() => dispatch({ type: ACTIONS.LOGIN_SUCCESS, payload: {email: "lakshan", role: "buyer"} })}>logged in</button>
-        //     <hr/>
-        //     <p>hello :{state.value}</p>
-        //     <button onClick={() => dispatch({ type: ACTIONS.LOGIN_ERROR })}>logout</button>
-        // </>
     )
 }

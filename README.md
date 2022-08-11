@@ -175,7 +175,7 @@ Auth Components
 
 - [ ] - make frontend vendor routes private
     - [ ] - redirect auth and unauth users accordingly
-    - [ ] - logout user when accessToken, refreshToken is expired 
+    - [ ] - logout user when accessToken, refreshToken is expired
 
 - [ ] - verify the user's email when user is confirming their account by cliking the link that sent to them
 

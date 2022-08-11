@@ -2,10 +2,8 @@ import React, { createContext, useReducer, useMemo, useEffect } from 'react';
 
 import './app.scss';
 import 'antd/dist/antd.css';
-// import SellerDashboard from './Components/SellerDashboard';
-// import AuthPage from './Components/Auth/AuthPage';
 
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 
 import VendorPage from './Components/VendorPage/VendorPage';
 import Home from './Components/VendorPage/Home';
@@ -20,7 +18,8 @@ import SignUp from './Components/Auth/SignUp';
 import ForgotPassword from './Components/Auth/ForgotPassword';
 import ConfirmEmail from './Components/Auth/ConfirmEmail';
 
-const initialState = {
+const authState = {
+  isAuthenticated: false,
   email: "",
   role: ""
 }
@@ -55,7 +54,7 @@ export const StateContext = createContext();
 
 function App() {
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, authState);
 
   /*
   - [ ] - add the loading while authenticating
@@ -86,23 +85,6 @@ function App() {
 
   }, []);
 
-  try {
-
-      
-
-    // const response = await fetch('http://localhost:5500/api/user/verifyAuth', {
-    //   method: 'GET',
-    //   credentials: "include",
-    // });
-
-    // const data = await response.json();
-
-    // console.log(data);
-
-  } catch(error) {
-    console.log(error);
-  }
-
   // const contextValue = useMemo(() => {
   //   return { state, dispatch };
   // }, [state, dispatch]);
@@ -131,6 +113,15 @@ function App() {
         </StateContext.Provider>
     </div>
   );
+}
+
+function Protected({ children, authState, permissionRole }) {
+  
+  if (!authState.isAuthenticated || !authState.role === permissionRole) {
+    return <Navigate to="/" replace />
+  }
+
+  return children;
 }
 
 export default App;
