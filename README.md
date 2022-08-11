@@ -179,7 +179,17 @@ Auth Components
 
 - [x] - add full screen loading
 
-- [/] - move error state to authState
+- [x] - move error state to authState
+
+- [ ] - account setup in fisrt login
+    - [ ] - create database schema
+    - [ ] - create api endpoint and validation
+    - [ ] - configure s3 bucket for image upload
+    - [ ] - complete frontend components
+
+- [ ] - start working on vendor setup account components
+
+- [ ] - store user role specific additional attributes in DB 
 
 - [ ] - logout
     - [ ] - add logout button in navbar
@@ -187,8 +197,6 @@ Auth Components
     - [ ] - make sure to revoke old tokens 
 
 - [ ] - verify the user's email when user is confirming their account by cliking the link that sent to them
-
-- [ ] - store user role specific additional attributes in DB 
 
 
 ### Backend
@@ -388,12 +396,13 @@ Store Entry
 
 - Vendor Entry
     - ID
-    - First Name (Optional)
-    - Last Name (Optional)
+    - cognito_id
+    - First Name
+    - Last Name
     - Phone (Optional)
     - Country
     - City
-    - store name subdomain
+    - store name /subdomain
     - Email
     - Password
 
