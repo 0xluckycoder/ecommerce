@@ -58,14 +58,14 @@ export default function SignIn() {
                     if (data.success) {
                         console.log('success login');
                         
-                        dispatch({ 
-                            type: ACTIONS.LOGIN_SUCCESS, 
-                            payload: {
-                                email: data.userData.email,
-                                role: data.userData.role
-                        }});
+                    dispatch({ 
+                        type: ACTIONS.LOGIN_SUCCESS, 
+                        payload: {
+                            email: data.userData.email,
+                            role: data.userData.role
+                    }});
 
-                        navigate('/vendor/dashboard');
+                        // navigate('/vendor/dashboard');
                     } else {
                         // if user is not confirmed redirect to email confirm page
                         if (data.message === "User is not confirmed.") {

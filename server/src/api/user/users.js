@@ -45,7 +45,7 @@ router.get('/verifyAuth', async(req, res, next) => {
         });
 
         const getUserCommand = new GetUserCommand({
-            AccessToken: 'sdfsdf'
+            AccessToken
         });
 
         // nested try catch
@@ -93,17 +93,17 @@ router.get('/verifyAuth', async(req, res, next) => {
 
                 // reassign access & id tokens as cookies
                 res.cookie('AccessToken', InitiateAuthCommandResponse.AuthenticationResult.AccessToken, {
-                    maxAge: 60000 * 5,
+                    maxAge: 60000 * 15,
                     httpOnly: true
                 });
                 res.cookie('IdToken', InitiateAuthCommandResponse.AuthenticationResult.IdToken, {
-                    maxAge: 60000 * 5,
+                    maxAge: 60000 * 15,
                     httpOnly: true
                 });
 
                 res.json({
                     success: true
-                })
+                });
                 /*
                 {
                     '$metadata': {
@@ -129,9 +129,9 @@ router.get('/verifyAuth', async(req, res, next) => {
                 */ 
             }
         }
-        res.json({
-            success: true
-        });
+        // res.json({
+        //     success: true
+        // });
 
     } catch(error) {
         // if accesstoken is invalid refresh it
@@ -284,17 +284,17 @@ router.post('/signin', async (req, res, next) => {
 
         // set access token, refresh token, id token on client accordingly
         res.cookie('AccessToken', adminInitiateAuthResponse.AuthenticationResult.AccessToken, {
-            maxAge: 60000 * 50,
+            maxAge: 60000 * 15,
             httpOnly: true
         });
 
         res.cookie('RefreshToken', adminInitiateAuthResponse.AuthenticationResult.RefreshToken, {
-            maxAge: 60000 * 50,
+            maxAge: 60000 * 15,
             httpOnly: true
         });
         
         res.cookie('IdToken', adminInitiateAuthResponse.AuthenticationResult.IdToken, {
-            maxAge: 60000 * 50,
+            maxAge: 60000 * 15,
             httpOnly: true
         });
 

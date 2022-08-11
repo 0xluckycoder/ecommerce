@@ -3,7 +3,7 @@ import React, { createContext, useReducer, useMemo, useEffect } from 'react';
 import './app.scss';
 import 'antd/dist/antd.css';
 
-import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Navigate, Link } from 'react-router-dom';
 
 import VendorPage from './Components/VendorPage/VendorPage';
 import Home from './Components/VendorPage/Home';
@@ -36,11 +36,13 @@ const reducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.LOGIN_SUCCESS:
       return {
+        isAuthenticated: true,
         email: action.payload.email,
         role: action.payload.role
       };
     case ACTIONS.LOGIN_ERROR:
       return {
+        isAuthenticated: false,
         email: "",
         role: ""
       };
@@ -52,13 +54,38 @@ const reducer = (state, action) => {
 export const DispatchContext = createContext();
 export const StateContext = createContext();
 
+export const ROUTES = {
+  VENDOR_DASHBOARD: '/vendor/dashboard',
+  VENDOR_CUSTOMERS: '/vendor/customers',
+  VENDOR_ORDERS: '/vendor/orders',
+  VENDOR_PRODUCTS: '/vendor/products',
+  VENDOR_SETTINGS: '/vendor/settings',
+  SIGNIN: '/auth/signin'
+}
+
 function App() {
 
   const [state, dispatch] = useReducer(reducer, authState);
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   /*
   - [ ] - add the loading while authenticating
   */
+
+  const authorizeDirectLinks = (path, role) => {
+    console.log(path, role);
+
+    // vendor allowed routes
+    role === 'vendor' && path === ROUTES.VENDOR_DASHBOARD && navigate(ROUTES.VENDOR_DASHBOARD);
+    role === 'vendor' && path === ROUTES.VENDOR_CUSTOMERS && navigate(ROUTES.VENDOR_CUSTOMERS);
+    role === 'vendor' && path === ROUTES.VENDOR_ORDERS && navigate(ROUTES.VENDOR_ORDERS);
+    role === 'vendor' && path === ROUTES.VENDOR_PRODUCTS && navigate(ROUTES.VENDOR_PRODUCTS);
+    role === 'vendor' && path === ROUTES.VENDOR_SETTINGS && navigate(ROUTES.VENDOR_SETTINGS);
+
+    // customer allowed routes
+  }
 
   useEffect(() => {
    (async () => {
@@ -77,6 +104,14 @@ function App() {
               role: data.userData.role
         }});
 
+        console.log(location.pathname);
+
+        // if (location.pathname === '/vendor/dashboard' && data.userData.role === 'vendor') {
+        //   navigate('/vendor/dashboard');
+        // }
+
+        authorizeDirectLinks(location.pathname, data.userData.role);
+
       } catch(error) {
         console.log('error', error);
         dispatch({ type: ACTIONS.LOGIN_ERROR });
@@ -91,10 +126,15 @@ function App() {
 
   return (
       <div className="App">
+        {/* <Link to="/vendor">vendor</Link> */}
         <StateContext.Provider value={{state}}>
           <DispatchContext.Provider value={{dispatch}}>
           <Routes>
-            <Route path="vendor" element={<VendorPage />}>
+            <Route path="vendor" element={
+                    <Protected authState={state} permissionRole={"vendor"}>
+                      <VendorPage />
+                    </Protected>
+            }>
               <Route path="dashboard" element={<Home />} />
               <Route path="customers" element={<Customers />} />
               <Route path="orders" element={<Orders />} />
@@ -116,12 +156,13 @@ function App() {
 }
 
 function Protected({ children, authState, permissionRole }) {
-  
-  if (!authState.isAuthenticated || !authState.role === permissionRole) {
-    return <Navigate to="/" replace />
-  }
 
-  return children;
+  if (authState.isAuthenticated && authState.role === permissionRole) {
+    console.log('truthy');
+    return children;
+  }
+  console.log('falsy');
+  return <Navigate to="/auth/signin" replace />
 }
 
 export default App;
