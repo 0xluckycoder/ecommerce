@@ -26,6 +26,10 @@ const vendorEntrySchema = new Schema({
   storeId: {
     type: String,
     required: true
+  },
+  userStatus: {
+    type: String,
+    required: true
   }
 });
 

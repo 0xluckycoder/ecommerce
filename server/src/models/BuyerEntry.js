@@ -38,6 +38,10 @@ const buyerEntrySchema = new Schema({
     },
     totalOrders: {
         type: String
+    },
+    userStatus: {
+        type: String,
+        required: true
     }
 });
 

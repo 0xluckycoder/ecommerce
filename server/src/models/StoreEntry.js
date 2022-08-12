@@ -20,6 +20,10 @@ const storeEntrySchema = new Schema({
     ownerId: {
         type: String,
         required: true,
+    },
+    userStatus: {
+        type: String,
+        required: true
     }
 });
 

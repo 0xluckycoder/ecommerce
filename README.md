@@ -195,7 +195,7 @@ Auth Components
     - [x] - read and understand Restful api structure
     - [/] - design a RESTful API structure for adding attributes
 
-- [ ] - when user sign up for the first time database record will automatically gets created with empty values
+- [x] - when user sign up for the first time database record will automatically gets created with empty values
     - add addional attribute to identify that it is a new record
     - fill required attributes with sample data and later update when user completes the setup
 

@@ -221,7 +221,8 @@ router.post('/signup', async (req, res, next) => {
                 cognitoId: signUpResponse.UserSub,
                 firstName: "null",
                 lastName: "null",
-                storeId: "null"
+                storeId: "null",
+                userStatus: "initial"
             });
             const createdVendorEntry = await vendorEntry.save();
             console.log(createdVendorEntry);
@@ -230,7 +231,8 @@ router.post('/signup', async (req, res, next) => {
                 cognitoId: signUpResponse.UserSub,
                 firstName: "null",
                 lastName: "null",
-                storeId: "null"
+                storeId: "null",
+                userStatus: "initial"
             });
             const createdBuyerEntry = await buyerEntry.save();
             console.log(createdBuyerEntry);
