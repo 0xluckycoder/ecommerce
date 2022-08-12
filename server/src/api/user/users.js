@@ -20,19 +20,28 @@ const StoreEntry = require('../../models/StoreEntry');
 
 const generateEmailConfirmTemplate = require('../../lib/generateEmailConfirmTemplate');
 
-router.get('/timer', async(req, res, next) => {
+/* end point for test loading icon */ 
+// router.get('/timer', async(req, res, next) => {
+//     try {
+//         setTimeout(() => {
+//             console.log('done');
+//             res.json({
+//                 success: true,
+//                 email: 'lakshan',
+//                 role: 'vendor'
+//             });
+//             console.log('finished');
+//         }, 3000);
+//     } catch (error) {
+//         console.log(error);
+//     }
+// });
+
+router.post('/attributes', async (req, res, next) => {
     try {
-        setTimeout(() => {
-            console.log('done');
-            res.json({
-                success: true,
-                email: 'lakshan',
-                role: 'vendor'
-            });
-            console.log('finished');
-        }, 3000);
-    } catch (error) {
-        console.log(error);
+
+    } catch(error) {
+        console.log('original error ❌❌', error);
     }
 });
 

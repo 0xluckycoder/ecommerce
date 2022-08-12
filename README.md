@@ -181,7 +181,7 @@ Auth Components
 
 - [x] - move error state to authState
 
-- [ ] - account setup in fisrt login
+- [/] - account setup in fisrt login
     - [ ] - create database schema
     - [ ] - create api endpoint and validation
     - [ ] - configure s3 bucket for image upload
@@ -190,6 +190,10 @@ Auth Components
 - [ ] - start working on vendor setup account components
 
 - [ ] - store user role specific additional attributes in DB 
+
+- [ ] - follow RESTful design
+    - [ ] - read and understand Restful api structure
+    - [ ] - design a RESTful API structure for adding attributes  
 
 - [ ] - logout
     - [ ] - add logout button in navbar
