@@ -17,7 +17,7 @@ const storeEntrySchema = new Schema({
         required: true,
         default: true
     },
-    storeOwner: {
+    ownerId: {
         type: String,
         required: true,
     }

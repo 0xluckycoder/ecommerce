@@ -16,7 +16,11 @@ const yup = require('yup');
 const { verify } = require('jsonwebtoken');
 const router = Router();
 
-const StoreEntry = require('../../models/StoreEntry');
+// const StoreEntry = require('../../models/StoreEntry');
+
+const VendorEntry = require('../../models/VendorEntry');
+const BuyerEntry = require('../../models/BuyerEntry');
+
 
 const generateEmailConfirmTemplate = require('../../lib/generateEmailConfirmTemplate');
 
@@ -37,13 +41,16 @@ const generateEmailConfirmTemplate = require('../../lib/generateEmailConfirmTemp
 //     }
 // });
 
-router.post('/attributes', async (req, res, next) => {
-    try {
-
-    } catch(error) {
-        console.log('original error ❌❌', error);
-    }
-});
+/* test attributes */ 
+// router.post('/attributes', async (req, res, next) => {
+//     try {
+//         const vendorEntry = new VendorEntry(req.body);
+//         const createdEntry = await vendorEntry.save();
+//         res.json(createdEntry);
+//     } catch(error) {
+//         console.log('original error ❌❌', error);
+//     }
+// });
 
 router.get('/verifyAuth', async(req, res, next) => {
     try {
@@ -184,10 +191,7 @@ router.post('/signup', async (req, res, next) => {
             role: yup.string('role must be a string')
                     .required('role is required')
         });
-
         const validated = await userSchema.validate(req.body);
-
-        console.log(validated);
 
         const client = new CognitoIdentityProvider({
             region: process.env.AWS_COGNITO_REGION,
@@ -211,6 +215,28 @@ router.post('/signup', async (req, res, next) => {
         });
         const signUpResponse = await client.send(signUpCommand);
 
+        // create user attribute record in DB
+        if (validated.role === 'vendor') {
+            const vendorEntry = new VendorEntry({
+                cognitoId: signUpResponse.UserSub,
+                firstName: "null",
+                lastName: "null",
+                storeId: "null"
+            });
+            const createdVendorEntry = await vendorEntry.save();
+            console.log(createdVendorEntry);
+        } else {
+            const buyerEntry = new BuyerEntry({
+                cognitoId: signUpResponse.UserSub,
+                firstName: "null",
+                lastName: "null",
+                storeId: "null"
+            });
+            const createdBuyerEntry = await buyerEntry.save();
+            console.log(createdBuyerEntry);
+        }
+
+        // email config
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
@@ -224,9 +250,6 @@ router.post('/signup', async (req, res, next) => {
         // send email confirm link
         const info = await transporter.sendMail(emailTemplate);
         console.log(info);
-
-        // set token cookies
-        // construct a format for response
 
         // success response
         res.status(200).json({
@@ -249,7 +272,6 @@ router.post('/signup', async (req, res, next) => {
     } catch(error) {
         
         console.log('original error ❌❌', error);
-
         next(error);
     }
 });

@@ -191,9 +191,13 @@ Auth Components
 
 - [ ] - store user role specific additional attributes in DB 
 
-- [ ] - follow RESTful design
-    - [ ] - read and understand Restful api structure
-    - [ ] - design a RESTful API structure for adding attributes  
+- [x] - follow RESTful design
+    - [x] - read and understand Restful api structure
+    - [/] - design a RESTful API structure for adding attributes
+
+- [ ] - when user sign up for the first time database record will automatically gets created with empty values
+    - add addional attribute to identify that it is a new record
+    - fill required attributes with sample data and later update when user completes the setup
 
 - [ ] - logout
     - [ ] - add logout button in navbar
@@ -365,7 +369,7 @@ Store Entry
     - Logo
     - Banner
     - Store status - Boolean
-    - Store Owner - FK
+    - OwnerId - FK
 
 - Product Entry
     - ID
@@ -391,11 +395,11 @@ Store Entry
     - City
     - Country
     - Address
-    - Email
+    - store_id
     - Phone (Optional)
     - Online Status / Last Online
     - Total Spent
-    - Total Complete Orders
+    - Total Orders
     - Save debit card number (next update feature)
 
 - Vendor Entry
@@ -406,9 +410,7 @@ Store Entry
     - Phone (Optional)
     - Country
     - City
-    - store name /subdomain
-    - Email
-    - Password
+    - store id
 
 
 
