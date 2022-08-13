@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Input, Button, Form, Alert } from 'antd';
 import { ACTIONS, DispatchContext, ROUTES, StateContext } from '../../App';
+import Card from '../Card/Card';
 
 export default function SignUp() {
 
@@ -151,6 +152,11 @@ export default function SignUp() {
         setAllowedToCallApiState(true);
     }
 
+    const positionStyle = {
+        top: "calc(50% - 393px/2 + 53px/2)",
+        maxWidth: "350px",
+    }
+
     return (
         <>
 
@@ -158,7 +164,7 @@ export default function SignUp() {
         
         ?
 
-        <div className={styles.authBox}>
+        <Card style={positionStyle}>
             <p className={styles.heading}>Create your account</p>
             {state.errorMessage ? <Alert message={state.errorMessage} type="error" style={{ marginBottom: "24px" }} /> : null}
             <div className={styles.row}>
@@ -201,7 +207,7 @@ export default function SignUp() {
                     }}>Sign in</a>
                 </div>
             </div>
-        </div>
+        </Card>
         
         :
         
@@ -219,8 +225,14 @@ function ChooseRole({ navigate, signUpState, setSignUpState }) {
         setSignUpState({ ...signUpState, roleSelectedByUser: true });
     }
 
+    const positionStyle = {
+        top: "calc(50% - 545.28px/2 + 53px/2)",
+        maxWidth: "600px"
+    }
+
     return (
-        <div className={styles.centerBox}>
+        // <div className={styles.centerBox}>
+        <Card style={positionStyle}>
             <h2>Join as a vendor or buyer</h2>
             <div className={styles.selectItems}>
                 <SelectItem
@@ -243,8 +255,7 @@ function ChooseRole({ navigate, signUpState, setSignUpState }) {
                 <Button onClick={() => navigate('/auth/signin')} className="themed-btn">Cancel</Button>
                 <Button onClick={() => handleNextPageClick()} className="themed-btn">Next</Button>
             </div>
-
-        </div>
+        </Card>
     );
 }
 

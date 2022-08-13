@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
+
 import styles from './AuthGlobalStyles.module.scss';
+
 import googleIcon from '../../assets/google-icon.svg';
 import { Input, Button, Form, Alert } from 'antd';
 import { useNavigate } from 'react-router-dom';
-
 import { DispatchContext, StateContext, ACTIONS, ROUTES } from '../../App';
+
+import Card from '../Card/Card';
 
 export default function SignIn() {
 
@@ -25,10 +28,6 @@ export default function SignIn() {
     });
 
     const [allowedToCallApiState, setAllowedToCallApiState] = useState(false);
-
-    // const [apiError, setApiError] = useState({
-    //     errorMessage: null
-    // });
 
     const emailElement = useRef(null);
     const passwordElement = useRef(null);
@@ -164,15 +163,20 @@ export default function SignIn() {
 
     const handleSignIn = () => {
 
-        validateEmail(signInState.email);
+        validateEmail(signInState.email); 
         validatePassword(signInState.password);
         
         // alllow api to make requests
         setAllowedToCallApiState(true);
     }
 
+    const positionStyle = {
+        top: "calc(50% - 393px/2 + 53px/2)",
+        maxWidth: "350px"
+    }
+
     return (
-        <div className={styles.authBox}>
+        <Card style={positionStyle}>
             <p className={styles.heading}>Login to your account</p>
             {state.errorMessage ? <Alert message={state.errorMessage} type="error" style={{ marginBottom: "24px" }} /> : null}
             <div className={styles.row}>
@@ -218,6 +222,6 @@ export default function SignIn() {
                     }}>Sign up</a>
                 </div>
             </div>
-        </div>
+        </Card>
     )
 }

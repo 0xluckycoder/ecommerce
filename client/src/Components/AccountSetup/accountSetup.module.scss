@@ -1,0 +1,72 @@
+.first {
+    text-align: center;
+    padding-top: 3rem;
+
+    h2 {
+        padding-top: 2rem;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    p {
+        padding: 1rem 0;
+        font-size: 24px;
+        color: #898989;
+        max-width: 500px;
+        line-height: normal;
+        margin: auto;
+    }
+
+    .customButton {
+        margin-top: 1rem;
+    }
+}
+
+.second {
+    .uploadItem {
+        img {
+            padding-top: 0.5rem;
+        }
+
+        .customButton {
+            margin-top: 1rem;
+        }
+    }
+
+    .customButton {
+        margin-top: 1rem;
+    }
+
+    .storeName {
+        padding-top: 1rem;
+    }
+}
+
+.third {
+
+    h2 {
+        padding-bottom: 1rem;
+    }
+
+    .formItem {
+        margin-bottom: 1rem;
+    }
+
+    .inline {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.dotsWrapper {
+    position: absolute;
+    width: 564px;
+    bottom: 1rem;
+    display: flex;
+    justify-content: center;
+
+    .dots {
+        display: flex;
+        gap: 10px;
+    }
+}

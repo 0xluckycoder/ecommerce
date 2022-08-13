@@ -181,16 +181,6 @@ Auth Components
 
 - [x] - move error state to authState
 
-- [/] - account setup in fisrt login
-    - [ ] - create database schema
-    - [ ] - create api endpoint and validation
-    - [ ] - configure s3 bucket for image upload
-    - [ ] - complete frontend components
-
-- [ ] - start working on vendor setup account components
-
-- [ ] - store user role specific additional attributes in DB 
-
 - [x] - follow RESTful design
     - [x] - read and understand Restful api structure
     - [/] - design a RESTful API structure for adding attributes
@@ -198,6 +188,17 @@ Auth Components
 - [x] - when user sign up for the first time database record will automatically gets created with empty values
     - add addional attribute to identify that it is a new record
     - fill required attributes with sample data and later update when user completes the setup
+
+- [/] - account setup in fisrt login
+    - [ ] - built frontend components
+        - [ ] - vendor account setup components
+        - [ ] - buyer account setup components
+    - [x] - create database schema
+    - [ ] - create api endpoint and validation
+    - [ ] - configure s3 bucket for image upload
+    - [ ] - complete frontend components
+
+- [/] - start working on vendor setup account components
 
 - [ ] - logout
     - [ ] - add logout button in navbar

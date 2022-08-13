@@ -19,6 +19,7 @@ import ForgotPassword from './Components/Auth/ForgotPassword';
 import ConfirmEmail from './Components/Auth/ConfirmEmail';
 
 import Loading from './Components/Loading';
+import AccountSetup from './Components/AccountSetup/AccountSetup';
 
 const authState = {
   isLoading: false,
@@ -184,9 +185,9 @@ function App() {
         :
             <Routes>
               <Route path="vendor" element={
-                      <Protected authState={state} permissionRole={"vendor"}>
+                      // <Protected authState={state} permissionRole={"vendor"}>
                         <VendorPage />
-                      </Protected>
+                      // </Protected>
               }>
                 <Route path="dashboard" element={<Home />} />
                 <Route path="customers" element={<Customers />} />
@@ -201,6 +202,7 @@ function App() {
                 <Route path="forgot-password" element={<ForgotPassword />} />
                 <Route path="confirm-email" element={<ConfirmEmail />} />
               </Route>
+              <Route path="account-setup" element={<AccountSetup />} />
             </Routes>
         }
         {/* <Loading /> */}
