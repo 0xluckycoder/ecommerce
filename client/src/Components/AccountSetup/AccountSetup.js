@@ -1,4 +1,4 @@
-import react from 'react';
+import react, { useState } from 'react';
 import Background from '../Background/Background';
 import Card from '../Card/Card';
 import TopNav from '../TopNav';
@@ -14,47 +14,73 @@ import Banner from '../../assets/banner-placeholder.png';
 
 export default function AccountSetup() {
 
+    const [step, setStep] = useState(1);
+    const [fieldState, setFieldState] = useState({
+        logo: "",
+        banner: "",
+        storeName: "",
+        email: "",
+        firstName: "",
+        lastName: "",
+        phone: "",
+        city: "",
+        country: ""
+    });
+
     const positionStyle = {
         top: "calc(50% - 545.28px/2 + 53px/2)",
         maxWidth: "600px",
         height: "550px"
     }
 
+    const handleStep = (step) => {
+
+        if (step === 'next') {
+            setStep(step => step + 1);
+        } else {
+            setStep(step => step - 1);
+        }
+    }
+
     return (
         <Background>
             <TopNav hideHamburger={true} />
-            <Card style={positionStyle}>
-                {/* <First /> */}
-                {/* <Second /> */}
-                <Third />
-                <Dots />
+            <Card style={positionStyle} lg={true}>
+                {step === 1 && <First handleStep={handleStep} />}
+                {step === 2 && <Second handleStep={handleStep} />}
+                {step === 3 && <Third handleStep={handleStep} />}
+                <Dots step={step} />
             </Card>
         </Background>
     );
 }
 
-function First() {
+function First({ handleStep }) {
     return (
         <div className={style.first}>
             <img src={Icon} />
             <h2>You're almost there</h2>
             <p>Continue with the next steps to create a store for you</p>
-            <Button className={`themed-btn ${style.customButton}`}>Continue</Button>
+            <Button
+                onClick={() => handleStep('next')} 
+                className={`themed-btn ${style.customButton}`}
+            >Continue</Button>
         </div>
     );
 }
 
-function Second() {
+function Second({ handleStep }) {
 
-    const validate = (event, storeName) => {
-        console.log(event, storeName);
+    const handleUpload = (event) => {
+        console.log(event)
     }
 
     return (
         <div className={style.second}>
             <h2>Details</h2>
             <div className={style.uploadItem}>
-                <Button className={`themed-btn ${style.customButton}`}>Upload</Button>
+                <input id="upload" type="file" hidden className={style.uploadButton} />
+                <label>Choose File</label>
                 <br/>
                 <img src={Logo} />
             </div>
@@ -63,12 +89,15 @@ function Second() {
                 <br/>
                 <img src={Banner} />
             </div>
-            <Button className={`themed-btn ${style.customButton}`}>Next</Button>
+            <Button 
+                onClick={() => handleStep('next')} 
+                className={`themed-btn ${style.customButton}`
+            }>Next</Button>
         </div>
     );
 }
 
-function Third() {
+function Third({ handleStep }) {
 
     const handleInputChange = () => {
 
@@ -148,18 +177,22 @@ function Third() {
                     />
                 </Form.Item>
             </div>
-            <Button className={`themed-btn ${style.customButton}`}>Finish</Button>
+            <div className={style.inline}>
+                <Button className={`themed-btn ${style.customButton}`}>Finish</Button>
+                <Button onClick={() => handleStep('back')}  className={`themed-btn ${style.customButton}`}>Back</Button>
+            </div>
         </div>
     );
 }
 
-function Dots() {
+function Dots({ step }) {
+
     return (
         <div className={style.dotsWrapper}>
             <div className={style.dots}>
-                <img src={BlackDot} />
-                <img src={GreyDot} />
-                <img src={GreyDot} />
+                {step === 1 ? <img src={BlackDot} /> : <img src={GreyDot} />}
+                {step === 2 ? <img src={BlackDot} /> : <img src={GreyDot} />}
+                {step === 3 ? <img src={BlackDot} /> : <img src={GreyDot} />}
             </div>
         </div>
     );

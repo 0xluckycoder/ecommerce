@@ -55,12 +55,13 @@
     .inline {
         display: flex;
         justify-content: space-between;
+        gap: 1rem;
     }
 }
 
 .dotsWrapper {
     position: absolute;
-    width: 564px;
+    width: calc(100% - 32px);
     bottom: 1rem;
     display: flex;
     justify-content: center;
@@ -70,3 +71,7 @@
         gap: 10px;
     }
 }
+
+// @media(max-width: 632px) {
+
+// }

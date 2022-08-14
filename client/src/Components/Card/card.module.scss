@@ -5,3 +5,9 @@
     margin: auto;
     border: 2px solid #ECEAEA;
 }
+
+@media(max-width: 632px) {
+    .cardLg {
+        margin: 0 1rem;
+    }
+}

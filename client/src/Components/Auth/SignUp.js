@@ -232,7 +232,7 @@ function ChooseRole({ navigate, signUpState, setSignUpState }) {
 
     return (
         // <div className={styles.centerBox}>
-        <Card style={positionStyle}>
+        <Card style={positionStyle} lg={true}>
             <h2>Join as a vendor or buyer</h2>
             <div className={styles.selectItems}>
                 <SelectItem
