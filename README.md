@@ -190,8 +190,10 @@ Auth Components
     - fill required attributes with sample data and later update when user completes the setup
 
 - [/] - account setup in fisrt login
-    - [ ] - built frontend components
-        - [ ] - vendor account setup components
+    - [x] - built frontend components
+         - [x] - image upload
+         - [/] - validate fields
+         - [/] - conditionally render bottom buttons
         - [ ] - buyer account setup components
     - [x] - create database schema
     - [ ] - create api endpoint and validation
