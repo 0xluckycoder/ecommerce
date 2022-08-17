@@ -2,13 +2,13 @@ import react, { useState, useRef } from 'react';
 import Background from '../Background/Background';
 import Card from '../Card/Card';
 import TopNav from '../TopNav';
+import RemoveIcon from '../RemoveIcon/RemoveIcon';
 import { Input, Button, Form, Alert } from 'antd';
 import style from './accountSetup.module.scss';
 
 import Icon from '../../assets/vendor-setup-screen.svg';
 import GreyDot from '../../assets/grey-dot.svg';
 import BlackDot from '../../assets/black-dot.svg';
-import Remove from '../../assets/remove-icon.svg';
 import Logo from '../../assets/logo-placeholder.png';
 import Banner from '../../assets/banner-placeholder.png';
 
@@ -191,7 +191,7 @@ function First({ handleStep }) {
     );
 }
 
-function Second({ handleStep, fieldState, error, validateImages }) {
+function Second({ handleStep, fieldState, error, validateImages, setFieldState }) {
 
     const logo = useRef(null);
     const banner = useRef(null);
@@ -230,6 +230,14 @@ function Second({ handleStep, fieldState, error, validateImages }) {
                     className={style.logoImage} 
                     src={fieldState.logo ? fieldState.logo : Logo} 
                 />
+                {fieldState.logo && <RemoveIcon 
+                                        left={145} 
+                                        top={85} 
+                                        imageFieldName={"logo"}
+                                        state={fieldState}
+                                        setState={setFieldState} 
+                                    />
+                }
             </div>
             {error.bannerError ? <Alert message={error.bannerError.help} type="error" /> : null}
             <div className={style.uploadItem}>
@@ -251,6 +259,14 @@ function Second({ handleStep, fieldState, error, validateImages }) {
                     className={style.bannerImage} 
                     src={fieldState.banner ? fieldState.banner : Banner} 
                 />
+                {fieldState.banner && <RemoveIcon 
+                        left={215} 
+                        top={268} 
+                        imageFieldName={"banner"}
+                        state={fieldState}
+                        setState={setFieldState} 
+                    />
+                }
             </div>
             {fieldState.logo === "" || fieldState.banner === "" ?
             
@@ -333,7 +349,11 @@ function Third({ handleStep, fieldState, setFieldState, error, setError, validat
                 </Form.Item>
             </div>
             <div className={style.inline}>
-                <Button className={`themed-btn ${style.customButton}`}>Finish</Button>
+                {error.storeNameError === null && error.firstNameError === null && error.lastNameError === null ?
+                    (<Button className={`themed-btn ${style.customButton}`}>Finish</Button>)
+                    :
+                    (<Button className={`themed-grey-btn ${style.customButton}`}>Finish</Button>)
+                }
                 <Button onClick={() => handleStep('back')}  className={`themed-btn ${style.customButton}`}>Back</Button>
             </div>
         </div>
