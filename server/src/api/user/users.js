@@ -8,7 +8,7 @@ const {
     AdminConfirmSignUpCommand,
     AdminInitiateAuthCommand,
     InitiateAuthCommand
-} = require('@aws-sdk/client-cognito-identity-provider')
+} = require('@aws-sdk/client-cognito-identity-provider');
 
 const { Router } = require('express');
 const nodemailer = require('nodemailer');
@@ -52,6 +52,9 @@ const generateEmailConfirmTemplate = require('../../lib/generateEmailConfirmTemp
 //     }
 // });
 
+// @desc check client cookies and retreive current logged in user
+// @path GET /api/verifyAuth
+// @authorization private
 router.get('/verifyAuth', async(req, res, next) => {
     try {
 

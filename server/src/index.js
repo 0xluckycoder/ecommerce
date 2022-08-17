@@ -8,8 +8,10 @@ require('dotenv').config();
 
 const middlewares = require('./middlewares');
 
-const stores = require('./api/store/stores');
-const users = require('./api/user/users');
+// const stores = require('./api/store/stores');
+// const users = require('./api/user/users');
+
+const authRoutes = require('./v1/api/authRoutes');
 
 
 const app = express();
@@ -44,8 +46,10 @@ app.get('/', (req, res) => {
     });
 });
 
-app.use('/api/user', users);
-app.use('/api/store', stores);
+// app.use('/api/user', users);
+// app.use('/api/store', stores);
+
+app.use('/api/v1/auth', authRoutes)
 
 // app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
