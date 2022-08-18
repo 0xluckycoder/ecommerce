@@ -33,10 +33,6 @@ export default function SignUp() {
 
     const [allowedToCallApiState, setAllowedToCallApiState] = useState(false);
 
-    // const [apiError, setApiError] = useState({
-    //     errorMessage: null
-    // });
-
     const validateEmail = (value) => {
 
         // validate empty fields
@@ -97,7 +93,7 @@ export default function SignUp() {
                 try {
                     dispatch({ type: ACTIONS.LOADING });
 
-                    const response = await fetch('http://localhost:5500/api/user/signup', {
+                    const response = await fetch('http://localhost:5500/api/v1/auth/signup', {
                         method: 'POST',
                         credentials: "include",
                         headers: {

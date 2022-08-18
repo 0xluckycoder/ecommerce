@@ -1,4 +1,4 @@
-import react, { useState, useRef } from 'react';
+import react, { useState, useRef, useEffect } from 'react';
 import Background from '../Background/Background';
 import Card from '../Card/Card';
 import TopNav from '../TopNav';
@@ -35,7 +35,7 @@ export default function AccountSetup() {
         phoneError: null,
         cityError: null,
         countryError: null,
-    })
+    });
 
     const handleStep = (step) => {
 
@@ -43,6 +43,35 @@ export default function AccountSetup() {
             setStep(step => step + 1);
         } else {
             setStep(step => step - 1);
+        }
+    }
+
+    // useEffect(() => {
+
+    // }, []);
+
+    const handleSubmit = async () => {
+        try {
+
+            const bodyData = {
+                ...fieldState
+            }
+
+            const response = await fetch('http://localhost:5500/api/vendor', {
+                method: 'POST',
+                credentials: true,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bodyData)
+            });
+
+            const data = await response.json();
+
+            console.log(data);
+
+        } catch(error) {
+            console.log(error);
         }
     }
 
@@ -169,6 +198,7 @@ export default function AccountSetup() {
                                     error={error}
                                     setError={setError}
                                     validate={validate}
+                                    handleSubmit={handleSubmit}
                                 />
                 }
                 <Dots step={step} />
@@ -260,7 +290,7 @@ function Second({ handleStep, fieldState, error, validateImages, setFieldState }
                     src={fieldState.banner ? fieldState.banner : Banner} 
                 />
                 {fieldState.banner && <RemoveIcon 
-                        left={215} 
+                        left={235} 
                         top={268} 
                         imageFieldName={"banner"}
                         state={fieldState}
@@ -281,7 +311,7 @@ function Second({ handleStep, fieldState, error, validateImages, setFieldState }
     );
 }
 
-function Third({ handleStep, fieldState, setFieldState, error, setError, validate }) {
+function Third({ handleStep, fieldState, setFieldState, error, handleSubmit , validate }) {
 
     const handleInputChange = (e) => {
         setFieldState({...fieldState, [e.target.name]: e.target.value});
@@ -296,7 +326,7 @@ function Third({ handleStep, fieldState, setFieldState, error, setError, validat
                     name="storeName"
                     onBlur={(e) => validate(e.target.value, "storeName")} 
                     onChange={handleInputChange}
-                    // value={signInState.password} 
+                    value={fieldState.storeName} 
                 />
             </Form.Item>
             <div className={style.inline}>
@@ -306,7 +336,7 @@ function Third({ handleStep, fieldState, setFieldState, error, setError, validat
                         name="firstName"
                         onBlur={(e) => validate(e.target.value, "firstName")} 
                         onChange={handleInputChange} 
-                        // value={signInState.password} 
+                        value={fieldState.firstName} 
                     />
                 </Form.Item>
                 <Form.Item {...(error.lastNameError ? error.lastNameError : {})} className={style.formItem}>
@@ -315,7 +345,7 @@ function Third({ handleStep, fieldState, setFieldState, error, setError, validat
                         name="lastName"
                         onBlur={(e) => validate(e.target.value, "lastName")} 
                         onChange={handleInputChange} 
-                        // value={signInState.password} 
+                        value={fieldState.lastName} 
                     />
                 </Form.Item>
             </div>
@@ -325,7 +355,7 @@ function Third({ handleStep, fieldState, setFieldState, error, setError, validat
                     name="phone"
                     onBlur={(e) => validate(e.target.value, "phone")} 
                     onChange={handleInputChange} 
-                    // value={signInState.password} 
+                    value={fieldState.phone} 
                 />
             </Form.Item>
             <div className={style.inline}>
@@ -335,7 +365,7 @@ function Third({ handleStep, fieldState, setFieldState, error, setError, validat
                         name="city"
                         onBlur={(e) => validate(e.target.value, "city")} 
                         onChange={handleInputChange} 
-                        // value={signInState.password} 
+                        value={fieldState.city} 
                     />
                 </Form.Item>
                 <Form.Item {...(error.countryError ? error.countryError : {})} className={style.formItem}>
@@ -344,13 +374,13 @@ function Third({ handleStep, fieldState, setFieldState, error, setError, validat
                         name="country"
                         onBlur={(e) => validate(e.target.value, "country")} 
                         onChange={handleInputChange} 
-                        // value={signInState.password} 
+                        value={fieldState.country} 
                     />
                 </Form.Item>
             </div>
             <div className={style.inline}>
                 {error.storeNameError === null && error.firstNameError === null && error.lastNameError === null ?
-                    (<Button className={`themed-btn ${style.customButton}`}>Finish</Button>)
+                    (<Button className={`themed-btn ${style.customButton}`} onClick={() => handleSubmit()}>Finish</Button>)
                     :
                     (<Button className={`themed-grey-btn ${style.customButton}`}>Finish</Button>)
                 }

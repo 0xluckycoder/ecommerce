@@ -45,7 +45,7 @@ export default function SignIn() {
                 try {
                     dispatch({ type: ACTIONS.LOADING });
 
-                    const response = await fetch('http://localhost:5500/api/user/signin', {
+                    const response = await fetch('http://localhost:5500/api/v1/auth/signin', {
                         method: 'POST',
                         credentials: "include",
                         headers: {
