@@ -93,6 +93,11 @@ const reducer = (state, action) => {
         ...authState,
         errorMessage: "",
       }
+    // case ACTIONS.STOP_LOADING:
+    //   return {
+    //     ...authState,
+    //     isLoading: false
+    //   }
     default:
       // console.log('default')
       return state;
@@ -147,7 +152,7 @@ function App() {
         //   dispatch({ type: ACTIONS.LOGIN_ERROR });
         // }, 5000);
 
-        const response = await fetch('http://localhost:5500/api/user/verifyAuth', {
+        const response = await fetch('http://localhost:5500/api/v1/auth/verifyAuth', {
           method: 'GET',
           credentials: "include",
         });
@@ -185,9 +190,9 @@ function App() {
         :
             <Routes>
               <Route path="vendor" element={
-                      // <Protected authState={state} permissionRole={"vendor"}>
+                      <Protected authState={state} permissionRole={"vendor"}>
                         <VendorPage />
-                      // </Protected>
+                      </Protected>
               }>
                 <Route path="dashboard" element={<Home />} />
                 <Route path="customers" element={<Customers />} />

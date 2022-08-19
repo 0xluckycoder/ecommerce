@@ -72,7 +72,7 @@ export default function SignIn() {
                     } else {
                         // if user is not confirmed redirect to email confirm page
                         if (data.message === "User is not confirmed.") {
-                            dispatch({ error: ACTIONS.CLEAR_ERROR });
+                            dispatch({ type: ACTIONS.CLEAR_ERROR });
                             navigate(ROUTES.CONFIRM_EMAIL);
                             return;
                         }

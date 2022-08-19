@@ -192,13 +192,20 @@ Auth Components
 - [/] - account setup in fisrt login
     - [x] - built frontend components
          - [x] - image upload
-         - [/] - validate fields
-         - [/] - conditionally render bottom buttons
+         - [x] - validate fields
+         - [x] - conditionally render bottom buttons
         - [ ] - buyer account setup components
+
     - [x] - create database schema
     - [ ] - create api endpoint and validation
     - [ ] - configure s3 bucket for image upload
     - [ ] - complete frontend components
+
+Learn Common Architecture and Design
+
+- [x] - setup in local and reverse engineer projects
+- [x] - understand the data flow and modularizing
+- [ ] - rewrite the backend
 
 - [/] - start working on vendor setup account components
 
@@ -221,17 +228,25 @@ Auth Components
 
 - API endpoints
 
-- [x] - POST - /api/user/signup - user singup
-- [x] - POST - /api/user/signin - user singin
-- [x] - GET  - /api/user/confirmEmail/:token - verify email address confirmation
-- [x] - GET  - /api/user - get user
-- [x] - POST - /api/user/token - get new access/id tokens using refresh token
+- Auth
+    - [x] - auth route
+    - [x] - auth controller
+    - [x] - auth service layer
+        - [x] - POST - /api/v1/auth/signup
+        - [x] - POST - /api/v1/auth/signin
+        - [x] - GET - /api/v1/auth/confirmEmail/:token
+        - [x] - GET - /api/v1/auth/verifyAuth
+
+- store all the attributes with nested endpoint - /api/v1/vendor/:vendorId/
+
+store    
+
 - [ ] - logout route
-- [ ] - resend email verification link
+- [ ] - resend email verification link route
 
 - [ ] - create mongoose schema for all entries
     - [x] - Store Entry
-    - [ ] - Vendor Entry
+    - [x] - Vendor Entry
     - [ ] - Product Entry
     - [ ] - Order Entry
     - [ ] - Buyer Entry

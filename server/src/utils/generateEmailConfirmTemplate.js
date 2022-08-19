@@ -13,7 +13,7 @@ module.exports = function generateEmailConfirmTemplate(id, email) {
 
     const secret = `${process.env.EMAIL_CONFIRM_SECRET}`;
     const token = sign(payload, secret, { expiresIn: 3600*24 });
-    const url = `http://localhost:5500/api/user/confirmEmail/${token}`;
+    const url = `http://localhost:5500/api/v1/auth/confirmEmail/${token}`;
 
     return {
         from: "freebie <freebiesell@zohomail.com>",

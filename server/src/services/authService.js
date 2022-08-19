@@ -10,8 +10,11 @@ const {
 const nodemailer = require('nodemailer');
 const { verify } = require('jsonwebtoken');
 
-const VendorEntry = require('../models/VendorEntry');
-const BuyerEntry = require('../models/BuyerEntry');
+const vendor = require('../database/vendor');
+const buyer = require('../database/buyer'); 
+
+// const VendorEntry = require('../models/VendorEntry');
+// const BuyerEntry = require('../models/BuyerEntry');
 
 const generateEmailConfirmTemplate = require('../utils/generateEmailConfirmTemplate');
 
@@ -42,25 +45,22 @@ const signUp = async (user) => {
     
         // create user attribute record in DB
         if (user.role === 'vendor') {
-            const vendorEntry = new VendorEntry({
+            await vendor.createVendor({
                 cognitoId: signUpCommandResponse.UserSub,
                 firstName: "null",
                 lastName: "null",
                 storeId: "null",
                 userStatus: "initial"
             });
-            const createdVendorEntry = await vendorEntry.save();
-            console.log(createdVendorEntry);
+
         } else {
-            const buyerEntry = new BuyerEntry({
+            await buyer.createBuyer({
                 cognitoId: signUpCommandResponse.UserSub,
                 firstName: "null",
                 lastName: "null",
                 storeId: "null",
                 userStatus: "initial"
-            });
-            const createdBuyerEntry = await buyerEntry.save();
-            console.log(createdBuyerEntry);
+            })
         }
 
         // email config
@@ -81,29 +81,159 @@ const signUp = async (user) => {
         return signUpCommandResponse;
 
     } catch (error) {
-        console.log('original error ❌❌', error);
         throw error;
-        // next(error);
     }
     
     // return;
 }
 
-const signIn = () => {
-    return;
+const signIn = async (user) => {
+    try {
+        // save user in cognito
+        const client = new CognitoIdentityProvider({
+            region: process.env.AWS_COGNITO_REGION,
+            credentials : {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
+        });
+
+        // retreive user tokens
+        const adminInitiateAuthCommand = new AdminInitiateAuthCommand({
+            AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
+            AuthParameters: {
+                USERNAME: user.email,
+                PASSWORD: user.password
+            },
+            ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID,
+            UserPoolId: process.env.AWS_USER_POOL_ID
+        });
+        const adminInitiateAuthResponse = await client.send(adminInitiateAuthCommand);
+        
+        // get user details
+        const getUserCommand = new GetUserCommand({
+            AccessToken: adminInitiateAuthResponse.AuthenticationResult.AccessToken
+        });
+        const getUserResponse = await client.send(getUserCommand);
+
+        // construct the response
+        const email = getUserResponse.UserAttributes.find(element => element.Name === "email");
+        const role = getUserResponse.UserAttributes.find(element => element.Name === "custom:role");
+        const data = {
+            email: email.Value,
+            role: role.Value
+        }
+
+        // extract tokens
+        const accessToken = adminInitiateAuthResponse.AuthenticationResult.AccessToken;
+        const refreshToken = adminInitiateAuthResponse.AuthenticationResult.RefreshToken;
+        const idToken = adminInitiateAuthResponse.AuthenticationResult.IdToken;
+
+        return {
+            data,
+            tokens: {
+                accessToken,
+                refreshToken,
+                idToken
+            }
+        }
+
+    } catch(error) {
+        throw error;
+    }
 }
 
-const confirmEmail = () => {
-    return;
+const confirmEmail = async (token) => {
+    try {
+        const client = new CognitoIdentityProvider({
+            region: process.env.AWS_COGNITO_REGION,
+            credentials : {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
+        });
+
+        // validate the jwt
+        const secret = `${process.env.EMAIL_CONFIRM_SECRET}`;
+        const decoded = verify(token, secret);
+
+        const adminConfirmSignUpCommand = new AdminConfirmSignUpCommand({
+            UserPoolId: process.env.AWS_USER_POOL_ID,
+            Username: decoded.id
+        });
+
+        const adminConfirmSignUpResponse = await client.send(adminConfirmSignUpCommand);
+        
+        return adminConfirmSignUpResponse;
+
+    } catch(error) {
+        throw error;
+    }
 }
 
-const verifyAuth = () => {
-    return;
+const verifyAuth = async (cookies) => {
+    try {
+
+        const client = new CognitoIdentityProvider({
+            region: process.env.AWS_COGNITO_REGION,
+            credentials : {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
+        });
+
+        // validate access token and get user details
+        const getUserCommand = new GetUserCommand({
+            AccessToken: cookies.AccessToken
+        });
+        const getUserResponse = await client.send(getUserCommand);
+
+        const email = getUserResponse.UserAttributes.find(element => element.Name === "email");
+        const role = getUserResponse.UserAttributes.find(element => element.Name === "custom:role");
+        const data = {
+            email: email.Value,
+            role: role.Value
+        }
+
+        return data;
+
+    } catch(error) {
+        throw error;
+    }
+}
+
+const refreshTokens = async (RefreshToken) => {
+    try {
+        const client = new CognitoIdentityProvider({
+            region: process.env.AWS_COGNITO_REGION,
+            credentials : {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
+        });
+
+        const command = new InitiateAuthCommand({
+            AuthFlow: "REFRESH_TOKEN_AUTH",
+            AuthParameters: {
+                REFRESH_TOKEN: RefreshToken,
+            },
+            ClientId: process.env.AWS_COGNITO_APP_CLIENT_ID
+        });
+
+        // retreive refreshed access & id tokens
+        const InitiateAuthCommandResponse = await client.send(command);
+        console.log('new tokens assigned', InitiateAuthCommandResponse);
+        return InitiateAuthCommandResponse;
+
+    } catch(error) {
+        throw error;
+    }
 }
 
 module.exports = {
     signUp,
     signIn,
     confirmEmail,
-    verifyAuth
+    verifyAuth,
+    refreshTokens
 }
