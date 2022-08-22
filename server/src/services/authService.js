@@ -13,9 +13,6 @@ const { verify } = require('jsonwebtoken');
 const vendor = require('../database/vendor');
 const buyer = require('../database/buyer'); 
 
-// const VendorEntry = require('../models/VendorEntry');
-// const BuyerEntry = require('../models/BuyerEntry');
-
 const generateEmailConfirmTemplate = require('../utils/generateEmailConfirmTemplate');
 
 const signUp = async (user) => {
@@ -116,12 +113,16 @@ const signIn = async (user) => {
         });
         const getUserResponse = await client.send(getUserCommand);
 
+        console.log(getUserResponse);
+
         // construct the response
         const email = getUserResponse.UserAttributes.find(element => element.Name === "email");
         const role = getUserResponse.UserAttributes.find(element => element.Name === "custom:role");
+        const subId = getUserResponse.UserAttributes.find(element => element.Name === "sub");
         const data = {
             email: email.Value,
-            role: role.Value
+            role: role.Value,
+            subId: subId.Value
         }
 
         // extract tokens
@@ -190,9 +191,11 @@ const verifyAuth = async (cookies) => {
 
         const email = getUserResponse.UserAttributes.find(element => element.Name === "email");
         const role = getUserResponse.UserAttributes.find(element => element.Name === "custom:role");
+        const subId = getUserResponse.UserAttributes.find(element => element.Name === "sub");
         const data = {
             email: email.Value,
-            role: role.Value
+            role: role.Value,
+            subId: subId.Value
         }
 
         return data;

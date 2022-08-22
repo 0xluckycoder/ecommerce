@@ -46,6 +46,8 @@ const signIn = async (req, res, next) => {
         });
 
         const validated = await userSchema.validate(req.body);
+        
+        // sign in the user
         const { tokens, data } = await authService.signIn(validated);
 
         // clear existing token cookies

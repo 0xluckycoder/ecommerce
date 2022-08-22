@@ -45,7 +45,7 @@ export default function SignIn() {
                 try {
                     dispatch({ type: ACTIONS.LOADING });
 
-                    const response = await fetch('http://localhost:5500/api/v1/auth/signin', {
+                    const signInResponse = await fetch('http://localhost:5500/api/v1/auth/signin', {
                         method: 'POST',
                         credentials: "include",
                         headers: {
@@ -55,7 +55,7 @@ export default function SignIn() {
                     });
                 
                     
-                    const data = await response.json();
+                    const data = await signInResponse.json();
                     console.log(data);
 
                     if (data.success) {
@@ -66,7 +66,16 @@ export default function SignIn() {
                                 email: data.userData.email,
                                 role: data.userData.role
                         }});
-                        data.userData.role === 'vendor' && navigate('/vendor/dashboard');
+
+                        
+                        // redirect to account setup if user status is "initial"
+                        if (data.userData.role === "vendor") {
+                            const getVendorByUserId = await fetch(`http://localhost:5500/api/v1/vendor/user/${data.userData.subId}`);
+                            const getVendorByUserIdData = await getVendorByUserId.json();
+                            console.log(getVendorByUserIdData);
+                            getVendorByUserIdData.data.userStatus === "initial" && navigate(ROUTES.VENDOR_ACCOUNT_SETUP)
+                        }
+                        // data.userData.role === 'vendor' && navigate('/vendor/dashboard');
                         // add customers redirect route here
 
                     } else {

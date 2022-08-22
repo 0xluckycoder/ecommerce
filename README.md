@@ -229,15 +229,50 @@ Learn Common Architecture and Design
 - API endpoints
 
 - Auth
-    - [x] - auth route
-    - [x] - auth controller
-    - [x] - auth service layer
+    - [x] - route
+    - [x] - controller
+    - [x] - service layer
         - [x] - POST - /api/v1/auth/signup
         - [x] - POST - /api/v1/auth/signin
         - [x] - GET - /api/v1/auth/confirmEmail/:token
         - [x] - GET - /api/v1/auth/verifyAuth
 
-- store all the attributes with nested endpoint - /api/v1/vendor/:vendorId/
+- Vendor
+    - [x] - route
+    - [/] - controller
+    - [/] - service layer
+    - [ ] - Authorization middleware
+        - [x] - GET - /api/v1/vendor/user/:id
+        - [x] - PUT - /api/v1/vendor/:id
+        - [/] - POST - /api/v1/vendor
+
+
+
+Vendor account setup workflow
+
+- when siging up appropriate attribute account will be also created for the user / with cognito id and userStatus of "initial"
+
+- if userStatus = initial and email is confirmed
+    - user wil be redirected to account setup
+
+    - once user setup is completed
+        - new store will be created for the user
+        - find initially created attribute account and update with account setup details 
+
+Development
+
+- [x] - retreive user attributes after login
+- [x] - redirect to account setup if status is initial
+- [/] - update attributes of vendor / buyer account
+    - [ ] - validate and save images on s3 bucket
+    - [ ] - update mongodb record with ref to s3 uploaded objects
+- [ ] - create a new store if user is a vendor
+- [ ] - only initial users can visit frontend page
+- [ ] - redirect to relevant vendor / buyer dashboard if status is active
+
+- in every recurrent authenticated
+
+- store all the attributes with nested endpoint - /api/v1/vendor/:vendorId/store
 
 store    
 

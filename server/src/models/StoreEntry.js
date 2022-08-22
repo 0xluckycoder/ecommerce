@@ -17,10 +17,11 @@ const storeEntrySchema = new Schema({
         required: true,
         default: true
     },
-    ownerId: {
-        type: String,
-        required: true,
-    },
+    // store is already linked to vendor with one to one relationship in his object field storeId
+    // ownerId: {
+    //     type: String,
+    //     required: true,
+    // },
     userStatus: {
         type: String,
         required: true

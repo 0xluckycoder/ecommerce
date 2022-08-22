@@ -12,6 +12,7 @@ const middlewares = require('./middlewares');
 // const users = require('./api/user/users');
 
 const authRoutes = require('./v1/api/authRoutes');
+const vendorRoutes = require('./v1/api/vendorRoutes');
 
 
 const app = express();
@@ -46,10 +47,9 @@ app.get('/', (req, res) => {
     });
 });
 
-// app.use('/api/user', users);
-// app.use('/api/store', stores);
-
-app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/vendor', vendorRoutes);
+// app.use('/api/v1/vendor', authorize, vendorRoutes);
 
 // app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);

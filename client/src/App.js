@@ -26,7 +26,7 @@ const authState = {
   isAuthenticated: false,
   email: "",
   role: "",
-  errorMessage: ""
+  errorMessage: "",
 }
 
 export const ACTIONS = {
@@ -115,7 +115,8 @@ export const ROUTES = {
   VENDOR_SETTINGS: '/vendor/settings',
   SIGNIN: '/auth/signin',
   SIGNUP: '/auth/signup',
-  CONFIRM_EMAIL: '/auth/confirm-email'
+  CONFIRM_EMAIL: '/auth/confirm-email',
+  VENDOR_ACCOUNT_SETUP: '/account-setup'
 }
 
 function App() {
@@ -129,7 +130,7 @@ function App() {
   - [ ] - add the loading while authenticating
   */
 
-  const authorizeDirectLinks = (path, role) => {
+  const authorizeDirectEnteredLinks = (path, role) => {
     console.log(path, role);
 
     // vendor allowed routes
@@ -159,14 +160,22 @@ function App() {
         const data = await response.json();
         console.log(data);
 
-        dispatch({ 
-          type: ACTIONS.AUTH_SUCCESS, 
-          payload: {
-              email: data.userData.email,
-              role: data.userData.role
-        }});
-        
-        authorizeDirectLinks(location.pathname, data.userData.role);
+        // redirect to account setup if user status is "initial"
+        if (data.userData.role === "vendor") {
+          const getVendorByUserId = await fetch(`http://localhost:5500/api/v1/vendor/user/${data.userData.subId}`);
+          const getVendorByUserIdData = await getVendorByUserId.json();
+          console.log(getVendorByUserIdData);
+          getVendorByUserIdData.data.userStatus === "initial" && navigate(ROUTES.VENDOR_ACCOUNT_SETUP)
+      }
+
+
+      dispatch({ 
+        type: ACTIONS.AUTH_SUCCESS, 
+        payload: {
+            email: data.userData.email,
+            role: data.userData.role
+      }});
+      authorizeDirectEnteredLinks(location.pathname, data.userData.role);
 
       } catch(error) {
         console.log('error', error);
@@ -207,7 +216,12 @@ function App() {
                 <Route path="forgot-password" element={<ForgotPassword />} />
                 <Route path="confirm-email" element={<ConfirmEmail />} />
               </Route>
-              <Route path="account-setup" element={<AccountSetup />} />
+              <Route path="account-setup" element={
+                        <Protected authState={state} permissionRole={"vendor"}>
+                          <AccountSetup />
+                        </Protected>
+              }/>
+                        
             </Routes>
         }
         {/* <Loading /> */}
