@@ -264,7 +264,12 @@ Development
 - [x] - retreive user attributes after login
 - [x] - redirect to account setup if status is initial
 - [/] - update attributes of vendor / buyer account
-    - [ ] - validate and save images on s3 bucket
+    - [ ] - validate image
+    - [ ] - create image processing funciton to resize the image accordingly
+    - [ ] - upload image to S3
+        - [ ] - learn s3 permissions
+        - [ ] - https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html
+        - [ ] - try uploading and receiving s3 objects with seperate test end point
     - [ ] - update mongodb record with ref to s3 uploaded objects
 - [ ] - create a new store if user is a vendor
 - [ ] - only initial users can visit frontend page
