@@ -1,6 +1,6 @@
 const yup = require('yup');
 const vendorService = require('../services/vendorService');
-
+const customError = require('../utils/customError');
 // add auhtorization middleware for private api endpoints
 
 const createVendor = async (req, res, next) => {
@@ -92,8 +92,28 @@ const getVendorByUserId = async (req, res, next) => {
     }
 }
 
+// send user id along with logo file
+
+const uploadLogo = async (req, res, next) => {
+    try {
+        const { file, body: { userId } } = req;
+
+        if (!file || !userId) throw customError('request validation failed', 'ValidationFailed');
+
+        const uploadLogoResponse = await vendorService.uploadLogo(file, userId);
+
+        res.status(200).json({
+            success: true,
+            data: uploadLogoResponse
+        });
+    } catch(error) {
+        next(error);
+    }
+}
+
 module.exports = {
     createVendor,
     getVendorByUserId,
-    updateVendor
+    updateVendor,
+    uploadLogo
 }

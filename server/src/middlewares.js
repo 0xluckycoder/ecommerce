@@ -19,7 +19,8 @@ const errorTypes = {
     NotBeforeError: 400,
     InvalidAuthorization: 401, // custom error name,
     CookiesUnavailable: 400, // custom error name
-    NotFound: 404
+    NotFound: 404, // custom error name
+    ValidationFailed: 400 // custom error name
 }
 
 // const notFound = (req, res, next) => {

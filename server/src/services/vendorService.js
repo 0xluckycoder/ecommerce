@@ -26,8 +26,24 @@ const getVendorByUserId = async (id) => {
     }
 }
 
+const uploadLogo = async (file, userId) => {
+    try {
+
+        /*
+            - crop and compress the image with sharp.js
+            - upload processed image to s3 (PutObjectCommand)
+                - read more about pricing
+            - return the public url to client
+        */ 
+
+     } catch(error) {
+        throw error;
+    }
+}
+
 module.exports = {
     createVendor,
     updateVendor,
-    getVendorByUserId
+    getVendorByUserId,
+    uploadLogo
 }
