@@ -14,6 +14,9 @@ const middlewares = require('./middlewares');
 const authRoutes = require('./v1/api/authRoutes');
 const vendorRoutes = require('./v1/api/vendorRoutes');
 
+// testing
+const sharp = require('sharp');
+const multer = require('multer');
 
 const app = express();
 
@@ -49,6 +52,28 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/vendor', vendorRoutes);
+
+// upload image with multer, sharpjs, s3
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname)
+    }
+});
+
+// const upload = multer({ dest: 'uploads/' })
+var upload = multer({ storage: storage });
+app.post('/api/testing/upload', upload.single('logo'), async (req, res, next) => {
+    if (!req.file) {
+        throw new Error('please upload a file');
+        return;
+    }
+    console.log(req.file);
+    res.send(req.file);
+});
 // app.use('/api/v1/vendor', authorize, vendorRoutes);
 
 // app.use(middlewares.notFound);

@@ -266,16 +266,14 @@ Development
 - [/] - update attributes of vendor / buyer account
     - [ ] - validate image
     - [ ] - create image processing funciton to resize the image accordingly
+        - https://www.digitalocean.com/community/tutorials/how-to-process-images-in-node-js-with-sharp
     - [ ] - upload image to S3
-        - [ ] - learn s3 permissions
-        - [ ] - https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html
-        - [ ] - try uploading and receiving s3 objects with seperate test end point
     - [ ] - update mongodb record with ref to s3 uploaded objects
 - [ ] - create a new store if user is a vendor
 - [ ] - only initial users can visit frontend page
 - [ ] - redirect to relevant vendor / buyer dashboard if status is active
 
-- in every recurrent authenticated
+page 188 (https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/js-sdk-dg.pdf)
 
 - store all the attributes with nested endpoint - /api/v1/vendor/:vendorId/store
 

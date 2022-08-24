@@ -16,8 +16,14 @@ export default function AccountSetup() {
 
     const [step, setStep] = useState(1);
     const [fieldState, setFieldState] = useState({
-        logo: "",
-        banner: "",
+        logo: {
+            blob: "",
+            file: null
+        },
+        banner: {
+            blob: "",
+            file: null
+        },
         storeName: "",
         firstName: "",
         lastName: "",
@@ -53,22 +59,67 @@ export default function AccountSetup() {
     const handleSubmit = async () => {
         try {
 
-            const bodyData = {
-                ...fieldState
-            }
+            let formData = new FormData();
+            formData.append('logo', fieldState.logo.file);
+            // formData.append('banner', fieldState.banner.file);
 
-            const response = await fetch('http://localhost:5500/api/vendor', {
+            const response = await fetch('http://localhost:5500/api/testing/upload', {
                 method: 'POST',
-                credentials: true,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(bodyData)
+                credentials: "include",
+                // headers: {
+                //     'Content-Type': 'multipart/form-data'
+                // },
+                body: formData
             });
 
+            // console.log(response);
             const data = await response.json();
 
             console.log(data);
+
+
+            // base64logo = null;
+            // base64Banner = null;
+
+            // convert logo into base64
+            // const logoReader = new FileReader();
+            // logoReader.readAsDataURL(fieldState.logo.file);
+            // logoReader.onloadend = () => {
+            //     const base64String = logoReader.result.replace('data:', '').replace(/^.+,/, '');
+            //     console.log(base64String);
+            //     base64logo = base64String;
+            // }
+
+            // convert banner into base64
+            // const bannerReader = new FileReader();
+            // bannerReader.readAsDataURL(fieldState.banner.file);
+            // bannerReader.onloadend = () => {
+            //     const base64String = bannerReader.result.replace('data:', '').replace(/^.+,/, '');
+            //     console.log(base64String);
+            //     base64Banner = base64String;
+            // }
+
+            // let banner = reader.readAsDataURL(fieldState.banner.file);
+
+            // console.log(logo);
+
+            // const bodyData = {
+            //     ...fieldState,
+            //     logo: logo,
+            //     banner: banner
+            // }
+            // console.log(bodyData);
+            // const response = await fetch('http://localhost:5500/api/vendor', {
+            //     method: 'POST',
+            //     credentials: true,
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(bodyData)
+            // });
+
+            // const data = await response.json();
+            // console.log(data);
 
         } catch(error) {
             console.log(error);
@@ -129,12 +180,18 @@ export default function AccountSetup() {
             }
         }
 
-        // construct the blob to preview
+        // if no errors construct the blob to preview and store the file
         const imageObjUrl = URL.createObjectURL(file);
         if (field === 'logo') {
-            setFieldState({...fieldState, logo: imageObjUrl});
+            setFieldState({...fieldState, logo: {
+                blob: imageObjUrl,
+                file
+            }});
         } else {
-            setFieldState({...fieldState, banner: imageObjUrl});
+            setFieldState({...fieldState, banner: {
+                blob: imageObjUrl,
+                file
+            }});
         }
     }
 
@@ -258,10 +315,10 @@ function Second({ handleStep, fieldState, error, validateImages, setFieldState }
                 <br/>
                 <img 
                     className={style.logoImage} 
-                    src={fieldState.logo ? fieldState.logo : Logo} 
+                    src={fieldState.logo.blob ? fieldState.logo.blob : Logo} 
                 />
-                {fieldState.logo && <RemoveIcon 
-                                        left={145} 
+                {fieldState.logo.blob && <RemoveIcon 
+                                        left={10} 
                                         top={85} 
                                         imageFieldName={"logo"}
                                         state={fieldState}
@@ -287,10 +344,10 @@ function Second({ handleStep, fieldState, error, validateImages, setFieldState }
                 <br/>
                 <img 
                     className={style.bannerImage} 
-                    src={fieldState.banner ? fieldState.banner : Banner} 
+                    src={fieldState.banner.blob ? fieldState.banner.blob : Banner} 
                 />
-                {fieldState.banner && <RemoveIcon 
-                        left={235} 
+                {fieldState.banner.blob && <RemoveIcon 
+                        left={10} 
                         top={268} 
                         imageFieldName={"banner"}
                         state={fieldState}
@@ -298,7 +355,7 @@ function Second({ handleStep, fieldState, error, validateImages, setFieldState }
                     />
                 }
             </div>
-            {fieldState.logo === "" || fieldState.banner === "" ?
+            {fieldState.logo.blob === "" || fieldState.banner.blob === "" ?
             
             (<Button className={`themed-grey-btn ${style.customButton}`}>Next</Button>) :
 
