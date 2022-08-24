@@ -61,9 +61,10 @@ export default function AccountSetup() {
 
             let formData = new FormData();
             formData.append('logo', fieldState.logo.file);
+            formData.append('userId', '6303b5f569e489a5f2ee3b87');
             // formData.append('banner', fieldState.banner.file);
 
-            const response = await fetch('http://localhost:5500/api/testing/upload', {
+            const response = await fetch('http://localhost:5500/api/v1/vendor/logo', {
                 method: 'POST',
                 credentials: "include",
                 // headers: {
@@ -76,32 +77,6 @@ export default function AccountSetup() {
             const data = await response.json();
 
             console.log(data);
-
-
-            // base64logo = null;
-            // base64Banner = null;
-
-            // convert logo into base64
-            // const logoReader = new FileReader();
-            // logoReader.readAsDataURL(fieldState.logo.file);
-            // logoReader.onloadend = () => {
-            //     const base64String = logoReader.result.replace('data:', '').replace(/^.+,/, '');
-            //     console.log(base64String);
-            //     base64logo = base64String;
-            // }
-
-            // convert banner into base64
-            // const bannerReader = new FileReader();
-            // bannerReader.readAsDataURL(fieldState.banner.file);
-            // bannerReader.onloadend = () => {
-            //     const base64String = bannerReader.result.replace('data:', '').replace(/^.+,/, '');
-            //     console.log(base64String);
-            //     base64Banner = base64String;
-            // }
-
-            // let banner = reader.readAsDataURL(fieldState.banner.file);
-
-            // console.log(logo);
 
             // const bodyData = {
             //     ...fieldState,
