@@ -87,33 +87,14 @@ const uploadLogo = async (file, userId) => {
 
         console.log(putObjectCommandResponse);
 
-        /*
-        arn:aws:s3:::freebiemedia
-        https://freebiemedia.s3.ap-south-1.amazonaws.com/33a5a4adf5f57c15be701e9a3d28717e221d791d.jpg
-        const parallellUploads = new Upload({
-        client: new S3Client({
-            credentials: {
-            accessKeyId: process.env.S3_KEY,
-            secretAccessKey: process.env.S3_SECRET,
-            },
-            region: process.env.S3_REGION,
-            endpoint: "http://us-east-1.linodeobjects.com",
-        }),
-        params: {
-            Bucket: process.env.S3_BUCKET,
-            Key: "gauntlet_" + uuid() + "_" + files.files.name,
-            Body: fs.createReadStream(files.files.path),
-        },
-        });
-
-        parallellUploads.on("httpUploadProgress", (progress) => {
-        console.log(progress);
-        });
-
-        await parallellUploads.done();
-        */ 
 
         /*
+            - add ACL permissons
+            - learn how to handle webp images in s3 and react client side
+                - decide whether its a suitable solution or not
+            - retreive uploaded image ULR
+            - handle multiple image uploads
+                - replace image name with unique name
             - read more about pricing
             - upload processed image to s3 (PutObjectCommand)
             - return the public url to client
