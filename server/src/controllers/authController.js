@@ -58,7 +58,7 @@ const signIn = async (req, res, next) => {
 
         // set access token, refresh token, id token on client accordingly
         const cookiesConfig = {
-            maxAge: 60000 * 15,
+            maxAge: 60000 * 60,
             httpOnly: true
         }
 
@@ -124,7 +124,7 @@ const verifyAuth = async (req, res, next) => {
             const refreshedTokens = await authService.refreshTokens(RefreshToken);
 
             const cookiesConfig = {
-                maxAge: 60000 * 15,
+                maxAge: 60000 * 60,
                 httpOnly: true
             }    
 
