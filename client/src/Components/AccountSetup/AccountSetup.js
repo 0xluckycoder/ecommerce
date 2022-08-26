@@ -61,8 +61,32 @@ export default function AccountSetup() {
 
             let formData = new FormData();
             formData.append('logo', fieldState.logo.file);
-            formData.append('userId', '6303b5f569e489a5f2ee3b87');
-            // formData.append('banner', fieldState.banner.file);
+            
+            /*
+            formData.append('banner', fieldState.banner.file);
+            formData.append('storeName', fieldState.storeName);
+            formData.append('firstName', fieldState.firstName);
+            formData.append('lastName', fieldState.lastName);
+            formData.append('phone', fieldState.phone);
+            formData.append('city', fieldState.city);
+            formData.append('country', fieldState.country);
+
+
+            logo: {
+            blob: "",
+            file: null
+            },
+            banner: {
+            blob: "",
+            file: null
+            },
+            storeName: "",
+            firstName: "",
+            lastName: "",
+            phone: "",
+            city: "",
+            country: ""
+            */ 
 
             const response = await fetch('http://localhost:5500/api/v1/vendor/logo', {
                 method: 'POST',

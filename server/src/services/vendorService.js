@@ -2,6 +2,7 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { v4: uuidv4 } = require('uuid');
 
 const customError = require('../utils/customError');
 const vendor = require('../database/vendor');
@@ -40,8 +41,10 @@ const uploadLogo = async (file, userId) => {
             "image/png"
         ];
 
+        // validate image size
         if (file.size > 1000000) throw customError('invalid file size', 'ValidationFailed')
         
+        // validate image format
         const isSupported = supportedFormats.some(item => item === file.mimetype);
         if (!isSupported) throw customError('invalid file format', 'ValidationFailed');
 
@@ -61,9 +64,8 @@ const uploadLogo = async (file, userId) => {
 
         // remove initially uploaded image
         fs.unlinkSync(file.path);
-        
-        // console.log(data);
 
+        // upload image to s3
         const client = new S3Client({
             region: process.env.AWS_COGNITO_REGION,
             credentials : {
@@ -71,33 +73,28 @@ const uploadLogo = async (file, userId) => {
                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
             },
         });
-
         const fileStream = fs.createReadStream(`${uploadDestination}.webp`);
-
-        // console.log('🔥', `${uploadDestination}.webp`);
-        // console.log(fileStream);
-
+        const uniqueFileName = uuidv4();
         const putObjectCommand = new PutObjectCommand({
             Body: fileStream,
-            Key: `${fileNameWithoutExt}.webp`,
-            Bucket: process.env.AWS_S3_BUCKET_NAME
+            Key: `${uniqueFileName}.webp`,
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            ACL: "public-read"
         });
-
         const putObjectCommandResponse = await client.send(putObjectCommand);
 
         console.log(putObjectCommandResponse);
 
 
         /*
-            - add ACL permissons
-            - learn how to handle webp images in s3 and react client side
-                - decide whether its a suitable solution or not
-            - retreive uploaded image ULR
-            - handle multiple image uploads
-                - replace image name with unique name
-            - read more about pricing
-            - upload processed image to s3 (PutObjectCommand)
-            - return the public url to client
+        - retreive uploaded image ULR
+        - read more about pricing
+        - return the public url to client
+            - store uploaded uuid filename
+        - complete attribute upload feature
+        - restructure notes and start planning
+
+        - architecture the api workflow for upload attributes / images / logos
         */ 
 
      } catch(error) {
