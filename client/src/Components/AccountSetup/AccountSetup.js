@@ -59,48 +59,47 @@ export default function AccountSetup() {
     const handleSubmit = async () => {
         try {
 
-            let formData = new FormData();
-            formData.append('logo', fieldState.logo.file);
+            let logoFormData = new FormData();
+            logoFormData.append('logo', fieldState.logo.file)
             
-            /*
-            formData.append('banner', fieldState.banner.file);
-            formData.append('storeName', fieldState.storeName);
-            formData.append('firstName', fieldState.firstName);
-            formData.append('lastName', fieldState.lastName);
-            formData.append('phone', fieldState.phone);
-            formData.append('city', fieldState.city);
-            formData.append('country', fieldState.country);
-
-
-            logo: {
-            blob: "",
-            file: null
-            },
-            banner: {
-            blob: "",
-            file: null
-            },
-            storeName: "",
-            firstName: "",
-            lastName: "",
-            phone: "",
-            city: "",
-            country: ""
-            */ 
-
-            const response = await fetch('http://localhost:5500/api/v1/vendor/logo', {
+            let bannerFormData = new FormData();
+            bannerFormData.append('banner', fieldState.banner.file);
+            
+            const logoUploadResponse = await fetch('http://localhost:5500/api/v1/vendor/logo', {
                 method: 'POST',
                 credentials: "include",
-                // headers: {
-                //     'Content-Type': 'multipart/form-data'
-                // },
-                body: formData
+                body: logoFormData
             });
+            const { data: logoUrl } = await logoUploadResponse.json();
+
+            const bannerUploadResponse = await fetch('http://localhost:5500/api/v1/vendor/banner', {
+                method: 'POST',
+                credentials: "include",
+                body: bannerFormData
+            });
+            const { data: bannerUrl } = await bannerUploadResponse.json();
+
+
+            /*
+            create authentication middle ware in backend api
+            pass the current user with next function
+            */ 
+
+            // const updateVendorResponse = await fetch('http://localhost:5500')
+
+            // const response = await fetch('http://localhost:5500/api/v1/vendor/logo', {
+            //     method: 'POST',
+            //     credentials: "include",
+            //     // headers: {
+            //     //     'Content-Type': 'multipart/form-data'
+            //     // },
+            //     body: formData
+            // });
 
             // console.log(response);
-            const data = await response.json();
+            // const data = await response.json();
 
-            console.log(data);
+            // console.log(data);
 
             // const bodyData = {
             //     ...fieldState,

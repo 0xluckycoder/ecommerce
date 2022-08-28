@@ -57,6 +57,7 @@ export default function SignIn() {
                     
                     const data = await signInResponse.json();
                     console.log(data);
+                    alert('fucked');
 
                     if (data.success) {
                         console.log('success login');

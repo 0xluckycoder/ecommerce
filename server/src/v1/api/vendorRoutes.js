@@ -1,6 +1,9 @@
 const { Router } = require('express');
 const vendorController = require('../../controllers/vendorController');
 const multer = require('multer');
+const {
+    authorizeUser
+} = require('../../middlewares');
 
 const router = Router();
 
@@ -20,10 +23,12 @@ const upload = multer({
 
 router.post('/', vendorController.createVendor);
 
-router.get('/user/:id', vendorController.getVendorByUserId);
+router.get('/user/:id', authorizeUser, vendorController.getVendorByUserId);
 
 router.put('/:id', vendorController.updateVendor);
 
 router.post('/logo', upload.single('logo'), vendorController.uploadLogo);
+
+router.post('/banner', upload.single('banner'), vendorController.uploadBanner);
 
 module.exports = router;

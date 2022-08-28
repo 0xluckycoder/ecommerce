@@ -1,46 +1,29 @@
-const errorTypes = {
-    ValidationError: 400,
-    UsernameExistsException: 400,
-    UserLambdaValidationException: 400,
-    UnexpectedLambdaException: 400,
-    TooManyRequestsException: 400,
-    ResourceNotFoundException: 400,
-    NotAuthorizedException: 400,
-    InvalidSmsRoleTrustRelationshipException: 400,
-    InvalidSmsRoleAccessPolicyException: 400,
-    InvalidPasswordException: 400,
-    InvalidParameterException: 400,
-    InvalidLambdaResponseException: 400,
-    InvalidEmailRoleAccessPolicyException: 400,
-    InternalErrorException: 400,
-    CodeDeliveryFailureException: 400,
-    JsonWebTokenError: 400,
-    TokenExpiredError: 400,
-    NotBeforeError: 400,
-    InvalidAuthorization: 401, // custom error name,
-    CookiesUnavailable: 400, // custom error name
-    NotFound: 404, // custom error name
-    ValidationFailed: 400 // custom error name
-}
-
-// const notFound = (req, res, next) => {
-//     const error = new Error(`Not found - ${req.originalUrl}`);
-//     res.status(404);
-//     next(error);
-// }
-
-
-/*
-app.get('/productswitherror', (request, response) => {
-  let error = new Error(`processing error in request at ${request.url}`)
-  error.statusCode = 400
-  throw error
-})
-
-guide - https://reflectoring.io/express-error-handling/
-*/
-
 const errorHandler = (error, req, res, next) => {
+
+    const errorTypes = {
+        ValidationError: 400,
+        UsernameExistsException: 400,
+        UserLambdaValidationException: 400,
+        UnexpectedLambdaException: 400,
+        TooManyRequestsException: 400,
+        ResourceNotFoundException: 400,
+        NotAuthorizedException: 400,
+        InvalidSmsRoleTrustRelationshipException: 400,
+        InvalidSmsRoleAccessPolicyException: 400,
+        InvalidPasswordException: 400,
+        InvalidParameterException: 400,
+        InvalidLambdaResponseException: 400,
+        InvalidEmailRoleAccessPolicyException: 400,
+        InternalErrorException: 400,
+        CodeDeliveryFailureException: 400,
+        JsonWebTokenError: 400,
+        TokenExpiredError: 400,
+        NotBeforeError: 400,
+        InvalidAuthorization: 401, // custom error name,
+        CookiesUnavailable: 400, // custom error name
+        NotFound: 404, // custom error name
+        ValidationFailed: 400 // custom error name
+    }
 
     // assign the status code
     const statusCode = errorTypes[error.name] ? errorTypes[error.name] : 500;
@@ -53,7 +36,22 @@ const errorHandler = (error, req, res, next) => {
     });
 }
 
+const authorizeUser = (req, res, next) => {
+    try {
+        /*
+            - Read about token handling
+            - authorize accesstoken & id token in a standard way
+            - pass the authenticate user with next function
+                - because some routes require auth user details
+        */ 
+
+    } catch (error) {
+
+    }
+}
+
 module.exports = {
     // notFound,
-    errorHandler
+    errorHandler,
+    authorizeUser
 }

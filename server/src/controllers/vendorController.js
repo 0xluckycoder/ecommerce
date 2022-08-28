@@ -92,15 +92,14 @@ const getVendorByUserId = async (req, res, next) => {
     }
 }
 
-// send user id along with logo file
 
 const uploadLogo = async (req, res, next) => {
     try {
-        const { file, body: { userId } } = req;
+        const { file } = req;
 
-        if (!file || !userId) throw customError('request validation failed', 'ValidationFailed');
+        if (!file) throw customError('request validation failed', 'ValidationFailed');
 
-        const uploadLogoResponse = await vendorService.uploadLogo(file, userId);
+        const uploadLogoResponse = await vendorService.uploadLogo(file);
 
         res.status(200).json({
             success: true,
@@ -111,9 +110,27 @@ const uploadLogo = async (req, res, next) => {
     }
 }
 
+const uploadBanner = async (req, res, next) => {
+    try {
+        const { file } = req;
+
+        if (!file) throw customError('request validation failed', 'ValidationFailed');
+
+        const uploadBannerResponse = await vendorService.uploadBanner(file);
+
+        res.status(200).json({
+            success: true,
+            data: uploadBannerResponse
+        });
+    } catch(error) {
+        next(error);
+    }
+}
+
 module.exports = {
     createVendor,
     getVendorByUserId,
     updateVendor,
-    uploadLogo
+    uploadLogo,
+    uploadBanner
 }
