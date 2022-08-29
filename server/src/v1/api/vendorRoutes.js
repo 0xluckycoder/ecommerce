@@ -2,7 +2,7 @@ const { Router } = require('express');
 const vendorController = require('../../controllers/vendorController');
 const multer = require('multer');
 const {
-    authorizeUser
+    authorizeRequest
 } = require('../../middlewares');
 
 const router = Router();
@@ -23,7 +23,10 @@ const upload = multer({
 
 router.post('/', vendorController.createVendor);
 
-router.get('/user/:id', authorizeUser, vendorController.getVendorByUserId);
+router.get('/user/:id', vendorController.getVendorByUserId);
+
+// authorize test routes
+router.get('/test/:id', authorizeRequest ,vendorController.getVendorByUserId);
 
 router.put('/:id', vendorController.updateVendor);
 

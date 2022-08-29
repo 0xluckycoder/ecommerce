@@ -148,11 +148,6 @@ function App() {
       try {
         dispatch({ type: ACTIONS.LOADING });
 
-        // setTimeout(() => {
-        //   console.log('timer done')
-        //   dispatch({ type: ACTIONS.LOGIN_ERROR });
-        // }, 5000);
-
         const response = await fetch('http://localhost:5500/api/v1/auth/verifyAuth', {
           method: 'GET',
           credentials: "include",

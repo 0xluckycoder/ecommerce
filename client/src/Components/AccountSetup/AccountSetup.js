@@ -59,6 +59,7 @@ export default function AccountSetup() {
     const handleSubmit = async () => {
         try {
 
+            /* 
             let logoFormData = new FormData();
             logoFormData.append('logo', fieldState.logo.file)
             
@@ -78,7 +79,14 @@ export default function AccountSetup() {
                 body: bannerFormData
             });
             const { data: bannerUrl } = await bannerUploadResponse.json();
+            */
 
+            const getVendorResponse = await fetch('http://localhost:5500/api/v1/vendor/test/17196fa3-c92f-4afa-9510-d17ad320167e', {
+                method: 'GET',
+                credentials: "include"
+            });
+            const data = await getVendorResponse.json();
+            console.log(data);
 
             /*
             create authentication middle ware in backend api

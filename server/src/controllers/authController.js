@@ -121,24 +121,29 @@ const verifyAuth = async (req, res, next) => {
          * if access token is invalid throw error
          * */ 
         if (error.name === 'NotAuthorizedException') {
-            const refreshedTokens = await authService.refreshTokens(RefreshToken);
+        
+            try {
+                const refreshedTokens = await authService.refreshTokens(RefreshToken);
+                const cookiesConfig = {
+                    maxAge: 60000 * 60,
+                    httpOnly: true
+                }    
 
-            const cookiesConfig = {
-                maxAge: 60000 * 60,
-                httpOnly: true
-            }    
+                // clear existing token cookies
+                res.clearCookie('AccessToken');
+                res.clearCookie('IdToken');
 
-            // clear existing token cookies
-            res.clearCookie('AccessToken');
-            res.clearCookie('IdToken');
+                // reassign new access & id token cookies
+                res.cookie('AccessToken', refreshedTokens.AuthenticationResult.AccessToken, cookiesConfig);
+                res.cookie('IdToken', refreshedTokens.AuthenticationResult.IdToken, cookiesConfig);
 
-            // reassign new access & id token cookies
-            res.cookie('AccessToken', refreshedTokens.AuthenticationResult.AccessToken, cookiesConfig);
-            res.cookie('IdToken', refreshedTokens.AuthenticationResult.IdToken, cookiesConfig);
+                return res.json({
+                    success: true
+                });
 
-            return res.json({
-                success: true
-            });
+            } catch (error) {
+                next(error);
+            }
             /*
                 {
                     '$metadata': {

@@ -80,6 +80,11 @@ const updateVendor = async (req, res, next) => {
 
 const getVendorByUserId = async (req, res, next) => {
     try {
+
+        console.log('🔥', req.userData);
+
+        console.log(req.data);
+
         const { id } = req.params;
         const getVendorResponse = await vendorService.getVendorByUserId(id);
 

@@ -174,7 +174,6 @@ const confirmEmail = async (token) => {
 
 const verifyAuth = async (cookies) => {
     try {
-
         const client = new CognitoIdentityProvider({
             region: process.env.AWS_COGNITO_REGION,
             credentials : {
@@ -201,6 +200,7 @@ const verifyAuth = async (cookies) => {
         return data;
 
     } catch(error) {
+        // console.log('auth error', error);
         throw error;
     }
 }
