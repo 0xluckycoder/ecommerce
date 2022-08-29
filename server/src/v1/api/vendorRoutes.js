@@ -23,12 +23,14 @@ const upload = multer({
 
 router.post('/', vendorController.createVendor);
 
-router.get('/user/:id', vendorController.getVendorByUserId);
+// router.get('/user/:id', vendorController.getVendorByUserId);
+
+router.get('/user', authorizeRequest, vendorController.getVendorByUserId);
 
 // authorize test routes
-router.get('/test/:id', authorizeRequest ,vendorController.getVendorByUserId);
+// router.get('/test/:id', authorizeRequest ,vendorController.getVendorByUserId);
 
-router.put('/:id', vendorController.updateVendor);
+router.put('/:id',  authorizeRequest, vendorController.updateVendor);
 
 router.post('/logo', upload.single('logo'), vendorController.uploadLogo);
 

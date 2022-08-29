@@ -13,6 +13,7 @@ const middlewares = require('./middlewares');
 
 const authRoutes = require('./v1/api/authRoutes');
 const vendorRoutes = require('./v1/api/vendorRoutes');
+const storeRoutes = require('./v1/api/storeRoutes');
 
 // // testing
 // const sharp = require('sharp');
@@ -36,7 +37,7 @@ app.use(morgan('common'));
 // config with only allowed origins
 app.use(cors({
     origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT"],
     credentials: true
 }));
 
@@ -52,6 +53,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/vendor', vendorRoutes);
+app.use('/api/v1/store', storeRoutes)
 // app.use('/api/v1/vendor', authorize, vendorRoutes);
 
 // upload image with multer, sharpjs, s3

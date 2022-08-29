@@ -14,7 +14,6 @@ const storeEntrySchema = new Schema({
     },
     storeStatus: {
         type: Boolean,
-        required: true,
         default: true
     },
     // store is already linked to vendor with one to one relationship in his object field storeId
@@ -22,10 +21,10 @@ const storeEntrySchema = new Schema({
     //     type: String,
     //     required: true,
     // },
-    userStatus: {
-        type: String,
-        required: true
-    }
+    // userStatus: {
+    //     type: String,
+    //     required: true
+    // }
 });
 
 const StoreEntry = mongoose.model('StoreEntry', storeEntrySchema);

@@ -41,11 +41,14 @@ const createVendor = async (req, res, next) => {
 
 const updateVendor = async (req, res, next) => {
     try {
-        // only available fields will be updated, other fields will stay the same
-        // create a workflow for testing and developemnt
-        // validate available fields
-
+        
         const { id } = req.params;
+        /*
+        - [ ] - protect these endpoints from CSRF attacks        
+            - check whether vendor Object includes the object or not
+        */ 
+        const { subId } = req.userData;
+        console.log('🔥', subId);
 
         // vendor schema
         const vendorSchema = yup.object().shape({
@@ -83,10 +86,12 @@ const getVendorByUserId = async (req, res, next) => {
 
         console.log('🔥', req.userData);
 
-        console.log(req.data);
+        // console.log(req.data);
 
-        const { id } = req.params;
-        const getVendorResponse = await vendorService.getVendorByUserId(id);
+        const { subId } = req.userData;
+
+        // const { id } = req.params;
+        const getVendorResponse = await vendorService.getVendorByUserId(subId);
 
         res.status(200).json({
             success: true,

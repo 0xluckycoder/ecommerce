@@ -90,9 +90,9 @@ const updateVendor = async (id, data) => {
     }
 }
 
-const getVendorByUserId = async (id) => {
+const getVendorByUserId = async (subId) => {
     try {
-        const foundVendor = await vendor.getVendorByUserId(id);
+        const foundVendor = await vendor.getVendorByUserId(subId);
         return foundVendor;
     } catch(error) {
         throw error;

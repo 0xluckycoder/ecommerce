@@ -71,7 +71,10 @@ export default function SignIn() {
                         
                         // redirect to account setup if user status is "initial"
                         if (data.userData.role === "vendor") {
-                            const getVendorByUserId = await fetch(`http://localhost:5500/api/v1/vendor/user/${data.userData.subId}`);
+                            const getVendorByUserId = await fetch('http://localhost:5500/api/v1/vendor/user', {
+                                method: 'GET',
+                                credentials: "include",
+                              });
                             const getVendorByUserIdData = await getVendorByUserId.json();
                             console.log(getVendorByUserIdData);
                             getVendorByUserIdData.data.userStatus === "initial" && navigate(ROUTES.VENDOR_ACCOUNT_SETUP)

@@ -23,7 +23,7 @@ const getVendorByUserId = async (id) => {
 
 const updateVendor = async (id, data) => {
     try {
-        const vendorEntry = await VendorEntry.updateOne({ id }, { ...data });
+        const vendorEntry = await VendorEntry.updateOne({ _id: id }, { ...data });
         return vendorEntry;
     } catch(error) {
         throw error;

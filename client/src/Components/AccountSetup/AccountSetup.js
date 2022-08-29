@@ -59,13 +59,32 @@ export default function AccountSetup() {
     const handleSubmit = async () => {
         try {
 
-            /* 
+            /*
+                - upload images to s3 and retrieve image links
+                - fetch vendorEntity object id from /vendor/user/
+                - create new store and assign store id in vendorEntity
+                - update vendor entity 
+
+                - [x] - Test Endpoints individually
+                    - [x] - upload banner & logo to s3
+                    - [x] - fetch vendorEntity by authenticated user id
+                    - [x] - create store
+                    - [x] - update vendor
+
+                - [x] - create all store endpoints
+                    - [x] - create
+                    - [x] - get store by id
+            */  
+
+            /*  
+            // logo
             let logoFormData = new FormData();
             logoFormData.append('logo', fieldState.logo.file)
             
+            // banner
             let bannerFormData = new FormData();
             bannerFormData.append('banner', fieldState.banner.file);
-            
+
             const logoUploadResponse = await fetch('http://localhost:5500/api/v1/vendor/logo', {
                 method: 'POST',
                 credentials: "include",
@@ -79,14 +98,71 @@ export default function AccountSetup() {
                 body: bannerFormData
             });
             const { data: bannerUrl } = await bannerUploadResponse.json();
-            */
 
-            const getVendorResponse = await fetch('http://localhost:5500/api/v1/vendor/test/17196fa3-c92f-4afa-9510-d17ad320167e', {
+
+            // fetch vendor attributes object
+            const getVendorByAuthUserResponse = await fetch('http://localhost:5500/api/v1/vendor/user', {
                 method: 'GET',
                 credentials: "include"
             });
-            const data = await getVendorResponse.json();
-            console.log(data);
+            const getVendorByAuthUserData = await getVendorByAuthUserResponse.json();
+
+            console.log(getVendorByAuthUserData);
+
+            */
+            // store attributes
+            const storeEntityData = {
+                storeName: fieldState.storeName,
+                logo: 'logoUrl',
+                banner: 'bannerUrl'
+            }
+
+            const createStoreResponse = await fetch(`http://localhost:5500/api/v1/store`, {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(storeEntityData)
+            });
+
+            const createStoreData = await createStoreResponse.json();
+            console.log(createStoreData);
+
+            // // vendor attributes
+            // const vendorEntityData = {
+            //     firstName: fieldState.firstName,
+            //     lastName: fieldState.lastName,
+            //     storeId: 'createStoreResponse.storeId'
+            // }
+            // if (fieldState.phone) vendorEntityData.phone = fieldState.phone;
+            // if (fieldState.city) vendorEntityData.city = fieldState.city;
+            // if (fieldState.country) vendorEntityData.country = fieldState.country;
+
+            // // update vendor
+            // const updateVendorResponse = await fetch(`http://localhost:5500/api/v1/vendor/6303b5f569e489a5f2ee3b87`, {
+            //     method: 'PUT',
+            //     credentials: "include",
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(vendorEntityData)
+            // });
+
+            // const updateVendorData = await updateVendorResponse.json();
+            // console.log('🔥', updateVendorData);
+
+
+
+
+            /* 
+                const getVendorResponse = await fetch('http://localhost:5500/api/v1/vendor/test/17196fa3-c92f-4afa-9510-d17ad320167e', {
+                    method: 'GET',
+                    credentials: "include"
+                });
+                const data = await getVendorResponse.json();
+                console.log(data);
+            */
 
             /*
             create authentication middle ware in backend api
