@@ -19,6 +19,7 @@ this app allows users to create their own store and start selling their products
 - AWS tools
 
 ### Business Logic / Features  
+
 - Managed ecommerce platform that allows anyone to create their own stores and start selling products online ( like shopify )
 - This app contains two user levels which are customer and vendor, since we have two customer levels when authenticating visitor will be asked to whether they need to signup as a customer or signup as a vendor.
 - once user selected a role his account only can be used for that selected role
@@ -118,35 +119,9 @@ Auth Components
         - [x] - vendor/customers
         - [ ] - vendor/customers/view/:id
         - [ ] - vendor/settings
-    - [x] - clean & structure up the components properly before move into other pages
-    - [x] - Dashboard homepage
-    - [x] - add active menu state
-        - [x] - show the active style if current page is match with the path
-    (https://demos.wrappixel.com/premium-admin-templates/react/adminpro-react/main/dashboards/analytical)
-
-    - [x] - fix scss style conflicts - https://www.freecodecamp.org/news/how-to-style-react-apps-with-css/
-    - [x] - seperate global files from sass modules
-    - [x] - Orders page
-    - [x] - Products page
-        - [x] - Products Upload Modal
-        - [ ] - Reactive auto sorting images
 
     - [ ] - Global alert component
     
-    - [x] - Customers
-        - [x] - Customers modal
-    
-    - [ ] - Settings
-    - [ ] - User Profile
-    - [ ] - Authentication modal
-
-
-
-- [x] - Go through react docs and recap everything
-- [x] - Start development with Frontend
-    - [x] - Configure with AntDesign / Sass
-    - [x] - Learn Antdesign layout & Grid
-- [ ] - Use useReducer as a state manager 
 - [ ] - Learn how expert developers use reactjs
 
 - [ ] - develop choose between pages
@@ -160,7 +135,6 @@ Auth Components
     - [ ] - add form validation for all fields
 
 - [ ] - create top level authentication handling with a state
-
 
 ## Todo
 
@@ -219,6 +193,13 @@ Learn Common Architecture and Design
 
 ### Backend
 
+- [x] - when signin if user is not initial redirect to vendor dashboard
+- [ ] - after submitting vendor attributes redirect users to vendor dashboard
+- [/] - show loading
+- [x] - on /vendor/account-setup page load users should redirect to vendor dashboard if user is not initial
+
+make the frontend state larger by also saving user attributes & store details
+
 - [x] - create a simple REST API with mongodb
 - [/] - Handle Errors properly
         - example - https://github.com/CodingGarden/inventory-app/blob/master/backend/src/middlewares.js
@@ -227,6 +208,8 @@ Learn Common Architecture and Design
 - [ ] - update errorHandler middleware after configuring dotenv
 
 - API endpoints
+
+- [x] - Authorization middleware for private endpoints
 
 - Auth
     - [x] - route
@@ -239,14 +222,22 @@ Learn Common Architecture and Design
 
 - Vendor
     - [x] - route
-    - [/] - controller
-    - [/] - service layer
-    - [ ] - Authorization middleware
+    - [x] - controller
+    - [x] - service layer
+    - [x] - model
         - [x] - GET - /api/v1/vendor/user/:id
         - [x] - PUT - /api/v1/vendor/:id
-        - [/] - POST - /api/v1/vendor
+        - [x] - POST - /api/v1/vendor
+        - [x] - POST - /api/v1/vendor/banner
+        - [x] - POST - /api/v1/vendor/logo
 
-
+- Store
+    - [x] - route
+    - [x] - controller
+    - [x] - service layer
+        - [x] - POST - /api/v1/store
+        - [x] - GET - /api/v1/store
+        - [/] - PUT - /api/v1/store/:id
 
 Vendor account setup workflow
 
@@ -349,10 +340,6 @@ Cognito App client config
         - [ ] - veirfy the user with jwk or with sdk getUser method if necessary
         - https://youtu.be/QDR-pX7Ho8k - cognito token verify guide
         - callGlobalSignOut when revoking tokens
-
-    - [x] - follow the refresh token guides and make sure process in not vulnerble or missing any important things
-        - [x] - https://youtu.be/QDR-pX7Ho8k
-        - [x] - https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
 
     - [ ] - store tokens in cookies
         - [ ] - validate tokens in subsequent requests

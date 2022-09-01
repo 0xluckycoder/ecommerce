@@ -1,9 +1,11 @@
-import react, { useState, useRef, useEffect } from 'react';
+import react, { useState, useRef, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Background from '../Background/Background';
 import Card from '../Card/Card';
 import TopNav from '../TopNav';
 import RemoveIcon from '../RemoveIcon/RemoveIcon';
 import { Input, Button, Form, Alert } from 'antd';
+import { DispatchContext, StateContext, ACTIONS, ROUTES } from '../../App';
 import style from './accountSetup.module.scss';
 
 import Icon from '../../assets/vendor-setup-screen.svg';
@@ -13,6 +15,10 @@ import Logo from '../../assets/logo-placeholder.png';
 import Banner from '../../assets/banner-placeholder.png';
 
 export default function AccountSetup() {
+
+    const { dispatch } = useContext(DispatchContext);
+
+    const navigate = useNavigate();
 
     const [step, setStep] = useState(1);
     const [fieldState, setFieldState] = useState({
@@ -52,39 +58,24 @@ export default function AccountSetup() {
         }
     }
 
-    // useEffect(() => {
-
-    // }, []);
-
     const handleSubmit = async () => {
         try {
-
             /*
                 - upload images to s3 and retrieve image links
                 - fetch vendorEntity object id from /vendor/user/
                 - create new store and assign store id in vendorEntity
                 - update vendor entity 
-
-                - [x] - Test Endpoints individually
-                    - [x] - upload banner & logo to s3
-                    - [x] - fetch vendorEntity by authenticated user id
-                    - [x] - create store
-                    - [x] - update vendor
-
-                - [x] - create all store endpoints
-                    - [x] - create
-                    - [x] - get store by id
             */  
 
-            /*  
-            // logo
+           dispatch({ type: ACTIONS.LOADING });
+            
             let logoFormData = new FormData();
             logoFormData.append('logo', fieldState.logo.file)
             
-            // banner
             let bannerFormData = new FormData();
             bannerFormData.append('banner', fieldState.banner.file);
 
+            // upload logo
             const logoUploadResponse = await fetch('http://localhost:5500/api/v1/vendor/logo', {
                 method: 'POST',
                 credentials: "include",
@@ -92,6 +83,7 @@ export default function AccountSetup() {
             });
             const { data: logoUrl } = await logoUploadResponse.json();
 
+            // upload banner
             const bannerUploadResponse = await fetch('http://localhost:5500/api/v1/vendor/banner', {
                 method: 'POST',
                 credentials: "include",
@@ -100,23 +92,23 @@ export default function AccountSetup() {
             const { data: bannerUrl } = await bannerUploadResponse.json();
 
 
-            // fetch vendor attributes object
+            // fetch vendor entity object
             const getVendorByAuthUserResponse = await fetch('http://localhost:5500/api/v1/vendor/user', {
                 method: 'GET',
                 credentials: "include"
             });
             const getVendorByAuthUserData = await getVendorByAuthUserResponse.json();
 
-            console.log(getVendorByAuthUserData);
+            // console.log(getVendorByAuthUserData.data._id);
 
-            */
-            // store attributes
+            // store data
             const storeEntityData = {
                 storeName: fieldState.storeName,
-                logo: 'logoUrl',
-                banner: 'bannerUrl'
+                logo: logoUrl,
+                banner: bannerUrl
             }
 
+            // create store
             const createStoreResponse = await fetch(`http://localhost:5500/api/v1/store`, {
                 method: 'POST',
                 credentials: "include",
@@ -125,86 +117,38 @@ export default function AccountSetup() {
                 },
                 body: JSON.stringify(storeEntityData)
             });
-
             const createStoreData = await createStoreResponse.json();
-            console.log(createStoreData);
 
-            // // vendor attributes
-            // const vendorEntityData = {
-            //     firstName: fieldState.firstName,
-            //     lastName: fieldState.lastName,
-            //     storeId: 'createStoreResponse.storeId'
-            // }
-            // if (fieldState.phone) vendorEntityData.phone = fieldState.phone;
-            // if (fieldState.city) vendorEntityData.city = fieldState.city;
-            // if (fieldState.country) vendorEntityData.country = fieldState.country;
+            // vendor data
+            const vendorEntityData = {
+                firstName: fieldState.firstName,
+                lastName: fieldState.lastName,
+                storeId: createStoreData.data._id,
+                userStatus: "active"
+            }
+            if (fieldState.phone) vendorEntityData.phone = fieldState.phone;
+            if (fieldState.city) vendorEntityData.city = fieldState.city;
+            if (fieldState.country) vendorEntityData.country = fieldState.country;
 
-            // // update vendor
-            // const updateVendorResponse = await fetch(`http://localhost:5500/api/v1/vendor/6303b5f569e489a5f2ee3b87`, {
-            //     method: 'PUT',
-            //     credentials: "include",
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(vendorEntityData)
-            // });
+            // update vendor
+            const updateVendorResponse = await fetch(`http://localhost:5500/api/v1/vendor/${getVendorByAuthUserData.data._id}`, {
+                method: 'PUT',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(vendorEntityData)
+            });
+            const updateVendorData = await updateVendorResponse.json();
+            console.log(updateVendorData);
 
-            // const updateVendorData = await updateVendorResponse.json();
-            // console.log('🔥', updateVendorData);
-
-
-
-
-            /* 
-                const getVendorResponse = await fetch('http://localhost:5500/api/v1/vendor/test/17196fa3-c92f-4afa-9510-d17ad320167e', {
-                    method: 'GET',
-                    credentials: "include"
-                });
-                const data = await getVendorResponse.json();
-                console.log(data);
-            */
-
-            /*
-            create authentication middle ware in backend api
-            pass the current user with next function
-            */ 
-
-            // const updateVendorResponse = await fetch('http://localhost:5500')
-
-            // const response = await fetch('http://localhost:5500/api/v1/vendor/logo', {
-            //     method: 'POST',
-            //     credentials: "include",
-            //     // headers: {
-            //     //     'Content-Type': 'multipart/form-data'
-            //     // },
-            //     body: formData
-            // });
-
-            // console.log(response);
-            // const data = await response.json();
-
-            // console.log(data);
-
-            // const bodyData = {
-            //     ...fieldState,
-            //     logo: logo,
-            //     banner: banner
-            // }
-            // console.log(bodyData);
-            // const response = await fetch('http://localhost:5500/api/vendor', {
-            //     method: 'POST',
-            //     credentials: true,
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(bodyData)
-            // });
-
-            // const data = await response.json();
-            // console.log(data);
+            dispatch({ type: ACTIONS.STOP_LOADING });
+            navigate(ROUTES.VENDOR_DASHBOARD)
+            // redirect user to vendor dashboard
 
         } catch(error) {
             console.log(error);
+            dispatch({ type: ACTIONS.STOP_LOADING });
         }
     }
 

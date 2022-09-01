@@ -9,21 +9,18 @@ const createVendor = async (req, res, next) => {
         const userSchema = yup.object().shape({
             firstName: yup.string('firstname must be a string')
                         .required('firstname is required')
-                        .max(127, 'firstname is too long')
-                        .min(3, 'firstname is too short'),
+                        .max(127, 'firstname is too long'),
             lastName: yup.string('lastname must be a string')
                         .required('lastname is required')
-                        .max(127, 'lastname is too long')
-                        .min(3, 'lastname is too short'),
+                        .max(127, 'lastname is too long'),
             phone: yup.string('phone must be a string')
-                        .max(20, 'phone number is too long')
-                        .min(7, 'phone number is too short'),
+                        .max(20, 'phone number is too long'),
             country: yup.string('country name must be a string')
-                        .max(56, 'country name is too long')
-                        .min(3, 'country name is too short'),
+                        .max(56, 'country name is too long'),
             city: yup.string('city name must be a string')
-                        .max(56, 'city name is too long')
-                        .min(3, 'city name is too short')
+                        .max(56, 'city name is too long'),
+            userStatus: yup.string('userStatus must be a string')
+                        .max(56, 'city name is too long'),
         });
 
         const validated = await userSchema.validate(req.body);

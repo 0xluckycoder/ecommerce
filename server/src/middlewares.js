@@ -64,14 +64,21 @@ const authorizeRequest = async (req, res, next) => {
          * */ 
 
             if (error.name === 'NotAuthorizedException') {
+
+            console.log('refreshing the access/id token');
                 
             try {
                 const refreshedTokens = await authService.refreshTokens(RefreshToken);
                 const cookiesConfig = {
                     maxAge: 60000 * 60,
                     httpOnly: true
-                }    
-    
+                }
+
+                const cookies = {
+                    AccessToken: refreshedTokens.AuthenticationResult.AccessToken,
+                }
+                const verifyAuthResponse = await authService.verifyAuth(cookies);
+
                 // clear existing token cookies
                 res.clearCookie('AccessToken');
                 res.clearCookie('IdToken');
@@ -80,7 +87,7 @@ const authorizeRequest = async (req, res, next) => {
                 res.cookie('AccessToken', refreshedTokens.AuthenticationResult.AccessToken, cookiesConfig);
                 res.cookie('IdToken', refreshedTokens.AuthenticationResult.IdToken, cookiesConfig);
                 
-                // move to next middleware after refreshing the tokens
+                req.userData = verifyAuthResponse;
                 return next();
     
             } catch (error) {

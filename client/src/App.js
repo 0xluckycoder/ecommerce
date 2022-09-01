@@ -88,6 +88,12 @@ const reducer = (state, action) => {
         isLoading: true
       }
 
+    case ACTIONS.STOP_LOADING:
+      return {
+        ...authState,
+        isLoading: false
+      }
+
     case ACTIONS.CLEAR_ERROR:
       return {
         ...authState,
@@ -163,7 +169,12 @@ function App() {
           });
           const getVendorByUserIdData = await getVendorByUserId.json();
           console.log(getVendorByUserIdData);
-          getVendorByUserIdData.data.userStatus === "initial" && navigate(ROUTES.VENDOR_ACCOUNT_SETUP)
+          
+          if (getVendorByUserIdData.data.userStatus === "initial") {
+            navigate(ROUTES.VENDOR_ACCOUNT_SETUP)
+          } else {
+            navigate(ROUTES.VENDOR_DASHBOARD)
+          }
       }
 
 

@@ -57,7 +57,6 @@ export default function SignIn() {
                     
                     const data = await signInResponse.json();
                     console.log(data);
-                    // alert('fucked');
 
                     if (data.success) {
                         console.log('success login');
@@ -77,7 +76,13 @@ export default function SignIn() {
                               });
                             const getVendorByUserIdData = await getVendorByUserId.json();
                             console.log(getVendorByUserIdData);
-                            getVendorByUserIdData.data.userStatus === "initial" && navigate(ROUTES.VENDOR_ACCOUNT_SETUP)
+
+                            if (getVendorByUserIdData.data.userStatus === "initial") {
+                                navigate(ROUTES.VENDOR_ACCOUNT_SETUP)
+                              } else {
+                                navigate(ROUTES.VENDOR_DASHBOARD)
+                              }
+                            // getVendorByUserIdData.data.userStatus === "initial" && navigate(ROUTES.VENDOR_ACCOUNT_SETUP)
                         }
                         // data.userData.role === 'vendor' && navigate('/vendor/dashboard');
                         // add customers redirect route here

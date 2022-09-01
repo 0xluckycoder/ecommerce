@@ -127,7 +127,7 @@ const verifyAuth = async (req, res, next) => {
                 const cookiesConfig = {
                     maxAge: 60000 * 60,
                     httpOnly: true
-                }    
+                }
 
                 // clear existing token cookies
                 res.clearCookie('AccessToken');
